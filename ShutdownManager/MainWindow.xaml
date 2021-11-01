@@ -4,10 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShutdownManager"
+        xmlns:tb="http://www.hardcodet.net/taskbar"
         mc:Ignorable="d"
-        Title="MainWindow" Height="370" Width="270" MinHeight="370" MinWidth="250" Icon="images/ShutdownManager white.ico">
+        Title="MainWindow" Height="370" Width="270" MinHeight="370" MinWidth="250" Icon="icons/ShutdownManager.ico">
 
     <Grid>
+
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="1.0*"/>
             <RowDefinition Height="0.8*"/>
@@ -24,8 +27,9 @@
         <GroupBox Header="Timer" Grid.ColumnSpan="2" Margin="8">
             <TextBlock Name="TbTimer" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="35" TextWrapping="Wrap" Text="00:00:00" />
         </GroupBox>
-        
-        
+
+        <tb:TaskbarIcon x:Name="MyNotifyIcon" IconSource="/icons/ShutdownManager.ico" ToolTipText="ShutdownManager" />
+
         <GroupBox Margin="8" Header="Settings" Grid.Row="2" Grid.ColumnSpan="2">
             <Grid>
                 <Grid.ColumnDefinitions>

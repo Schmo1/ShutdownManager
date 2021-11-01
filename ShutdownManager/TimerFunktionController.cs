@@ -8,13 +8,10 @@ namespace ShutdownManager
     internal enum eTimerZeroActions { Shutdown, Restart, EnergySafe }
 
 
-    class ComputerFunctions
+    class TimerFunktionController
     {
 
-        //Constanten
-        private const string balloonTipTitle = "ShutdownManager";
 
-        public TaskbarIcon tb = new TaskbarIcon();
         public Timer timer = new Timer();
 
 
@@ -27,6 +24,9 @@ namespace ShutdownManager
 
 
         //Properties
+
+        public bool TimerHasStarted => timerHasStarted;
+
         public TimeSpan TimeLeft { get; set; }
         public eTimerZeroActions TimerZeroAction {get; set;}
 
@@ -64,13 +64,12 @@ namespace ShutdownManager
 
 
         //Konstruktor
-        public ComputerFunctions()
+        public TimerFunktionController()
         {
-            
+
             timer.Tick += new EventHandler(Timer_Tick);
             timer.Interval = 1000; //one Second  
         }
-
 
 
 
@@ -87,10 +86,6 @@ namespace ShutdownManager
         {
             if (!timerHasStarted)
             {
-                string message = "Timer has started";
-
-                BalloonIcon icon = BalloonIcon.Info;
-                tb.ShowBalloonTip(balloonTipTitle, message, icon);
 
                 timer.Start();
                 timer.Enabled = true;
@@ -99,17 +94,11 @@ namespace ShutdownManager
 
         }
 
-        public void StopTimer(bool withBalloonTip)
+        public void StopTimer()
         {
             if (timerHasStarted)
             {
-                if (withBalloonTip)
-                {
-                    string message = "Timer has stopped";
-                    BalloonIcon icon = BalloonIcon.Info;
-                    tb.ShowBalloonTip(balloonTipTitle, message, icon);
-                }
-
+                
                 timer.Enabled = false;
                 timer.Stop();
 
@@ -123,7 +112,7 @@ namespace ShutdownManager
 
             if (TimeLeft.TotalSeconds < 1)
             {
-                StopTimer(false);
+                StopTimer();
                 TimeLeft = new TimeSpan(0,0,0);
                 TimerAktions();
             }

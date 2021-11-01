@@ -13,27 +13,37 @@ namespace ShutdownManager
     public partial class MainWindow : Window
     {
 
-        ComputerFunctions pcFunktions = new ComputerFunctions();
+        TimerFunktionController timerController = new TimerFunktionController();
 
-        
+        //Constanten
+        private const string balloonTipTitle = "ShutdownManager";
 
         public MainWindow()
         {
             InitializeComponent();
             DataContext = this;
-            pcFunktions.timer.Tick += OnTimerTick; //Update Timer event
+            timerController.timer.Tick += OnTimerTick; //Update Timer event
         }
 
 
         private void Button_Start(object sender, RoutedEventArgs e)
         {
             CheckEmptyUserInput();
-            pcFunktions.StartTimer();
+            if (timerController.TimerHasStarted)
+            {
+                string message = "Timer has started";
+                MyNotifyIcon.ShowBalloonTip(balloonTipTitle, message, BalloonIcon.Info);
+            }
+
+            timerController.StartTimer();
             
         }
         private void Button_Stop(object sender, RoutedEventArgs e)
         {
-            pcFunktions.StopTimer(true); //With BalloonTip
+            string message = "Timer has stopped";
+            MyNotifyIcon.ShowBalloonTip(balloonTipTitle, message, BalloonIcon.Info);
+
+            timerController.StopTimer(); 
         }
 
         private void HoursTxt_TextChanged(object sender, RoutedEventArgs e)
@@ -43,13 +53,13 @@ namespace ShutdownManager
                 int hours = Convert.ToInt32(txtHours.Text);
                 if(hours > 23)
                 {
-                    pcFunktions.Hours = 23;
-                    pcFunktions.Minutes = 59;
-                    pcFunktions.Seconds = 59;
+                    timerController.Hours = 23;
+                    timerController.Minutes = 59;
+                    timerController.Seconds = 59;
                 }
                 else
                 {
-                    pcFunktions.Hours = hours;
+                    timerController.Hours = hours;
                 }
 
                 UpdateTimer();
@@ -68,13 +78,13 @@ namespace ShutdownManager
             try
             {
                 int minutes = Convert.ToInt32(txtMinutes.Text);
-                if (pcFunktions.Hours > 22 && minutes > 59)
+                if (timerController.Hours > 22 && minutes > 59)
                 {
-                    pcFunktions.Minutes = 59;
+                    timerController.Minutes = 59;
                 }
                 else
                 {
-                    pcFunktions.Minutes = Convert.ToInt32(txtMinutes.Text);
+                    timerController.Minutes = Convert.ToInt32(txtMinutes.Text);
                 }
 
                     
@@ -94,13 +104,13 @@ namespace ShutdownManager
             try
             {
                 int seconds = Convert.ToInt32(txtSeconds.Text);
-                if (pcFunktions.Hours > 22 && pcFunktions.Minutes > 58 && seconds > 59)
+                if (timerController.Hours > 22 && timerController.Minutes > 58 && seconds > 59)
                 {
-                    pcFunktions.Seconds = 59;
+                    timerController.Seconds = 59;
                 }
                 else
                 {
-                    pcFunktions.Seconds = Convert.ToInt32(txtSeconds.Text);
+                    timerController.Seconds = Convert.ToInt32(txtSeconds.Text);
                 }
                     
                 UpdateTimer();
@@ -118,7 +128,7 @@ namespace ShutdownManager
         {
             try
             {
-                TbTimer.Text = pcFunktions.TimeLeft.ToString(@"hh\:mm\:ss");
+                TbTimer.Text = timerController.TimeLeft.ToString(@"hh\:mm\:ss");
             }
             catch (Exception)
             {
@@ -170,17 +180,25 @@ namespace ShutdownManager
         {
             if ((bool)RadioButton_Shutdown.IsChecked)
             {
-                pcFunktions.TimerZeroAction = eTimerZeroActions.Shutdown;
+                timerController.TimerZeroAction = eTimerZeroActions.Shutdown;
             }
             else if ((bool)RadioButton_Restart.IsChecked)
             {
-                pcFunktions.TimerZeroAction = eTimerZeroActions.Restart;
+                timerController.TimerZeroAction = eTimerZeroActions.Restart;
 
             }
             else
             {
-                pcFunktions.TimerZeroAction = eTimerZeroActions.EnergySafe;
+                timerController.TimerZeroAction = eTimerZeroActions.EnergySafe;
             }
+        }
+
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            //clean up notifyicon (would otherwise stay open until application finishes)
+            MyNotifyIcon.Dispose();
+
+            base.OnClosing(e);
         }
     }
 }
