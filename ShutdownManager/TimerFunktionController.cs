@@ -1,19 +1,23 @@
 ﻿using System;
-using Hardcodet.Wpf.TaskbarNotification;
 using System.Windows.Forms;
 using System.Diagnostics;
 
 namespace ShutdownManager
 {
-    internal enum eTimerZeroActions { Shutdown, Restart, EnergySafe }
+    internal enum ETimerActions { Shutdown, Restart, EnergySafe }
 
-
-    class TimerFunktionController
+    internal class TimerFunktionController
     {
-
 
         public Timer timer = new Timer();
 
+
+        //Konstruktor
+        public TimerFunktionController()
+        {
+            timer.Tick += new EventHandler(Timer_Tick);
+            timer.Interval = 1000; //one Second  
+        }
 
         //variables
         private int hours;
@@ -24,15 +28,13 @@ namespace ShutdownManager
 
 
         //Properties
-
         public bool TimerHasStarted => timerHasStarted;
 
         public TimeSpan TimeLeft { get; set; }
-        public eTimerZeroActions TimerZeroAction {get; set;}
+        public ETimerActions TimerAction {get; set;}
 
         public int Hours
         {
-
             get => hours;
             set
             {
@@ -40,7 +42,6 @@ namespace ShutdownManager
                 UpdateTimeSpan();
             }
         }
-
 
         public int Minutes
         {
@@ -63,14 +64,8 @@ namespace ShutdownManager
         }
 
 
-        //Konstruktor
-        public TimerFunktionController()
-        {
-
-            timer.Tick += new EventHandler(Timer_Tick);
-            timer.Interval = 1000; //one Second  
-        }
-
+        //Events
+        public event EventHandler OnTimerIsOver;
 
 
         //Methode
@@ -78,7 +73,6 @@ namespace ShutdownManager
         private void UpdateTimeSpan()
         {
             TimeLeft = new TimeSpan(hours,minutes,seconds);
-            
         }
 
 
@@ -86,23 +80,25 @@ namespace ShutdownManager
         {
             if (!timerHasStarted)
             {
-
                 timer.Start();
                 timer.Enabled = true;
                 timerHasStarted = true;
             }
-
         }
 
-        public void StopTimer()
+        public void StopPauseTimer(bool isPaused)
         {
             if (timerHasStarted)
             {
                 
                 timer.Enabled = false;
                 timer.Stop();
-
                 timerHasStarted = false;
+
+                if (!isPaused)//If the Timer is not paused, then Update the Timespan
+                {
+                    UpdateTimeSpan();
+                }
             }
         }
 
@@ -112,8 +108,10 @@ namespace ShutdownManager
 
             if (TimeLeft.TotalSeconds < 1)
             {
-                StopTimer();
-                TimeLeft = new TimeSpan(0,0,0);
+                OnTimerIsOver?.Invoke(this, EventArgs.Empty); //Event
+                StopPauseTimer(false);
+                TimeLeft = new TimeSpan(0, 0, 0); //Sometimes the counter goes down to -1 
+                UpdateTimeSpan();
                 TimerAktions();
             }
             
@@ -121,16 +119,16 @@ namespace ShutdownManager
 
         private void TimerAktions()
         {
-            if(TimerZeroAction == eTimerZeroActions.Shutdown)
+            if(TimerAction == ETimerActions.Shutdown)
             {
                 MessageBox.Show("Shutdown", "Invalid action", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                
             }
-            else if (TimerZeroAction == eTimerZeroActions.Restart)
+            else if (TimerAction == ETimerActions.Restart)
             {
                 MessageBox.Show("Restart");
             }
-            else if (TimerZeroAction == eTimerZeroActions.EnergySafe)
+            else if (TimerAction == ETimerActions.EnergySafe)
             {
                 MessageBox.Show("EnergySafe");
             }

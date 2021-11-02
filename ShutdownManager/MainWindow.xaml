@@ -6,17 +6,71 @@
         xmlns:local="clr-namespace:ShutdownManager"
         xmlns:tb="http://www.hardcodet.net/taskbar"
         mc:Ignorable="d"
-        Title="MainWindow" Height="370" Width="270" MinHeight="370" MinWidth="250" Icon="icons/ShutdownManager.ico">
+        Title="Shutdown Manager" Height="370" Width="300" MinHeight="370" MinWidth="270" Icon="icons/ShutdownManager.ico" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
+        <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+        <Style x:Key="RoundetButton" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" CornerRadius="8" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
 
     <Grid>
-
-        
         <Grid.RowDefinitions>
             <RowDefinition Height="1.0*"/>
-            <RowDefinition Height="0.8*"/>
+            <RowDefinition Height="0.7*"/>
+            <RowDefinition Height="0.7*"/>
             <RowDefinition Height="2*"/>
-
-
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -24,59 +78,51 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <GroupBox Header="Timer" Grid.ColumnSpan="2" Margin="8">
+        <tb:TaskbarIcon x:Name="MyNotifyIcon" IconSource="/icons/ShutdownManager.ico" ToolTipText="ShutdownManager" />
+
+        <GroupBox Header="Timer" Grid.ColumnSpan="2" Margin="7">
             <TextBlock Name="TbTimer" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="35" TextWrapping="Wrap" Text="00:00:00" />
         </GroupBox>
 
-        <tb:TaskbarIcon x:Name="MyNotifyIcon" IconSource="/icons/ShutdownManager.ico" ToolTipText="ShutdownManager" />
+        <Button Name="btStart" Margin="7" Click="Button_Start" FontSize="20" Grid.Row="1" Grid.ColumnSpan="2" Style="{DynamicResource RoundetButton}">Start</Button>
+        <Button Name="btPause" Margin="7" Click="Button_Pause" FontSize="20" Grid.Row="2" Style="{DynamicResource RoundetButton}" >Pause</Button>
+        <Button Name="btStop" Margin="7" Click="Button_Stop" FontSize="20" Grid.Row="2" Grid.Column="1" Style="{DynamicResource RoundetButton}" >Stop</Button>
 
-        <GroupBox Margin="8" Header="Settings" Grid.Row="2" Grid.ColumnSpan="2">
+
+        <GroupBox Margin="7" Header="Time Settings" Grid.Row="3">
             <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="0.6*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="75"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="40"/>
-                    </Grid.ColumnDefinitions>
 
-                    <TextBox PreviewTextInput="NumberValidationTextBox" FontSize="15" TextAlignment="Center" Text="00" TextChanged="HoursTxt_TextChanged" Name="txtHours" HorizontalAlignment="Right" Height="28" Width="65"/>
-                    <TextBox PreviewTextInput="NumberValidationTextBox" FontSize="15" TextAlignment="Center" Text="00" TextChanged="MinutesTxt_TextChanged" Name="txtMinutes" HorizontalAlignment="Right" Height="28" Width="65" Grid.Row="1"/>
-                    <TextBox PreviewTextInput="NumberValidationTextBox" FontSize="15" TextAlignment="Center" Text="00" TextChanged="SecondsTxt_TextChanged" Name="txtSeconds"  HorizontalAlignment="Right" Height="28" Width="65" Grid.Row="2"/>
+                <TextBox PreviewTextInput="NumberValidationTextBox" FontSize="15" TextAlignment="Center" Text="00" TextChanged="HoursTxt_TextChanged" Name="txtHours" HorizontalAlignment="Right" Height="24" Width="65"/>
+                <TextBox PreviewTextInput="NumberValidationTextBox" FontSize="15" TextAlignment="Center" Text="00" TextChanged="MinutesTxt_TextChanged" Name="txtMinutes" HorizontalAlignment="Right" Height="24" Width="65" Grid.Row="1"/>
+                <TextBox PreviewTextInput="NumberValidationTextBox" FontSize="15" TextAlignment="Center" Text="00" TextChanged="SecondsTxt_TextChanged" Name="txtSeconds"  HorizontalAlignment="Right" Height="24" Width="65" Grid.Row="2"/>
 
-                    <TextBlock Text="h" Grid.Column="1" FontSize="17" HorizontalAlignment = "Left" VerticalAlignment="Center" Margin="5" TextAlignment="Center" />
-                    <TextBlock Text="m" Grid.Row="1" Grid.Column="1" FontSize="17" HorizontalAlignment = "Left" VerticalAlignment="Center" Margin="5" TextAlignment="Center" />
-                    <TextBlock Text="s"  Grid.Row="2" Grid.Column="1" FontSize="17" HorizontalAlignment = "Left" VerticalAlignment="Center" Margin="5" TextAlignment="Center" />
-                </Grid>
+                <TextBlock Text="h" Grid.Column="1" FontSize="17" HorizontalAlignment = "Left" VerticalAlignment="Center" Margin="5" TextAlignment="Center" />
+                <TextBlock Text="m" Grid.Row="1" Grid.Column="1" FontSize="17" HorizontalAlignment = "Left" VerticalAlignment="Center" Margin="5" TextAlignment="Center" />
+                <TextBlock Text="s"  Grid.Row="2" Grid.Column="1" FontSize="17" HorizontalAlignment = "Left" VerticalAlignment="Center" Margin="5" TextAlignment="Center" />
 
-
-                <Grid Grid.Column="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="40"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height= "30"/>
-                    </Grid.RowDefinitions>
-                    <RadioButton Checked="RadioButton_Update" GroupName="rbAction" x:Name="RadioButton_Shutdown" Grid.Column="1" Margin="10,15,5,5" Content="Shutdown" IsChecked="True"/>
-                    <RadioButton Checked="RadioButton_Update" GroupName="rbAction" x:Name="RadioButton_Restart" Grid.Column="1" Margin="10,5,5,5" Content="Restart" Grid.Row="1"/>
-                    <RadioButton Checked="RadioButton_Update" GroupName="rbAction" x:Name="RadioButton_EnergieSafe" Grid.Column="1" Margin="10,5,5,5" Content="Energiesafe" Grid.Row="2"/>
-                </Grid>
-                
-                
             </Grid>
-           
+
         </GroupBox>
 
-        <Button Margin="10" Click="Button_Start" FontSize="20" Grid.Row="1">Start</Button>
-        <Button Margin="10" Click="Button_Stop" FontSize="20" Grid.Row="1" Grid.Column="1">Stop</Button>
+        <GroupBox Margin="7" Header="Action" Grid.Row="3" Grid.Column="1">
 
+            <StackPanel>
+                <RadioButton Checked="RadioButton_Update" GroupName="rbAction" x:Name="RadioButton_Shutdown" Margin="10,15,5,5" Content="Shutdown" IsChecked="True"/>
+                <RadioButton Checked="RadioButton_Update" GroupName="rbAction" x:Name="RadioButton_Restart" Margin="10,5,5,5" Content="Restart" />
+                <RadioButton Checked="RadioButton_Update" GroupName="rbAction" x:Name="RadioButton_EnergieSafe" Margin="10,5,5,5" Content="Energiesafe"/>
+            </StackPanel>
+
+        </GroupBox>
 
     </Grid>
 </Window>
