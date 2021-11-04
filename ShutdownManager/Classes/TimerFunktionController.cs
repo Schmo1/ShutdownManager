@@ -27,10 +27,6 @@ namespace ShutdownManager
             timer.Interval = 1000; //one Second  
         }
 
-        //Constants
-
-        private const bool isTestingMode = true;
-
         //Variables
         private bool timerHasStarted;
 

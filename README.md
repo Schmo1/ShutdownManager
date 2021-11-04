@@ -13,6 +13,5 @@ Features include:
 ## Screenshots
 
 <div align="center">
-    <img alt="Setup" src="./screenshots/setup-backup.png">
-    <img alt="Backing up data" src="./screenshots/backing-up.png">
+    <img alt="Setup" src="./screenshots/MainScreenshot">
 </div>
