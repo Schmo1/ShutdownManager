@@ -1,41 +1,66 @@
 ﻿using System;
 using System.Windows;
 using Hardcodet.Wpf.TaskbarNotification;
-using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace ShutdownManager
 {
 
     public partial class MainWindow : Window
     {
-        private readonly TimerFunktionController timerController = new TimerFunktionController();
+        private readonly TimerFunktionController timerFunktionController = new TimerFunktionController();
+        
 
         //Constanten
         private const string balloonTipTitle = "ShutdownManager";
+
+        //Images
+        private readonly ImageSource imagePlayPNG;
+        private readonly ImageSource imagePausePNG;
+        private readonly ImageSource imageStopPNG;
+        private readonly ImageSource imageStopDeactiPNG;
+
 
         public MainWindow()
         {
             InitializeComponent();
             DataContext = this;
 
-            timerController.timer.Tick += OnTimerTick; //Update Timer event
-            timerController.OnTimerIsOver += OnTimerisOver;
+            timerFunktionController.timer.Tick += OnTimerTick; //Update Timer event
+            timerFunktionController.OnTimerIsOver += OnTimerisOver;
+
+            imagePlayPNG = new BitmapImage(new Uri(@"/images/Play.png", UriKind.Relative));
+            imagePausePNG = new BitmapImage(new Uri(@"/images/Pause.png", UriKind.Relative));
+            imageStopPNG = new BitmapImage(new Uri(@"/images/Stop.png", UriKind.Relative));
+            imageStopDeactiPNG = new BitmapImage(new Uri(@"/images/StopDeacti.png", UriKind.Relative));
+
             DeactivateStopButton();
+
+            timerFunktionController.userDataPersistentManager.LoadUserData();
+            UpdateLoadedUserData();
+            timerFunktionController.UpdateTimeSpan();
         }
 
 
-        private void Button_Start(object sender, RoutedEventArgs e)
+        private void Button_StartStop(object sender, RoutedEventArgs e)
         {
             CheckEmptyUserInput();
-            if (timerController.TimerHasStarted)
+            if (!timerFunktionController.TimerHasStarted)
             {
                 MyNotifyIcon.ShowBalloonTip(balloonTipTitle, "Timer has started", BalloonIcon.Info); //Ballon Tip for user
+                DeactivateStartButton();
+                timerFunktionController.StartTimer();
+            }
+            else
+            {
+                MyNotifyIcon.ShowBalloonTip(balloonTipTitle, "Timer has paused", BalloonIcon.Info); //Ballon Tip for user
+                DeactivateStopButton();
+                timerFunktionController.StopPauseTimer(true);
             }
 
-            DeactivateStartButton();
-            timerController.StartTimer();
 
         }
         private void Button_Stop(object sender, RoutedEventArgs e)
@@ -43,16 +68,10 @@ namespace ShutdownManager
             MyNotifyIcon.ShowBalloonTip(balloonTipTitle, "Timer has stopped", BalloonIcon.Info); //Ballon Tip for user
 
             DeactivateStopButton();
-            timerController.StopPauseTimer(false);
+            timerFunktionController.StopPauseTimer(false);
             UpdateTimer();
         }
 
-        private void Button_Pause(object sender, RoutedEventArgs e)
-        {
-            MyNotifyIcon.ShowBalloonTip(balloonTipTitle, "Timer has paused", BalloonIcon.Info); //Ballon Tip for user
-            DeactivateStopButton();
-            timerController.StopPauseTimer(true);
-        }
 
         private void HoursTxt_TextChanged(object sender, RoutedEventArgs e)
         {
@@ -100,6 +119,34 @@ namespace ShutdownManager
             }
         }
 
+        private void UpdateLoadedUserData()
+        {
+            txtHours.Text = timerFunktionController.Hours.ToString();
+            txtMinutes.Text = timerFunktionController.Minutes.ToString();
+            txtSeconds.Text = timerFunktionController.Seconds.ToString();
+
+            switch (timerFunktionController.TimerAction)
+            {
+                case ETimerActions.Shutdown:
+                    RadioButton_Shutdown.IsChecked = true;
+                    RadioButton_Restart.IsChecked = false;
+                    RadioButton_Sleep.IsChecked = false;
+                    break;
+
+                case ETimerActions.Restart:
+                    RadioButton_Shutdown.IsChecked = false;
+                    RadioButton_Restart.IsChecked = true;
+                    RadioButton_Sleep.IsChecked = false;
+                    break;
+
+                default:
+                    RadioButton_Shutdown.IsChecked = false;
+                    RadioButton_Restart.IsChecked = false;
+                    RadioButton_Sleep.IsChecked = true;
+                    break;
+            }
+        }
+
 
         private void OnTimerTick(object source, EventArgs args)
         {
@@ -115,15 +162,15 @@ namespace ShutdownManager
         {
             if ((bool)RadioButton_Shutdown.IsChecked)
             {
-                timerController.TimerAction = ETimerActions.Shutdown;
+                timerFunktionController.TimerAction = ETimerActions.Shutdown;
             }
             else if ((bool)RadioButton_Restart.IsChecked)
             {
-                timerController.TimerAction = ETimerActions.Restart;
+                timerFunktionController.TimerAction = ETimerActions.Restart;
             }
             else
             {
-                timerController.TimerAction = ETimerActions.EnergySafe;
+                timerFunktionController.TimerAction = ETimerActions.Sleep;
             }
         }
 
@@ -138,9 +185,12 @@ namespace ShutdownManager
         private void DeactivateStartButton()
         {
             //Buttons
-            btStart.IsEnabled = false;
             btStop.IsEnabled = true;
-            btPause.IsEnabled = true;
+
+            //Images
+            imagePlayPause.Source = imagePausePNG;
+            imageStop.Source = imageStopPNG;
+
             //Textfields
             txtHours.IsEnabled = false;
             txtMinutes.IsEnabled = false;
@@ -149,9 +199,13 @@ namespace ShutdownManager
         private void DeactivateStopButton()
         {
             //Buttons
-            btStart.IsEnabled = true;
             btStop.IsEnabled = false;
-            btPause.IsEnabled = false;
+
+
+            //Images
+            imagePlayPause.Source = imagePlayPNG;
+            imageStop.Source = imageStopDeactiPNG;
+
             //Textfields
             txtHours.IsEnabled = true;
             txtMinutes.IsEnabled = true;
@@ -166,13 +220,13 @@ namespace ShutdownManager
                 if (hours > 23)
                 {
                     //if the hours ar over 24, it try to count the days. But there are no days in the Programm. 
-                    timerController.Hours = 23;
-                    timerController.Minutes = 59;
-                    timerController.Seconds = 59;
+                    timerFunktionController.Hours = 23;
+                    timerFunktionController.Minutes = 59;
+                    timerFunktionController.Seconds = 59;
                 }
                 else
                 {
-                    timerController.Hours = hours;
+                    timerFunktionController.Hours = hours;
                 }
 
                 UpdateTimer();
@@ -188,13 +242,13 @@ namespace ShutdownManager
             try
             {
                 int minutes = Convert.ToInt32(txtMinutes.Text);
-                if (timerController.Hours > 22 && minutes > 59)
+                if (timerFunktionController.Hours > 22 && minutes > 59)
                 {
-                    timerController.Minutes = 59;
+                    timerFunktionController.Minutes = 59;
                 }
                 else
                 {
-                    timerController.Minutes = Convert.ToInt32(txtMinutes.Text);
+                    timerFunktionController.Minutes = Convert.ToInt32(txtMinutes.Text);
                 }
 
 
@@ -213,13 +267,13 @@ namespace ShutdownManager
             try
             {
                 int seconds = Convert.ToInt32(txtSeconds.Text);
-                if (timerController.Hours > 22 && timerController.Minutes > 58 && seconds > 59)
+                if (timerFunktionController.Hours > 22 && timerFunktionController.Minutes > 58 && seconds > 59)
                 {
-                    timerController.Seconds = 59;
+                    timerFunktionController.Seconds = 59;
                 }
                 else
                 {
-                    timerController.Seconds = Convert.ToInt32(txtSeconds.Text);
+                    timerFunktionController.Seconds = Convert.ToInt32(txtSeconds.Text);
                 }
 
                 UpdateTimer();
@@ -234,7 +288,7 @@ namespace ShutdownManager
         {
             try
             {
-                TbTimer.Text = timerController.TimeLeft.ToString(@"hh\:mm\:ss");
+                TbTimer.Text = timerFunktionController.TimeLeft.ToString(@"hh\:mm\:ss");
             }
             catch (Exception)
             {
