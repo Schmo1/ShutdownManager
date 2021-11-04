@@ -128,48 +128,23 @@ namespace ShutdownManager
         }
 
         private void TimerAktions()
-        {
-            if (isTestingMode)
+        { 
+            if (userDataPersistentManager.TimerAction == ETimerActions.Shutdown)
             {
-                if (userDataPersistentManager.TimerAction == ETimerActions.Shutdown)
-                {
-                    MessageBox.Show("Shutdown", "Invalid action", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                }
-                else if (userDataPersistentManager.TimerAction == ETimerActions.Restart)
-                {
-                    MessageBox.Show("Restart");
-                }                
-                else if (userDataPersistentManager.TimerAction == ETimerActions.Sleep)
-                {
-                    MessageBox.Show("Sleep");
-                }
-                else
-                {
-                    MessageBox.Show("No action was selected. Please select some action!", "Invalid action", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
+                Process.Start("shutdown", "/s /f /t 0");
+            }
+            else if (userDataPersistentManager.TimerAction == ETimerActions.Restart)
+            {
+                Process.Start("shutdown", "/r /f /t 0");
+            }
+            else if (userDataPersistentManager.TimerAction == ETimerActions.Sleep)
+            {
+                SetSuspendState(false, false, false);
             }
             else
             {
-                if (userDataPersistentManager.TimerAction == ETimerActions.Shutdown)
-                {
-                    Process.Start("shutdown", "/s /f /t 0");
-                }
-                else if (userDataPersistentManager.TimerAction == ETimerActions.Restart)
-                {
-                    Process.Start("shutdown", "/r /f /t 0");
-                }
-                else if (userDataPersistentManager.TimerAction == ETimerActions.Sleep)
-                {
-                    SetSuspendState(false, false, false);
-                }
-                else
-                {
-                    MessageBox.Show("No action was selected. Please select some action!", "Invalid action", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
+                MessageBox.Show("No action was selected. Please select some action!", "Invalid action", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-
         }
-
     }
 }
