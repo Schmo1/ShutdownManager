@@ -1,13 +1,18 @@
-﻿<Window x:Class="ShutdownManager.MainWindow"
+﻿<Window x:Class="ShutdownManager.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ShutdownManager"
-        xmlns:tb="http://www.hardcodet.net/taskbar"
+        xmlns:local="clr-namespace:ShutdownManager.Views"
+        xmlns:converters="clr-namespace:ShutdownManager.Converters"
         mc:Ignorable="d"
-        Title="Shutdown Manager" Height="320" Width="290" MinHeight="320" MinWidth="270" MaxHeight="500" MaxWidth="400" Icon="icons/ShutdownManager.ico" WindowStartupLocation="CenterScreen">
+        Title="Shutdown Manager" Height="320" Width="290" MinHeight="320" MinWidth="270" MaxHeight="500" MaxWidth="400" Icon="/ShutdownManager;component/icons/ShutdownManager.ico" WindowStartupLocation="CenterScreen">
     <Window.Resources>
+        <converters:StringToIntConverter x:Key="MyStringConverter"/>
+        <converters:BoolInvertConverter x:Key="MyBoolInvertConverter"/>
+
+        
+
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
                 <Setter.Value>
@@ -70,6 +75,7 @@
             <RowDefinition Height="1.2*"/>
             <RowDefinition Height="55"/>
             <RowDefinition Height="2*"/>
+
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -77,20 +83,39 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <tb:TaskbarIcon x:Name="MyNotifyIcon" IconSource="/icons/ShutdownManager.ico" ToolTipText="ShutdownManager" />
 
         <GroupBox Header="Timer" Grid.ColumnSpan="2" Margin="7">
-            <TextBlock Name="TbTimer" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="35" TextWrapping="Wrap" Text="00:00:00" />
+            <TextBlock Name="TbTimer" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="35" TextWrapping="Wrap" Text="{Binding TimeLeft , FallbackValue=00:00:00}" />
         </GroupBox>
 
 
-        <Button Name="btStartStop" Margin="3" Click="Button_StartStop" Grid.Row="1" Background="White" BorderThickness="0" Width="50" Height="50" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{DynamicResource RoundetButton}" >
-            <Image Name="imagePlayPause" Source="images\play.png"/>
+        <Button Name="btStartStop" 
+                Margin="3" 
+                Click="Button_StartStop" 
+                Grid.Row="1" 
+                Background="White" 
+                BorderThickness="0" 
+                Width="50" 
+                Height="50" 
+                HorizontalAlignment="Right" 
+                VerticalAlignment="Center" 
+                Style="{DynamicResource RoundetButton}" >
+            <Image Name="imagePlayPause" Source="/ShutdownManager;component/images\play.png"/>
         </Button>
-        <Button Name="btStop" Margin="3" Click="Button_Stop" Grid.Row="1" Grid.Column="1" Background="White" BorderThickness="0" Width="50" Height="50" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{DynamicResource RoundetButton}"  >
-            <Image Name="imageStop" Source="images\Stop.png"/>
+        <Button Name="btStop" 
+                Margin="3" 
+                Click="Button_Stop" 
+                Grid.Row="1" 
+                Grid.Column="1" 
+                Background="White" 
+                BorderThickness="0" 
+                Width="50" Height="50" 
+                HorizontalAlignment="Left" 
+                VerticalAlignment="Center" 
+                Style="{DynamicResource RoundetButton}"
+                IsEnabled="{Binding IsTimerStarted}">
+            <Image Name="imageStop" Source="/ShutdownManager;component/images\Stop.png"/>
         </Button>
-        
 
         <GroupBox Margin="7" Header="Time Settings" Grid.Row="3">
             <Grid>
@@ -105,9 +130,38 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox PreviewTextInput="NumberValidationTextBox" FontSize="15" TextAlignment="Center" Text="0" TextChanged="HoursTxt_TextChanged" Name="txtHours" HorizontalAlignment="Right" Height="24" Width="65"/>
-                <TextBox PreviewTextInput="NumberValidationTextBox" FontSize="15" TextAlignment="Center" Text="0" TextChanged="MinutesTxt_TextChanged" Name="txtMinutes" HorizontalAlignment="Right" Height="24" Width="65" Grid.Row="1"/>
-                <TextBox PreviewTextInput="NumberValidationTextBox" FontSize="15" TextAlignment="Center" Text="0" TextChanged="SecondsTxt_TextChanged" Name="txtSeconds"  HorizontalAlignment="Right" Height="24" Width="65" Grid.Row="2"/>
+                <TextBox PreviewTextInput="NumberValidationTextBox" 
+                         FontSize="15" 
+                         TextAlignment="Center" 
+                         Text="{Binding Hours, FallbackValue= 0 , Converter={StaticResource MyStringConverter}}" 
+                         IsEnabled="{Binding IsTimerStarted, Converter={StaticResource MyBoolInvertConverter}}"
+                         Name="txtHours" 
+                         HorizontalAlignment="Right" 
+                         Height="24" 
+                         Width="65"/>
+
+
+                <TextBox PreviewTextInput="NumberValidationTextBox" 
+                         FontSize="15" 
+                         TextAlignment="Center" 
+                         Text="{Binding Minutes, FallbackValue=0, Converter={StaticResource MyStringConverter}}" 
+                         IsEnabled="{Binding IsTimerStarted, Converter={StaticResource MyBoolInvertConverter}}"
+                         Name="txtMinutes" 
+                         HorizontalAlignment="Right" 
+                         Height="24" 
+                         Width="65" 
+                         Grid.Row="1"/>
+                
+                <TextBox PreviewTextInput="NumberValidationTextBox" 
+                         FontSize="15" 
+                         TextAlignment="Center" 
+                         Text="{Binding Seconds, FallbackValue=0, Converter={StaticResource MyStringConverter}}"
+                         IsEnabled="{Binding IsTimerStarted, Converter={StaticResource MyBoolInvertConverter}}"
+                         Name="txtSeconds"  
+                         HorizontalAlignment="Right" 
+                         Height="24" 
+                         Width="65" 
+                         Grid.Row="2"/>
 
                 <TextBlock Text="h" Grid.Column="1" FontSize="17" HorizontalAlignment = "Left" VerticalAlignment="Center" Margin="5" TextAlignment="Center" />
                 <TextBlock Text="m" Grid.Row="1" Grid.Column="1" FontSize="17" HorizontalAlignment = "Left" VerticalAlignment="Center" Margin="5" TextAlignment="Center" />
@@ -120,12 +174,11 @@
         <GroupBox Margin="7" Header="Action" Grid.Row="3" Grid.Column="1">
 
             <StackPanel>
-                <RadioButton Checked="RadioButton_Update" GroupName="rbAction" x:Name="RadioButton_Shutdown" Margin="13,15,5,5" Content="Shutdown" IsChecked="True"/>
-                <RadioButton Checked="RadioButton_Update" GroupName="rbAction" x:Name="RadioButton_Restart" Margin="13,5,5,5" Content="Restart" />
-                <RadioButton Checked="RadioButton_Update" GroupName="rbAction" x:Name="RadioButton_Sleep" Margin="13,5,5,5" Content="Sleep"/>
+                <RadioButton GroupName="rbAction" x:Name="RadioButton_Shutdown" Margin="13,15,5,5" Content="Shutdown" IsChecked="{Binding ShutdownIsChecked}"/>
+                <RadioButton GroupName="rbAction" x:Name="RadioButton_Restart" Margin="13,5,5,5" Content="Restart" IsChecked="{Binding RestartIsChecked}" />
+                <RadioButton GroupName="rbAction" x:Name="RadioButton_Sleep" Margin="13,5,5,5" Content="Sleep" IsChecked="{Binding SleepIsChecked}"/>
             </StackPanel>
 
         </GroupBox>
-
     </Grid>
 </Window>
