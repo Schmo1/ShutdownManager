@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Windows;
-using System.Threading;
-using System.IO;
-using System.IO.MemoryMappedFiles;
 using ShutdownManager.Views;
 using ShutdownManager.Classes;
 using ShutdownManager.ViewModels;
@@ -135,12 +132,20 @@ namespace ShutdownManager
 
         private static void OnMainWindowClosing(object source, EventArgs args)
         {
+
+            Window.Closing -= OnMainWindowClosing;
+
             if (TimerFunktionController.IsTimerStarted)
             {
                 TaskbarIcon.ShowBalloonTip("Info", "The timer is still running in the background", BalloonIcon.Info);
             }
+            //Close Window only on X-Button
+            else if (!AppCon.IsAutoStartChecked && !(source.ToString() == "ShutdownManager.Views.MainWindow"))
+            {
+                Current.Shutdown();
+            }
 
-            Window.Closing -= OnMainWindowClosing;
+            
         }
 
 

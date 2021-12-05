@@ -2,7 +2,6 @@
 using System.Windows.Input;
 using ShutdownManager.Commands;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 namespace ShutdownManager.ViewModels
 {
@@ -13,10 +12,6 @@ namespace ShutdownManager.ViewModels
     /// </summary>
     public class NotifyIconViewModel
     {
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-
 
         // Shows a window, if none is already open.
 
@@ -61,7 +56,22 @@ namespace ShutdownManager.ViewModels
                 return new DelegateCommand { CommandAction = () => Application.Current.Shutdown() };
             }
         }
-        
+
+
+        // 
+        public ICommand AddToStartup
+        {
+            get
+            {
+                return new DelegateCommand { CommandAction = () => App.AppCon.ChangeAutoStartChecked() };
+            }
+        }
+
+        public bool IsAutoStartChecked
+        {
+            get { return App.AppCon.IsAutoStartChecked; }
+        }
+
     }
 
 

@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using System.IO;
 using Newtonsoft.Json;
+using ShutdownManager;
 
 namespace ShutdownManager.Classes
 {
@@ -19,7 +20,7 @@ namespace ShutdownManager.Classes
             {
                 //create Path for AppData
                 string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                folder = Path.Combine(folder, "ShutdownManager");
+                folder = Path.Combine(folder, App.AppCon.AppName);
 
                 // CreateDirectory will check if every folder in path exists and, if not, create them.
                 // If all folders exist then CreateDirectory will do nothing.
