@@ -155,10 +155,6 @@ namespace ShutdownManager.Classes
                     App.FunktionController.DownloadValue = Math.Round(receivedMBS,1).ToString() + " MB/s"; 
                     App.FunktionController.UploadValue = Math.Round(sendMBS).ToString() + " MB/s"; 
 
-                    Console.WriteLine("Download: {0}", App.FunktionController.DownloadValue);
-                    Console.WriteLine("Upload: {0}", App.FunktionController.UploadValue);
-                    Console.WriteLine();
-
                     maxReceivedOld += maxReceived;
                     maxSendOld += maxSend;
 

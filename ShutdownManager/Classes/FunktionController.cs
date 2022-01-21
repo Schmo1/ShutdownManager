@@ -103,6 +103,7 @@ namespace ShutdownManager.Classes
             { 
                 int maxValue = 99999;
                 int minValue = 2;
+
                 if (value > maxValue)
                 {
                     userDataPersistentManager.ObserveTime = maxValue;
@@ -125,6 +126,7 @@ namespace ShutdownManager.Classes
             {
                 double maxValue = 1000;
                 double minValue = 0.1;
+
                 if (value > maxValue)
                 {
                     userDataPersistentManager.Speed = maxValue;
