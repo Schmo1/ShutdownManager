@@ -1,4 +1,5 @@
 ﻿
+using Hardcodet.Wpf.TaskbarNotification;
 using System;
 using System.Net.NetworkInformation;
 using System.Threading;
@@ -12,7 +13,13 @@ namespace ShutdownManager.Classes
     {
         public enum LoadFunction { Download, Upload }
 
-        public LoadFunction ObserveFunction {get; set; }
+        public LoadFunction ObserveFunction { 
+            
+            get  {
+                if (App.FunktionController.userDataPersistentManager.UploadIsChecked) { return LoadFunction.Upload; }
+                else { return LoadFunction.Download; }
+            }
+        }
 
         public bool IsObserveActiv
         {
@@ -20,6 +27,7 @@ namespace ShutdownManager.Classes
             
             set 
             {
+                CreateTaskbarMessage(value);
                 if (value)
                 {
                     _expiredObserveTime = 0;
@@ -107,8 +115,7 @@ namespace ShutdownManager.Classes
                     interfaces = NetworkInterface.GetAllNetworkInterfaces();
                 }catch (ThreadAbortException)
                 {
-                    //nothing
-                    
+                    //nothing                    
                 }
                 catch (Exception e)
                 {
@@ -223,6 +230,32 @@ namespace ShutdownManager.Classes
             return average;
         }
 
+
+        private void CreateTaskbarMessage(bool stateActivated)
+        {
+
+            string message = "Observing the Down/Upload is activ/inactiv!";
+
+            if (ObserveFunction == LoadFunction.Download)
+            {
+                message = message.Replace("Down/Upload", "Download");
+            }
+            else
+            {
+                message = message.Replace("Down/Upload", "Upload");
+            }
+
+            if (stateActivated)
+            {
+                message = message.Replace("activ/inactiv", "activ");
+            }
+            else
+            {
+                message = message.Replace("activ/inactiv", "inactiv");
+            }
+
+            App.TaskbarIcon.ShowBalloonTip("Info", message, BalloonIcon.Info);
+        }
 
         private void ObserveIsOver()
         {

@@ -43,7 +43,6 @@ namespace ShutdownManager.Classes
             set
             {
                 userDataPersistentManager.DownloadIsChecked = value;
-                App.DownUploadController.ObserveFunction = DownUploadController.LoadFunction.Download;
             }
         }
 
@@ -53,8 +52,7 @@ namespace ShutdownManager.Classes
             get => userDataPersistentManager.UploadIsChecked;
             set
             {
-                userDataPersistentManager.UploadIsChecked = value;
-                App.DownUploadController.ObserveFunction = DownUploadController.LoadFunction.Upload;
+                userDataPersistentManager.UploadIsChecked = value;      
             }
         }
 
@@ -125,7 +123,20 @@ namespace ShutdownManager.Classes
             get => userDataPersistentManager.Speed;
             set
             {
-                userDataPersistentManager.Speed = value;
+                double maxValue = 1000;
+                double minValue = 0.1;
+                if (value > maxValue)
+                {
+                    userDataPersistentManager.Speed = maxValue;
+                }
+                else if (value < minValue)
+                {
+                    userDataPersistentManager.Speed = minValue;
+                }
+                else
+                {
+                    userDataPersistentManager.Speed = value;
+                }
             }
         }
 
