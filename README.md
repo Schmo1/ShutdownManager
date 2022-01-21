@@ -9,9 +9,12 @@ Features include:
 - The configuration will be safed in a json-file. If you open the tool again, the configuration will be reloaded, when a json-file exist
 - You can press some button to stop, pause or to play the timer
 - For every action, you get some balloon tip
+- You can also shut down your PC by observing your Down/Upload speed. 
+- The time and speed which controlls the shutdown time can be adjusted.
 
 ## Screenshots
 
 <div align="center">
-    <img alt="Setup" src="./screenshots/MainScreenshot.png">
+    <img alt="Setup" src="./screenshots/MainScreenshot1.png">
+	<img alt="Setup" src="./screenshots/MainScreenshot2.png">
 </div>
