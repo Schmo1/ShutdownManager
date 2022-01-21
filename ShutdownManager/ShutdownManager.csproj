@@ -108,12 +108,15 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Classes\AppController.cs" />
-    <Compile Include="Classes\TimerFunktionController.cs" />
+    <Compile Include="Classes\DownUploadController.cs" />
+    <Compile Include="Classes\FunktionController.cs" />
+    <Compile Include="Classes\ShutdownOptions.cs" />
     <Compile Include="Classes\UserData.cs" />
     <Compile Include="Classes\UserDataPersistentManager.cs" />
     <Compile Include="Commands\DelegateCommand.cs" />
-    <Compile Include="Converters\BoolInvertConverter.cs" />
     <Compile Include="Converters\StringToIntConverter.cs" />
+    <Compile Include="Converters\StringToDoubleConverter.cs" />
+    <Compile Include="Converters\BoolInvertConverter.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

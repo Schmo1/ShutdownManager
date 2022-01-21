@@ -4,14 +4,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShutdownManager.Views"
-        xmlns:converters="clr-namespace:ShutdownManager.Converters"
+        xmlns:converters="clr-namespace:ShutdownManager.Converters" xmlns:classes="clr-namespace:ShutdownManager.Classes" d:DataContext="{d:DesignInstance Type=classes:FunktionController}"
         mc:Ignorable="d"
-        Title="Shutdown Manager" Height="320" Width="290" MinHeight="320" MinWidth="270" MaxHeight="500" MaxWidth="400" Icon="/ShutdownManager;component/icons/ShutdownManager.ico" WindowStartupLocation="CenterScreen">
+        Title="Shutdown Manager" Height="350" Width="330" MinHeight="320" MinWidth="270" MaxHeight="500" MaxWidth="400" Icon="/ShutdownManager;component/icons/ShutdownManager.ico" WindowStartupLocation="CenterScreen">
     <Window.Resources>
-        <converters:StringToIntConverter x:Key="MyStringConverter"/>
-        <converters:BoolInvertConverter x:Key="MyBoolInvertConverter"/>
-
         
+        <!-- Converters -->
+        <converters:StringToIntConverter x:Key="MyStringToIntConverter"/>
+        <converters:BoolInvertConverter x:Key="MyBoolInvertConverter"/>
+        <converters:StringToDoubleConverter x:Key="MyStringToDoubleConverter"/>
+
 
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
@@ -70,115 +72,228 @@
         </Style>
     </Window.Resources>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="1.2*"/>
-            <RowDefinition Height="55"/>
-            <RowDefinition Height="2*"/>
 
-        </Grid.RowDefinitions>
-
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-
-
-        <GroupBox Header="Timer" Grid.ColumnSpan="2" Margin="7">
-            <TextBlock Name="TbTimer" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="35" TextWrapping="Wrap" Text="{Binding TimeLeft , FallbackValue=00:00:00}" />
-        </GroupBox>
-
-
-        <Button Name="btStartStop" 
-                Margin="3" 
-                Click="Button_StartStop" 
-                Grid.Row="1" 
-                Background="White" 
-                BorderThickness="0" 
-                Width="50" 
-                Height="50" 
-                HorizontalAlignment="Right" 
-                VerticalAlignment="Center" 
-                Style="{DynamicResource RoundetButton}" >
-            <Image Name="imagePlayPause" Source="/ShutdownManager;component/images\play.png"/>
-        </Button>
-        <Button Name="btStop" 
-                Margin="3" 
-                Click="Button_Stop" 
-                Grid.Row="1" 
-                Grid.Column="1" 
-                Background="White" 
-                BorderThickness="0" 
-                Width="50" Height="50" 
-                HorizontalAlignment="Left" 
-                VerticalAlignment="Center" 
-                Style="{DynamicResource RoundetButton}"
-                IsEnabled="{Binding IsTimerStarted}">
-            <Image Name="imageStop" Source="/ShutdownManager;component/images\Stop.png"/>
-        </Button>
-
-        <GroupBox Margin="7" Header="Time Settings" Grid.Row="3">
+    <!--        -->
+    <!--- Timer -->
+    <!--        -->
+    <TabControl Margin="5">
+        <TabItem Header="Timer" Name="TIHeader">
             <Grid>
-
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="0.6*"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="1.2*"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="2*"/>
+
                 </Grid.RowDefinitions>
+
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="82"/>
+                    <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox PreviewTextInput="NumberValidationTextBox" 
-                         FontSize="15" 
-                         TextAlignment="Center" 
-                         Text="{Binding Hours, FallbackValue= 0 , Converter={StaticResource MyStringConverter}}" 
-                         IsEnabled="{Binding IsTimerStarted, Converter={StaticResource MyBoolInvertConverter}}"
-                         Name="txtHours" 
-                         HorizontalAlignment="Right" 
-                         Height="24" 
-                         Width="65"/>
+
+                <GroupBox Header="Time" Grid.ColumnSpan="2" Margin="7">
+                    <TextBlock Name="TbTimer" 
+                               TextAlignment="Center" 
+                               VerticalAlignment="Center" 
+                               HorizontalAlignment="Center" 
+                               FontSize="35" 
+                               TextWrapping="Wrap" 
+                               Text="{Binding TimeLeft , FallbackValue=00:00:00}" />
+
+                </GroupBox>
+
+                <Button Name="btStartStop" 
+                    Margin="3" 
+                    Click="Button_StartStop" 
+                    Grid.Row="1" 
+                    Background="White" 
+                    BorderThickness="0" 
+                    Width="50" 
+                    Height="50" 
+                    HorizontalAlignment="Right" 
+                    VerticalAlignment="Center" 
+                    Style="{DynamicResource RoundetButton}" >
+                    <Image Name="imagePlayPause" Source="/ShutdownManager;component/images\play.png"/>
+                </Button>
+                <Button Name="btStop" 
+                    Margin="3" 
+                    Click="Button_Stop" 
+                    Grid.Row="1" 
+                    Grid.Column="1" 
+                    Background="White" 
+                    BorderThickness="0" 
+                    Width="50" Height="50" 
+                    HorizontalAlignment="Left" 
+                    VerticalAlignment="Center" 
+                    Style="{DynamicResource RoundetButton}"
+                    IsEnabled="{Binding IsTimerStarted}">
+                    <Image Name="imageStop" Source="/ShutdownManager;component/images\Stop.png"/>
+                </Button>
 
 
-                <TextBox PreviewTextInput="NumberValidationTextBox" 
-                         FontSize="15" 
-                         TextAlignment="Center" 
-                         Text="{Binding Minutes, FallbackValue=0, Converter={StaticResource MyStringConverter}}" 
-                         IsEnabled="{Binding IsTimerStarted, Converter={StaticResource MyBoolInvertConverter}}"
-                         Name="txtMinutes" 
-                         HorizontalAlignment="Right" 
-                         Height="24" 
-                         Width="65" 
-                         Grid.Row="1"/>
-                
-                <TextBox PreviewTextInput="NumberValidationTextBox" 
-                         FontSize="15" 
-                         TextAlignment="Center" 
-                         Text="{Binding Seconds, FallbackValue=0, Converter={StaticResource MyStringConverter}}"
-                         IsEnabled="{Binding IsTimerStarted, Converter={StaticResource MyBoolInvertConverter}}"
-                         Name="txtSeconds"  
-                         HorizontalAlignment="Right" 
-                         Height="24" 
-                         Width="65" 
-                         Grid.Row="2"/>
+                <GroupBox Margin="7" Header="Time Settings" Grid.Row="3">
+                    <Grid>
 
-                <TextBlock Text="h" Grid.Column="1" FontSize="17" HorizontalAlignment = "Left" VerticalAlignment="Center" Margin="5" TextAlignment="Center" />
-                <TextBlock Text="m" Grid.Row="1" Grid.Column="1" FontSize="17" HorizontalAlignment = "Left" VerticalAlignment="Center" Margin="5" TextAlignment="Center" />
-                <TextBlock Text="s"  Grid.Row="2" Grid.Column="1" FontSize="17" HorizontalAlignment = "Left" VerticalAlignment="Center" Margin="5" TextAlignment="Center" />
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="0.6*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="82"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
+                        <TextBox PreviewTextInput="NumberValidationTextBox" 
+                             FontSize="15" 
+                             TextAlignment="Center" 
+                             Text="{Binding Hours, FallbackValue= 0 , Converter={StaticResource MyStringToIntConverter}}" 
+                             IsEnabled="{Binding IsTimerStarted, Converter={StaticResource MyBoolInvertConverter}}"
+                             Name="txtHours" 
+                             HorizontalAlignment="Right" 
+                             Height="24" 
+                             Width="65"/>
+
+
+                        <TextBox PreviewTextInput="NumberValidationTextBox" 
+                             FontSize="15" 
+                             TextAlignment="Center" 
+                             Text="{Binding Minutes, FallbackValue=0, Converter={StaticResource MyStringToIntConverter}}" 
+                             IsEnabled="{Binding IsTimerStarted, Converter={StaticResource MyBoolInvertConverter}}"
+                             Name="txtMinutes" 
+                             HorizontalAlignment="Right" 
+                             Height="24" 
+                             Width="65" 
+                             Grid.Row="1"/>
+
+                        <TextBox PreviewTextInput="NumberValidationTextBox" 
+                             FontSize="15" 
+                             TextAlignment="Center" 
+                             Text="{Binding Seconds, FallbackValue=0, Converter={StaticResource MyStringToIntConverter}}"
+                             IsEnabled="{Binding IsTimerStarted, Converter={StaticResource MyBoolInvertConverter}}"
+                             Name="txtSeconds"  
+                             HorizontalAlignment="Right" 
+                             Height="24" 
+                             Width="65" 
+                             Grid.Row="2"/>
+
+                        <TextBlock Text="h" Grid.Column="1" FontSize="17" HorizontalAlignment = "Left" VerticalAlignment="Center" Margin="5" TextAlignment="Center" />
+                        <TextBlock Text="m" Grid.Row="1" Grid.Column="1" FontSize="17" HorizontalAlignment = "Left" VerticalAlignment="Center" Margin="5" TextAlignment="Center" />
+                        <TextBlock Text="s"  Grid.Row="2" Grid.Column="1" FontSize="17" HorizontalAlignment = "Left" VerticalAlignment="Center" Margin="5" TextAlignment="Center" />
+
+                    </Grid>
+
+                </GroupBox>
+
+                <GroupBox Margin="7" Header="Action" Grid.Row="3" Grid.Column="1">
+
+                    <StackPanel>
+                        <RadioButton GroupName="rbAction" x:Name="RadioButton_Shutdown" Margin="13,15,5,10" Content="Shutdown" IsChecked="{Binding ShutdownIsChecked}"/>
+                        <RadioButton GroupName="rbAction" x:Name="RadioButton_Restart" Margin="13,5,5,10" Content="Restart" IsChecked="{Binding RestartIsChecked}" />
+                        <RadioButton GroupName="rbAction" x:Name="RadioButton_Sleep" Margin="13,5,5,10" Content="Sleep" IsChecked="{Binding SleepIsChecked}"/>
+                    </StackPanel>
+
+                </GroupBox>
             </Grid>
+        </TabItem>
 
-        </GroupBox>
+        <!--                        -->
+        <!--- Down/Upload Controll  -->
+        <!--                        -->
+        <TabItem Header="Down/Upload Control" Name="TIDownUpload" IsSelected="{Binding Path= DownUploadIsSelected, Mode=OneWayToSource}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
 
-        <GroupBox Margin="7" Header="Action" Grid.Row="3" Grid.Column="1">
+                </Grid.RowDefinitions>
 
-            <StackPanel>
-                <RadioButton GroupName="rbAction" x:Name="RadioButton_Shutdown" Margin="13,15,5,5" Content="Shutdown" IsChecked="{Binding ShutdownIsChecked}"/>
-                <RadioButton GroupName="rbAction" x:Name="RadioButton_Restart" Margin="13,5,5,5" Content="Restart" IsChecked="{Binding RestartIsChecked}" />
-                <RadioButton GroupName="rbAction" x:Name="RadioButton_Sleep" Margin="13,5,5,5" Content="Sleep" IsChecked="{Binding SleepIsChecked}"/>
-            </StackPanel>
 
-        </GroupBox>
-    </Grid>
+                <!--- Infotext  -->
+                <StackPanel Margin="7">
+                    <TextBlock Name="tbTextDownUp1"> If the Down-, Upload Control is active, it will check</TextBlock>
+                    <TextBlock Name="tbTextDownUp2"> if the average XXXInsertDownUploadXXX speed is under XXXInsertSpeedXXX MB/s</TextBlock>
+                    <TextBlock x:Name="tbTextDownUp3"><Run Text="for Insert"/><Run Language="de-de" Text="Times"/><Run Text=" s then the PC will shut down"/></TextBlock>
+                </StackPanel>
+
+                <!--- Checkbox to activate the function  -->
+                <CheckBox Grid.Row="1" Margin="7,3.5,7,3.5" IsChecked="{Binding IsObserveActiv}">Activate</CheckBox>
+
+
+
+                <!--- Showing the actual values  -->
+                <GroupBox Header="Actual values" Margin="7,3.5,7,3.5" Grid.Row="2">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="0.7*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="0.7*"/>
+                        </Grid.ColumnDefinitions>
+
+
+                        <TextBlock Grid.Column="0" Margin="7" HorizontalAlignment = "Left" VerticalAlignment="Center" >Download:</TextBlock>
+                        <TextBlock Grid.Column="1" Margin="0,7,0,7" HorizontalAlignment = "Left" Text="{Binding DownloadValue}"/>
+                        <TextBlock Grid.Column="2" Margin="7" HorizontalAlignment = "Left" VerticalAlignment="Center" >Upload:</TextBlock>
+                        <TextBlock Grid.Column="3" Margin="0,7,0,7" HorizontalAlignment = "Left" Text="{Binding UploadValue}"/>
+                    </Grid>
+                </GroupBox>
+
+
+                <!--- Properties -->
+                <GroupBox Header="Properties" Margin="7,3.5,7,3.5" Grid.Row="3">
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="1.4*"/>
+                        </Grid.ColumnDefinitions>
+                        <GroupBox Header="Observe" Margin="7,7,3.5,7">
+                            <StackPanel>
+                                <RadioButton GroupName="rbDownUp" Name="RadioButton_Download" Margin="7,14,7,10" Content="Downlaod" Click="RadioButton_DownUp_Click"/>
+                                <RadioButton GroupName="rbDownUp" Name="RadioButton_Upload"   Margin="7,0,0,10"  Content="Upload" Click="RadioButton_DownUp_Click"/>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="Values" Grid.Column="1" Margin="7,3.5,7,7">
+                            <Grid>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="1.6*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBox Margin="7" 
+                                         TextAlignment="Center" 
+                                         Text="{Binding Speed, FallbackValue=0.5, Converter={StaticResource MyStringToDoubleConverter}}"
+                                         PreviewTextInput="NumberValidationTextBoxDouble"
+                                         Name="tBSpeed"
+                                         TextChanged="TextChanged"/>
+                                <TextBox Margin="7" 
+                                         TextAlignment="Center" 
+                                         Grid.Row="1" 
+                                         Text="{Binding ObserveTime, FallbackValue=10, Converter={StaticResource MyStringToIntConverter}}" 
+                                         PreviewTextInput="NumberValidationTextBox"
+                                         Name="tBSeconds"
+                                         TextChanged="TextChanged"/>
+                                <TextBlock Margin="4,7,7,7" Grid.Column="1" Text="Speed (MB/s)"  />
+                                <TextBlock Margin="4,7,7,7" Grid.Column="1" Grid.Row="1"><Run Language="de-de" Text="Times (s)"/></TextBlock>
+                            </Grid>
+                        </GroupBox>
+                    </Grid>
+                </GroupBox>
+            </Grid>
+        </TabItem>
+    </TabControl>
 </Window>

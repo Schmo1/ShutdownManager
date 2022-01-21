@@ -2,7 +2,6 @@
 using System.Windows.Forms;
 using System.IO;
 using Newtonsoft.Json;
-using ShutdownManager;
 
 namespace ShutdownManager.Classes
 {
@@ -12,7 +11,21 @@ namespace ShutdownManager.Classes
         
         private string _path;
         private bool _isLoaded = false;
-        
+
+
+        //Data override
+        public override int Hours { get => base.Hours; set { base.Hours = value; SaveUserData(); } }
+        public override int Minutes { get => base.Minutes; set { base.Minutes = value; SaveUserData(); } }
+        public override int Seconds { get => base.Seconds; set { base.Seconds = value; SaveUserData(); } }
+        public override bool ShutdownIsChecked { get => base.ShutdownIsChecked; set { base.ShutdownIsChecked = value; SaveUserData(); } }
+        public override bool RestartIsChecked { get => base.RestartIsChecked; set { base.RestartIsChecked = value; SaveUserData(); } }
+        public override bool SleepIsChecked { get => base.SleepIsChecked; set { base.SleepIsChecked = value; SaveUserData(); } }
+        public override bool DownloadIsChecked { get => base.DownloadIsChecked; set { base.DownloadIsChecked = value; SaveUserData(); } }
+        public override bool UploadIsChecked { get => base.UploadIsChecked; set { base.UploadIsChecked = value; SaveUserData(); } }
+        public override int ObserveTime { get => base.ObserveTime; set { base.ObserveTime = value; SaveUserData(); } }
+        public override double Speed { get => base.Speed; set { base.Speed = value; SaveUserData(); } }
+
+
 
         public UserDataPersistentManager()
         {
@@ -49,7 +62,7 @@ namespace ShutdownManager.Classes
                 try
                 {
                     StreamWriter sw = new StreamWriter(_path, false);
-                    UserData saveData = new UserData(Hours, Minutes, Seconds, ShutdownIsChecked, RestartIsChecked, SleepIsChecked);
+                    UserData saveData = new UserData(Hours, Minutes, Seconds, ShutdownIsChecked, RestartIsChecked, SleepIsChecked, Speed, ObserveTime, DownloadIsChecked, UploadIsChecked);
                     string userDataStr = JsonConvert.SerializeObject(saveData, Formatting.Indented);
                     sw.Write(userDataStr);
                     sw.Close();
@@ -82,6 +95,7 @@ namespace ShutdownManager.Classes
                     loadData = JsonConvert.DeserializeObject<UserData>(userDataStr);
                     sr.Close();
 
+                    //Timer Control
                     Hours = loadData.Hours;
                     Minutes = loadData.Minutes;
                     Seconds = loadData.Seconds;
@@ -89,6 +103,11 @@ namespace ShutdownManager.Classes
                     RestartIsChecked = loadData.RestartIsChecked;
                     SleepIsChecked = loadData.SleepIsChecked;
 
+                    //Down- Upload Control
+                    Speed = loadData.Speed;
+                    ObserveTime = loadData.ObserveTime;
+                    DownloadIsChecked = loadData.DownloadIsChecked;
+                    UploadIsChecked = loadData.UploadIsChecked;
 
                 }
                 catch (Exception e)

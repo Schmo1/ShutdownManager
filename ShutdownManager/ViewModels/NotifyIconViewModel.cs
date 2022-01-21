@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 using ShutdownManager.Commands;
-using System.ComponentModel;
 
 namespace ShutdownManager.ViewModels
 {
@@ -40,8 +39,9 @@ namespace ShutdownManager.ViewModels
             {
                 return new DelegateCommand
                 {
+
                     CommandAction = () => App.Window.Close(),
-                    CanExecuteFunc = () => App.Window.IsVisible == true
+                    CanExecuteFunc = () => App.Window.IsVisible == true,
                 };
             }
         }

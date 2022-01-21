@@ -35,8 +35,6 @@ namespace ShutdownManager.Classes
             thReciver = new Thread(ReciveRequestForGUI);
             thReciver.SetApartmentState(ApartmentState.STA);
 
-
-
             CheckRegistry();
 
         }

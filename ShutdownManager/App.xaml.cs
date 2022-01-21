@@ -14,14 +14,16 @@ namespace ShutdownManager
     {
 
         //Variables
-        private static TimerFunktionController _timerFunktionController;
+        private static FunktionController _funktionController;
 
         //Properties
         public static MainWindow Window { get; set; }
-        public static TimerFunktionController TimerFunktionController { get => _timerFunktionController; set => _timerFunktionController = value; }
+        public static FunktionController FunktionController { get => _funktionController; set => _funktionController = value; }
+        public static DownUploadController DownUploadController { get; set; }
         public static TaskbarIcon TaskbarIcon { get; set; }
         public static NotifyIconViewModel NotifyIconViewModel { get; set; }
         public static AppController AppCon { get; set; }
+        public static ShutdownOptions ShutdownOptions { get; set; }
 
         private delegate void OpenMainWindowDel();
 
@@ -35,10 +37,10 @@ namespace ShutdownManager
             AppCon = new AppController();
             AppCon.OnOpenRequest += OpenGUIRequest; //Timer is over event
             
-            TimerFunktionController = new TimerFunktionController();
+            FunktionController = new FunktionController();
             NotifyIconViewModel = new NotifyIconViewModel();
-            Window = new MainWindow();
-
+            DownUploadController = new DownUploadController();
+            ShutdownOptions = new ShutdownOptions();    
         }
 
 
@@ -69,13 +71,16 @@ namespace ShutdownManager
             {
                 MessageBox.Show(ex.Message.ToString(), "Find Resource", MessageBoxButton.OK ,MessageBoxImage.Error);
             }
-           
 
             if (WithUserInterface())
             {
-                OpenMainWindow();
+               OpenMainWindow();
             }
-            
+            else
+            {
+                Window = new MainWindow();
+            }
+
         }
 
         private void OpenGUIRequest(object source, EventArgs args)
@@ -88,8 +93,9 @@ namespace ShutdownManager
         protected override void OnExit(ExitEventArgs e)
         {
             TaskbarIcon.Dispose();
-
+            DownUploadController.AbortThread();
             AppCon.StopListening();
+
             AppCon = null;
 
             base.OnExit(e);
@@ -112,7 +118,8 @@ namespace ShutdownManager
 
         public static void OpenMainWindow()
         {
-            if (Window == null || Window.IsVisible == false)
+
+            if(Window == null || Window.IsVisible == false)
             {
                 try
                 {
@@ -127,6 +134,7 @@ namespace ShutdownManager
                 }
 
             }
+
             Window.WindowState = WindowState.Normal;
         }
 
@@ -134,8 +142,10 @@ namespace ShutdownManager
         {
 
             Window.Closing -= OnMainWindowClosing;
+            DownUploadController.AbortThread();
 
-            if (TimerFunktionController.IsTimerStarted)
+
+            if (FunktionController.IsTimerStarted)
             {
                 TaskbarIcon.ShowBalloonTip("Info", "The timer is still running in the background", BalloonIcon.Info);
             }

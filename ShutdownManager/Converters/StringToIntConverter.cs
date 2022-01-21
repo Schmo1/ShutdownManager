@@ -4,16 +4,29 @@ using System.Windows.Data;
 
 namespace ShutdownManager.Converters
 {
-    internal class BoolInvertConverter : IValueConverter
+    internal class StringToIntConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return !(bool)value;
+            int intValue;
+            try
+            {
+                intValue = System.Convert.ToInt32(value);
+            }
+            catch (Exception)
+            {
+
+                intValue = 0;
+            }
+
+
+            return intValue;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return !(bool)value;
+            return (string)value;    
+   
         }
     }
 }

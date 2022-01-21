@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.ComponentModel;
 using Hardcodet.Wpf.TaskbarNotification;
 using System.Runtime.CompilerServices;
@@ -9,39 +7,66 @@ using System.Runtime.CompilerServices;
 namespace ShutdownManager.Classes
 {
 
-    public class TimerFunktionController : INotifyPropertyChanged
+    public class FunktionController : INotifyPropertyChanged
     {
-
-        [DllImport("Powrprof.dll", SetLastError = true)]
-
-        static extern uint SetSuspendState(bool hibernate, bool forceCritical, bool disableWakeEvent);
 
 
         //Variables
         private bool _isTimerStarted;
         private string _timeLeft;
         private TimeSpan _timeSpanLeft;
+        private string _uploadValue;
+        private string _downloadValue;
 
         public Timer timer = new Timer();
         public UserDataPersistentManager userDataPersistentManager = new UserDataPersistentManager(); //Class to manage the UserData's
+
 
 
         //Properties
         public bool IsTimerStarted { get => _isTimerStarted; set { _isTimerStarted = value; OnPropertyChanged(); } }
         public TimeSpan TimeSpanLeft { get { return _timeSpanLeft; } set { _timeSpanLeft = value; TimeLeft = _timeSpanLeft.ToString(@"hh\:mm\:ss"); } }
         public string TimeLeft { get { return _timeLeft; } set { _timeLeft = value; OnPropertyChanged(); } }
+        
 
-        public bool ShutdownIsChecked { get => userDataPersistentManager.ShutdownIsChecked; set { userDataPersistentManager.ShutdownIsChecked = value; userDataPersistentManager.SaveUserData(); } }
-        public bool RestartIsChecked { get => userDataPersistentManager.RestartIsChecked; set { userDataPersistentManager.RestartIsChecked = value; userDataPersistentManager.SaveUserData(); } }
-        public bool SleepIsChecked { get => userDataPersistentManager.SleepIsChecked; set { userDataPersistentManager.SleepIsChecked = value; userDataPersistentManager.SaveUserData(); } }
 
+        //Timer Functions
+        public bool ShutdownIsChecked { get => userDataPersistentManager.ShutdownIsChecked; set { userDataPersistentManager.ShutdownIsChecked = value;} }
+        public bool RestartIsChecked { get => userDataPersistentManager.RestartIsChecked; set { userDataPersistentManager.RestartIsChecked = value;} }
+        public bool SleepIsChecked { get => userDataPersistentManager.SleepIsChecked; set { userDataPersistentManager.SleepIsChecked = value;} }
+
+
+        // Down- Upload Functions
+        public bool DownloadIsChecked
+        {
+        get => userDataPersistentManager.DownloadIsChecked;
+            set
+            {
+                userDataPersistentManager.DownloadIsChecked = value;
+                App.DownUploadController.ObserveFunction = DownUploadController.LoadFunction.Download;
+            }
+        }
+
+
+        public bool UploadIsChecked
+        {
+            get => userDataPersistentManager.UploadIsChecked;
+            set
+            {
+                userDataPersistentManager.UploadIsChecked = value;
+                App.DownUploadController.ObserveFunction = DownUploadController.LoadFunction.Upload;
+            }
+        }
+
+
+
+        //Times for Timerfunctioncontrol
         public int Hours
         {
             get => userDataPersistentManager.Hours;
             set
             {
                 userDataPersistentManager.Hours = value;
-                userDataPersistentManager.SaveUserData();
                 UpdateTimeSpan();
                 OnPropertyChanged();
             }
@@ -53,7 +78,6 @@ namespace ShutdownManager.Classes
             set
             {
                 userDataPersistentManager.Minutes = value;
-                userDataPersistentManager.SaveUserData();
                 UpdateTimeSpan();
                 OnPropertyChanged();
             }
@@ -65,26 +89,87 @@ namespace ShutdownManager.Classes
             set
             {
                 userDataPersistentManager.Seconds = value;
-                userDataPersistentManager.SaveUserData();
                 UpdateTimeSpan();
                 OnPropertyChanged();
             }
         }
 
+
+        public bool IsObserveActiv { get => App.DownUploadController.IsObserveActiv; set => App.DownUploadController.IsObserveActiv = value; }    
+
+        //Down- Upload Control
+        public int ObserveTime
+        {
+            get => userDataPersistentManager.ObserveTime;
+            set
+            { 
+                int maxValue = 99999;
+                int minValue = 2;
+                if (value > maxValue)
+                {
+                    userDataPersistentManager.ObserveTime = maxValue;
+                }else if (value < minValue)
+                {
+                    userDataPersistentManager.ObserveTime = minValue;
+                }
+                else
+                {
+                    userDataPersistentManager.ObserveTime = value;
+                }
+                App.DownUploadController.ObserveTime = userDataPersistentManager.ObserveTime;
+
+            }
+        }
+        public double Speed
+        {
+            get => userDataPersistentManager.Speed;
+            set
+            {
+                userDataPersistentManager.Speed = value;
+            }
+        }
+
+        public string DownloadValue
+        {
+            get => _downloadValue;
+            set
+            {
+                _downloadValue = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string UploadValue {
+            get => _uploadValue;
+            set
+            {
+                _uploadValue = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool DownUploadIsSelected 
+        {
+            get => App.DownUploadController.IsViewActiv;
+            set => App.DownUploadController.IsViewActiv = value;
+        }
+
+
+
         //Events
         public event EventHandler OnTimerIsOver;
-        public event EventHandler OnTimerTick;
         public event PropertyChangedEventHandler PropertyChanged;
 
 
         //Konstruktor
-        public TimerFunktionController()
+        public FunktionController()
         {
             userDataPersistentManager.LoadUserData();
             OnPropertyChanged();
             UpdateTimeSpan();
             timer.Tick += new EventHandler(Timer_Tick);
             timer.Interval = 1000; //one Second  
+            CheckEmptyUserInput();
         }
 
 
@@ -96,6 +181,24 @@ namespace ShutdownManager.Classes
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+
+        private void CheckEmptyUserInput()
+        {
+            if(ObserveTime == 0)
+            {
+                ObserveTime = 10;
+            }
+
+            if(Speed == 0)
+            {
+                Speed = 0.5;
+            }
+
+            if(!DownloadIsChecked && !UploadIsChecked)
+            {
+                DownloadIsChecked = true;
+            }
+        }
         public void UpdateTimeSpan()
         {
 
@@ -180,15 +283,15 @@ namespace ShutdownManager.Classes
         { 
             if (ShutdownIsChecked)
             {
-               Process.Start("shutdown", "/s /f /t 0");
+                App.ShutdownOptions.Shutdown();
             }
             else if (RestartIsChecked)
-            { 
-                Process.Start("shutdown", "/r /f /t 0");
+            {
+                App.ShutdownOptions.Restart();
             }
             else if (SleepIsChecked)
             {
-               SetSuspendState(true, false, false); //With hibernate   
+                App.ShutdownOptions.Sleep(); 
             }
             else
             {

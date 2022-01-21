@@ -10,32 +10,37 @@ namespace ShutdownManager.Views
     public partial class MainWindow : Window
     {
 
-
+        private const string downUploadText2 = "if the average XXXInsertDownUploadXXX speed is under XXXInsertSpeedXXX MB/s";
+        private const string downUploadText3 = " for XXXInsertTimesXXX Times (s) then the PC will shut down";
+        private const string speedInsertTemplate = "XXXInsertSpeedXXX";
+        private const string timesInsertTemplate = "XXXInsertTimesXXX";
+        private const string DownUploadInsertTemplate = "XXXInsertDownUploadXXX";
 
         public MainWindow()
         {
+            
+            
             InitializeComponent();
 
-            DataContext = App.TimerFunktionController;
+            DataContext = App.FunktionController;
 
-            App.TimerFunktionController.OnTimerIsOver += OnTimerisOver; //Timer is over event
+            App.FunktionController.OnTimerIsOver += OnTimerisOver; //Timer is over event
 
         }
 
 
-
         private void Button_StartStop(object sender, RoutedEventArgs e)
         {
-            if (!App.TimerFunktionController.IsTimerStarted)
+            if (!App.FunktionController.IsTimerStarted)
             {
                 FillUpEmptyUserInput();
                 ShowPauseImage();
-                App.TimerFunktionController.StartTimer();
+                App.FunktionController.StartTimer();
             }
             else
             {
                 ShowPlayImage();
-                App.TimerFunktionController.StopPauseTimer(true);
+                App.FunktionController.StopPauseTimer(true);
             }
 
 
@@ -43,13 +48,19 @@ namespace ShutdownManager.Views
         private void Button_Stop(object sender, RoutedEventArgs e)
         {
             ShowPlayImage();
-            App.TimerFunktionController.StopPauseTimer(false);
+            App.FunktionController.StopPauseTimer(false);
         }
 
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
+
+        private void NumberValidationTextBoxDouble(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex(@"[0 - 9] + (\.[0 - 9]+)?");
             e.Handled = regex.IsMatch(e.Text);
         }
 
@@ -64,7 +75,7 @@ namespace ShutdownManager.Views
 
         public void LoadInformations()
         {
-            if (App.TimerFunktionController.IsTimerStarted)
+            if (App.FunktionController.IsTimerStarted)
             {
                 ShowPauseImage();
             }
@@ -97,6 +108,45 @@ namespace ShutdownManager.Views
 
         }
 
+        private void UpdateDownUploadText()
+        {
+            if (tbTextDownUp2 != null && tbTextDownUp3 != null && tBSpeed != null && tBSeconds != null)
+            {   //Replace Text
+                tbTextDownUp2.Text = downUploadText2;
+                tbTextDownUp3.Text = downUploadText3;
+
+                tbTextDownUp2.Text = tbTextDownUp2.Text.Replace(speedInsertTemplate, tBSpeed.Text);
+                tbTextDownUp3.Text = tbTextDownUp3.Text.Replace(timesInsertTemplate, tBSeconds.Text);
+
+                if (App.FunktionController.DownloadIsChecked)
+                {
+                    tbTextDownUp2.Text = tbTextDownUp2.Text.Replace(DownUploadInsertTemplate, "Download");
+                }
+                else if (App.FunktionController.UploadIsChecked)
+                {
+                    tbTextDownUp2.Text = tbTextDownUp2.Text.Replace(DownUploadInsertTemplate, "Upload");
+                }
+
+            }
+
+            RadioButton_Download.IsChecked = App.FunktionController.DownloadIsChecked ;
+            RadioButton_Upload.IsChecked = App.FunktionController.UploadIsChecked;
+
+        }
+
+        private void RadioButton_DownUp_Click(object sender, RoutedEventArgs e)
+        {
+
+            App.FunktionController.DownloadIsChecked = (bool)RadioButton_Download.IsChecked;
+            App.FunktionController.UploadIsChecked = (bool)RadioButton_Upload.IsChecked;
+            UpdateDownUploadText();
+        }
+
+
+        private void TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            UpdateDownUploadText();
+        }
     }
     
 }
