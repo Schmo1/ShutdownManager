@@ -12,7 +12,13 @@
             <Separator />
             <MenuItem Header="Startup" Command="{Binding AddToStartup}" IsCheckable="True" IsChecked="{Binding IsAutoStartChecked, Mode=OneWay}"/>
             <Separator/>
-            <MenuItem Header="Exit" Command="{Binding ExitApplicationCommand}" />
+            <MenuItem Header="Exit" Command="{Binding ExitApplicationCommand}">
+                <MenuItem.Icon>
+                    <Image Width="16"
+                           Height="16"
+                           Source="/images/Close.png" />
+                </MenuItem.Icon>
+            </MenuItem>
         </ContextMenu>
 
 

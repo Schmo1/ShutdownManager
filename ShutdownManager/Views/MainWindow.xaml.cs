@@ -40,7 +40,7 @@ namespace ShutdownManager.Views
             else
             {
                 ShowPlayImage();
-                App.FunktionController.StopPauseTimer(true);
+                App.FunktionController.StopPauseTimer(true, true);
             }
 
 
@@ -48,7 +48,7 @@ namespace ShutdownManager.Views
         private void Button_Stop(object sender, RoutedEventArgs e)
         {
             ShowPlayImage();
-            App.FunktionController.StopPauseTimer(false);
+            App.FunktionController.StopPauseTimer(false, true);
         }
 
 

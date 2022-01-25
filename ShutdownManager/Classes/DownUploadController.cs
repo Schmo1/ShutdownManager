@@ -41,45 +41,46 @@ namespace ShutdownManager.Classes
             set { _observeTime = value; CreateArrNew(); }
         }
 
-        public bool IsViewActiv
+        //if view is activ, it would be start the Thread to read the up- and download
+        public bool IsTapActiv
         {
-            get => _isViewActive;
+            get => _isTapActive;
             set
             {
-                _isViewActive = value;
+                _isTapActive = value;
                 if (thUpdateValues != null)
                 {
                     //start Thread
-                    if (_isViewActive && !thUpdateValues.IsAlive)
+                    if (_isTapActive && !thUpdateValues.IsAlive)
                     {
                         thUpdateValues = new Thread(UpdateNetworkTraffic);
                         thUpdateValues.Start();
                     }
-                    //start Thread
-                    else if (thUpdateValues.IsAlive && !_isObserveActive)
+                    //stop Thread
+                    else
                     {
-                        try
-                        {
-                            thUpdateValues.Abort();
-                        }
-                        catch (Exception)
-                        {
-
-                        }
-                        
+                        AbortThreadWithConditions();
                     }
                 }
                 else
                 {
+                    //Create new Thread
                     thUpdateValues = new Thread(UpdateNetworkTraffic);
                 }
             }
             
         }
 
+        public bool IsWindowActiv
+        {
+            get => _isWindowActiv;
+            set => _isWindowActiv = value;
+        }
+
         private int _observeTime;
         private bool _isObserveActive;
-        private bool _isViewActive;
+        private bool _isTapActive;
+        private bool _isWindowActiv;
         private NetworkInterface[] interfaces;
         private Thread thUpdateValues;
         private double[] recordedSpeeds;
@@ -87,6 +88,16 @@ namespace ShutdownManager.Classes
 
         public DownUploadController()
         {
+        }
+
+
+        //Abort thread if conditions OK
+        private void AbortThreadWithConditions()
+        {
+            if (thUpdateValues.IsAlive && !_isObserveActive)
+            {
+                AbortThread();
+            }
         }
 
 
@@ -189,6 +200,7 @@ namespace ShutdownManager.Classes
                 }
                
                 Thread.Sleep(1000);
+                
             }
 
         }
@@ -256,8 +268,7 @@ namespace ShutdownManager.Classes
         private void ObserveIsOver()
         {
             _expiredObserveTime = 0;
-            //App.ShutdownOptions.Shutdown();
-            MessageBox.Show(" Average speed");
+            App.ShutdownOptions.Shutdown();
         }
 
         public void AbortThread()

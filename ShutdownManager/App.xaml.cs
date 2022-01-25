@@ -124,7 +124,10 @@ namespace ShutdownManager
                 try
                 {
                     Window = new MainWindow();
+
+                    //Create some events
                     Window.Closing += OnMainWindowClosing;
+
                     Window.Show();
                     Window.LoadInformations();
                 }

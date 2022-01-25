@@ -163,8 +163,8 @@ namespace ShutdownManager.Classes
 
         public bool DownUploadIsSelected 
         {
-            get => App.DownUploadController.IsViewActiv;
-            set => App.DownUploadController.IsViewActiv = value;
+            get => App.DownUploadController.IsTapActiv;
+            set => App.DownUploadController.IsTapActiv = value;
         }
 
 
@@ -238,7 +238,7 @@ namespace ShutdownManager.Classes
             }
         }
 
-        public void StopPauseTimer(bool isPaused)
+        public void StopPauseTimer(bool isPaused, bool WithMessage)
         {
             if (IsTimerStarted)
             {
@@ -249,11 +249,12 @@ namespace ShutdownManager.Classes
                 if (!isPaused)//If the Timer is not paused, then Update the Timespan
                 {
                     UpdateTimeSpan();
-                    App.TaskbarIcon.ShowBalloonTip("Info", "Timer has stopped", BalloonIcon.Info);
+                    if (WithMessage) { App.TaskbarIcon.ShowBalloonTip("Info", "Timer has stopped", BalloonIcon.Info); }
+                    
                 }
                 else
                 {
-                    App.TaskbarIcon.ShowBalloonTip("Info", "Timer has paused", BalloonIcon.Info);
+                    if (WithMessage) {App.TaskbarIcon.ShowBalloonTip("Info", "Timer has paused", BalloonIcon.Info); }
                 }
             }
         }
@@ -265,7 +266,7 @@ namespace ShutdownManager.Classes
             if (TimeSpanLeft.TotalSeconds < 1)
             {
                 OnTimerIsOver?.Invoke(this, EventArgs.Empty); //Event
-                StopPauseTimer(false);
+                StopPauseTimer(false,false);
                 TimeSpanLeft = new TimeSpan(0, 0, 0); //Sometimes the counter goes down to -1 
                 UpdateTimeSpan();
                 TimerAktions();
