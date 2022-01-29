@@ -16,7 +16,7 @@ namespace ShutdownManager.Classes
         public LoadFunction ObserveFunction { 
             
             get  {
-                if (App.FunktionController.userDataPersistentManager.UploadIsChecked) { return LoadFunction.Upload; }
+                if (App.ViewModel.userDataPersistentManager.UploadIsChecked) { return LoadFunction.Upload; }
                 else { return LoadFunction.Download; }
             }
         }
@@ -163,8 +163,8 @@ namespace ShutdownManager.Classes
                     receivedMBS = ((double)maxReceived / 1024.0) / 1024.0;   // (maxReceived / 1024) /1024 = MBit/s
                     sendMBS = ((double)maxSend / 1024.0) / 1024.0; // (maxSent / 1024) / 1024 = MBit / s
 
-                    App.FunktionController.DownloadValue = Math.Round(receivedMBS,1).ToString() + " MB/s"; 
-                    App.FunktionController.UploadValue = Math.Round(sendMBS).ToString() + " MB/s"; 
+                    App.ViewModel.DownloadValue = Math.Round(receivedMBS,1).ToString() + " MB/s";
+                    App.ViewModel.UploadValue = Math.Round(sendMBS).ToString() + " MB/s"; 
 
                     maxReceivedOld += maxReceived;
                     maxSendOld += maxSend;
@@ -191,7 +191,7 @@ namespace ShutdownManager.Classes
 
 
                         //Check if Average of the Speed is under the Observe speed and on the first time they should do nothing
-                        if (IsAverageUnderSpeed() && (_expiredObserveTime > App.FunktionController.ObserveTime))
+                        if (IsAverageUnderSpeed() && (_expiredObserveTime > App.ViewModel.ObserveTime))
                         {
                             ObserveIsOver();
                         }
@@ -207,12 +207,12 @@ namespace ShutdownManager.Classes
 
         private void CreateArrNew()
         {
-            recordedSpeeds = new double[App.FunktionController.ObserveTime];
+            recordedSpeeds = new double[App.ViewModel.ObserveTime];
         }
 
         private bool IsAverageUnderSpeed()
         {
-            if(GetAverage() < App.FunktionController.Speed)
+            if(GetAverage() < App.ViewModel.Speed)
             {
                 return true;
             }

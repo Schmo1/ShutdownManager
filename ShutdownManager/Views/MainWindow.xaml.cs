@@ -22,25 +22,25 @@ namespace ShutdownManager.Views
             
             InitializeComponent();
 
-            DataContext = App.FunktionController;
+            DataContext = App.ViewModel;
 
-            App.FunktionController.OnTimerIsOver += OnTimerisOver; //Timer is over event
+            App.TimerController.OnTimerIsOver += OnTimerisOver; //Timer is over event
 
         }
 
 
         private void Button_StartStop(object sender, RoutedEventArgs e)
         {
-            if (!App.FunktionController.IsTimerStarted)
+            if (!App.TimerController.IsTimerStarted)
             {
                 FillUpEmptyUserInput();
                 ShowPauseImage();
-                App.FunktionController.StartTimer();
+                App.TimerController.StartTimer();
             }
             else
             {
                 ShowPlayImage();
-                App.FunktionController.StopPauseTimer(true, true);
+                App.TimerController.StopPauseTimer(true, true);
             }
 
 
@@ -48,7 +48,7 @@ namespace ShutdownManager.Views
         private void Button_Stop(object sender, RoutedEventArgs e)
         {
             ShowPlayImage();
-            App.FunktionController.StopPauseTimer(false, true);
+            App.TimerController.StopPauseTimer(false, true);
         }
 
 
@@ -75,7 +75,7 @@ namespace ShutdownManager.Views
 
         public void LoadInformations()
         {
-            if (App.FunktionController.IsTimerStarted)
+            if (App.TimerController.IsTimerStarted)
             {
                 ShowPauseImage();
             }
@@ -118,27 +118,27 @@ namespace ShutdownManager.Views
                 tbTextDownUp2.Text = tbTextDownUp2.Text.Replace(speedInsertTemplate, tBSpeed.Text);
                 tbTextDownUp3.Text = tbTextDownUp3.Text.Replace(timesInsertTemplate, tBSeconds.Text);
 
-                if (App.FunktionController.DownloadIsChecked)
+                if (App.ViewModel.DownloadIsChecked)
                 {
                     tbTextDownUp2.Text = tbTextDownUp2.Text.Replace(DownUploadInsertTemplate, "Download");
                 }
-                else if (App.FunktionController.UploadIsChecked)
+                else if (App.ViewModel.UploadIsChecked)
                 {
                     tbTextDownUp2.Text = tbTextDownUp2.Text.Replace(DownUploadInsertTemplate, "Upload");
                 }
 
             }
 
-            RadioButton_Download.IsChecked = App.FunktionController.DownloadIsChecked ;
-            RadioButton_Upload.IsChecked = App.FunktionController.UploadIsChecked;
+            RadioButton_Download.IsChecked = App.ViewModel.DownloadIsChecked ;
+            RadioButton_Upload.IsChecked = App.ViewModel.UploadIsChecked;
 
         }
 
         private void RadioButton_DownUp_Click(object sender, RoutedEventArgs e)
         {
 
-            App.FunktionController.DownloadIsChecked = (bool)RadioButton_Download.IsChecked;
-            App.FunktionController.UploadIsChecked = (bool)RadioButton_Upload.IsChecked;
+            App.ViewModel.DownloadIsChecked = (bool)RadioButton_Download.IsChecked;
+            App.ViewModel.UploadIsChecked = (bool)RadioButton_Upload.IsChecked;
             UpdateDownUploadText();
         }
 

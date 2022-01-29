@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShutdownManager.Views"
-        xmlns:converters="clr-namespace:ShutdownManager.Converters" xmlns:classes="clr-namespace:ShutdownManager.Classes" d:DataContext="{d:DesignInstance Type=classes:FunktionController}"
+        xmlns:converters="clr-namespace:ShutdownManager.Converters"
         mc:Ignorable="d"
         Title="Shutdown Manager" Height="350" Width="330" MinHeight="320" MinWidth="270" MaxHeight="500" MaxWidth="400" Icon="/ShutdownManager;component/icons/ShutdownManager.ico" WindowStartupLocation="CenterScreen">
     <Window.Resources>

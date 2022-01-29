@@ -15,7 +15,7 @@ namespace ShutdownManager.Classes
         private static Thread thReciver;
         private static bool _firstInstance;
         private static bool _isAutoStartChecked;
-        private const string appName = "ShutdownManager";
+        private string appName = Application.ResourceAssembly.GetName().Name;
 
 
         public string AppName { get { return appName; } }

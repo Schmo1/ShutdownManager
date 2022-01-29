@@ -1,4 +1,4 @@
-﻿
+﻿using System.Windows;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
@@ -12,19 +12,44 @@ namespace ShutdownManager.Classes
 
         static extern uint SetSuspendState(bool hibernate, bool forceCritical, bool disableWakeEvent);
 
+        private const bool _testingModeActiv = true;
+
         public void Shutdown()
         {
-            Process.Start("shutdown", "/s /f /t 0");
+            if (_testingModeActiv)
+            {
+                MessageBox.Show("Shutdown!");
+            }
+            else
+            {
+                Process.Start("shutdown", "/s /f /t 0");
+            }
+            
         }
 
         public void Restart()
         {
-            Process.Start("shutdown", "/r /f /t 0");
+            if (_testingModeActiv)
+            {
+                MessageBox.Show("Restart!");
+            }
+            else
+            {
+                Process.Start("shutdown", "/r /f /t 0");
+            }
         }
 
         public void Sleep()
         {
-            SetSuspendState(true, false, false); //With hibernate 
+            if (_testingModeActiv)
+            {
+                MessageBox.Show("Sleep!");
+            }
+            else
+            {
+                SetSuspendState(true, false, false); //With hibernate 
+            }
+           
         }
 
     }

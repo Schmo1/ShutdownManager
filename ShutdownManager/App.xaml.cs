@@ -14,11 +14,12 @@ namespace ShutdownManager
     {
 
         //Variables
-        private static FunktionController _funktionController;
+        private static TimerController _timerController;
 
         //Properties
         public static MainWindow Window { get; set; }
-        public static FunktionController FunktionController { get => _funktionController; set => _funktionController = value; }
+        public static TimerController TimerController { get => _timerController; set => _timerController = value; }
+        public static MainWindowViewModel ViewModel { get; set; }   
         public static DownUploadController DownUploadController { get; set; }
         public static TaskbarIcon TaskbarIcon { get; set; }
         public static NotifyIconViewModel NotifyIconViewModel { get; set; }
@@ -36,8 +37,10 @@ namespace ShutdownManager
 
             AppCon = new AppController();
             AppCon.OnOpenRequest += OpenGUIRequest; //Timer is over event
-            
-            FunktionController = new FunktionController();
+
+            ViewModel = new MainWindowViewModel();
+            TimerController = new TimerController();
+ 
             NotifyIconViewModel = new NotifyIconViewModel();
             DownUploadController = new DownUploadController();
             ShutdownOptions = new ShutdownOptions();    
@@ -148,7 +151,7 @@ namespace ShutdownManager
             DownUploadController.AbortThread();
 
 
-            if (FunktionController.IsTimerStarted)
+            if (TimerController.IsTimerStarted)
             {
                 TaskbarIcon.ShowBalloonTip("Info", "The timer is still running in the background", BalloonIcon.Info);
             }
