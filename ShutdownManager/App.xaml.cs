@@ -150,13 +150,12 @@ namespace ShutdownManager
             Window.Closing -= OnMainWindowClosing;
             DownUploadController.AbortThread();
 
-
             if (TimerController.IsTimerStarted)
             {
                 TaskbarIcon.ShowBalloonTip("Info", "The timer is still running in the background", BalloonIcon.Info);
             }
             //Close Window only on X-Button
-            else if (!AppCon.IsAutoStartChecked && !(source.ToString() == "ShutdownManager.Views.MainWindow"))
+            else if (!AppCon.IsAutoStartChecked)
             {
                 Current.Shutdown();
             }
