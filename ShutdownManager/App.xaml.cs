@@ -18,6 +18,7 @@ namespace ShutdownManager
 
         //Properties
         public static MainWindow Window { get; set; }
+        private static SettingsView SettingsView { get; set; }
         public static TimerController TimerController { get => _timerController; set => _timerController = value; }
         public static MainWindowViewModel ViewModel { get; set; }   
         public static DownUploadController DownUploadController { get; set; }
@@ -144,6 +145,25 @@ namespace ShutdownManager
             Window.WindowState = WindowState.Normal;
         }
 
+        public static void OpenSettings()
+        {
+            if (SettingsView == null || SettingsView.IsVisible == false)
+            {
+                SettingsView = new SettingsView();
+                try
+                {
+                    SettingsView.Show();
+                }
+                catch (Exception ex)
+                {
+
+                    MessageBox.Show(ex.Message.ToString(), "Create Settings Window", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+
+            SettingsView.WindowState = WindowState.Normal;
+        }
+
         private static void OnMainWindowClosing(object source, EventArgs args)
         {
 
@@ -155,7 +175,7 @@ namespace ShutdownManager
                 TaskbarIcon.ShowBalloonTip("Info", "The timer is still running in the background", BalloonIcon.Info);
             }
             //Close Window only on X-Button
-            else if (!AppCon.IsAutoStartChecked)
+            else if (!AppCon.AutoStart.AutoStartActiv)
             {
                 Current.Shutdown();
             }

@@ -30,6 +30,14 @@ namespace ShutdownManager.ViewModels
             }
         }
 
+        public ICommand OpenSettings
+        {
+            get
+            {
+                return new DelegateCommand { CommandAction = () => App.OpenSettings() };
+            }
+        }
+
 
         // Hides the main window. This command is only enabled if a window is open.
 
@@ -58,19 +66,7 @@ namespace ShutdownManager.ViewModels
         }
 
 
-        // 
-        public ICommand AddToStartup
-        {
-            get
-            {
-                return new DelegateCommand { CommandAction = () => App.AppCon.ChangeAutoStartChecked() };
-            }
-        }
 
-        public bool IsAutoStartChecked
-        {
-            get { return App.AppCon.IsAutoStartChecked; }
-        }
 
     }
 
