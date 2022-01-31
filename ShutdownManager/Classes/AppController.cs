@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Threading;
@@ -19,6 +18,9 @@ namespace ShutdownManager.Classes
         public string AppName { get { return appName; } }
         public AutoStart AutoStart { get; set; }
 
+        public bool OnWindwoClosingActiv { get => Properties.Settings.Default.OnWindowClosingActiv; }
+        public bool OpenMinimized { get => Properties.Settings.Default.OpenMinimized; }
+
         public event EventHandler OnOpenRequest;
 
 
@@ -28,7 +30,7 @@ namespace ShutdownManager.Classes
             mutex = new Mutex(false, appName + "BySchmo", out _firstInstance);
             thReciver = new Thread(ReciveRequestForGUI);
             thReciver.SetApartmentState(ApartmentState.STA);
-            AutoStart = new AutoStart();
+            AutoStart = new AutoStart(" /startup");
 
         }
 

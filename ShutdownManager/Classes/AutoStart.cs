@@ -15,8 +15,21 @@ namespace ShutdownManager.Classes
         // The path to the key where Windows looks for startup applications
         private readonly RegistryKey startupKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
         private readonly string appName = Application.ResourceAssembly.GetName().Name;
+        private string _args;
 
         public bool AutoStartActiv { get => IsAutoStartActiv(); }
+        public string Argumente { get { return _args; } set { _args = value; EnableAutoStart(); } }
+
+
+
+        public AutoStart()
+        {
+
+        }
+        public AutoStart(string args)
+        {
+           Argumente = args;
+        }
 
 
         private bool IsAutoStartActiv()
@@ -94,7 +107,7 @@ namespace ShutdownManager.Classes
             //Get Full Path
             string dirInfo = Path.GetFullPath(Forms.Application.ExecutablePath);
             //add quotation marks and argument
-            dirInfo = $"\"{dirInfo}\"" + " /ui";
+            dirInfo = $"\"{dirInfo}\"" + Argumente;
 
             return dirInfo;
         }

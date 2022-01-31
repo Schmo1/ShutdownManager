@@ -5,12 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShutdownManager.Views"
         mc:Ignorable="d"
-        Title="Settings" Height="150" Width="350" Icon="/ShutdownManager;component/images/Settings.png" >
+        Title="Settings" Height="250" Width="350" Icon="/ShutdownManager;component/images/Settings.png" >
     <StackPanel>
-        <GroupBox Header="Windows settings" Margin="7">
+        <GroupBox Header="Startup" Margin="7">
             <StackPanel>
                 <CheckBox Content="Start automatically with Windows" Margin="7" IsChecked="{Binding AutoStartActiv}"/>
-                <CheckBox Content="When closing it still runs in the background" Margin="7"/>
+                <CheckBox Content="Open minimized" Margin="7" IsChecked="{Binding OpenMinimized}"/> 
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="App settings" Margin="7">
+            <StackPanel>
+                <CheckBox Content="After window closing it still run's in the background" Margin="7" IsChecked="{Binding WindowRunInTheBackground}"/>
+                <CheckBox Content="Disable Push Messages" Margin="7" IsChecked="{Binding DisablePushMessages}"/>
             </StackPanel>
         </GroupBox>
     </StackPanel>

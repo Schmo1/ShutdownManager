@@ -1,5 +1,4 @@
-﻿
-using Hardcodet.Wpf.TaskbarNotification;
+﻿using Hardcodet.Wpf.TaskbarNotification;
 using System;
 using System.Net.NetworkInformation;
 using System.Threading;

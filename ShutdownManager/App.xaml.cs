@@ -109,15 +109,25 @@ namespace ShutdownManager
 
         private bool WithUserInterface()
         {
-            string[] arguments = Environment.GetCommandLineArgs();
 
-            bool WithUi = true;
-            foreach (string arg in arguments)
+            if (AppCon.OpenMinimized)
             {
-                if (arg == "/ui") { WithUi = false; }
+                //Check if its on Startup
+                string[] arguments = Environment.GetCommandLineArgs();
+
+                bool WithUi = true;
+                foreach (string arg in arguments)
+                {
+                    if (arg == "/startup") { WithUi = false; }
+                }
+
+                return WithUi;
+            }
+            else
+            {
+                return true;   
             }
 
-            return WithUi;
         }
 
         public static void OpenMainWindow()
@@ -175,7 +185,7 @@ namespace ShutdownManager
                 TaskbarIcon.ShowBalloonTip("Info", "The timer is still running in the background", BalloonIcon.Info);
             }
             //Close Window only on X-Button
-            else if (!AppCon.AutoStart.AutoStartActiv)
+            else if (!AppCon.OnWindwoClosingActiv)
             {
                 Current.Shutdown();
             }
