@@ -37,7 +37,7 @@ namespace ShutdownManager.Classes
                 timer.Start();
                 timer.Enabled = true;
                 IsTimerStarted = true;
-                App.TaskbarIcon.ShowBalloonTip("Info", "Timer has started", BalloonIcon.Info);
+                App.ShowBalloonTip("Info", "Timer has started", BalloonIcon.Info);
             }
         }
 
@@ -52,12 +52,12 @@ namespace ShutdownManager.Classes
                 if (!isPaused)//If the Timer is not paused, then Update the Timespan
                 {
                     UpdateTimeSpan();
-                    if (WithMessage) { App.TaskbarIcon.ShowBalloonTip("Info", "Timer has stopped", BalloonIcon.Info); }
+                    if (WithMessage) { App.ShowBalloonTip("Info", "Timer has stopped", BalloonIcon.Info); }
                     
                 }
                 else
                 {
-                    if (WithMessage) {App.TaskbarIcon.ShowBalloonTip("Info", "Timer has paused", BalloonIcon.Info); }
+                    if (WithMessage) {App.ShowBalloonTip("Info", "Timer has paused", BalloonIcon.Info); }
                 }
             }
         }
@@ -92,7 +92,7 @@ namespace ShutdownManager.Classes
                     message = "PC is going to sleep after 60 seconds!";
                 }
 
-                App.TaskbarIcon.ShowBalloonTip("Info", message, BalloonIcon.Info);
+                App.ShowBalloonTip("Info", message, BalloonIcon.Info);
             }
         }
 

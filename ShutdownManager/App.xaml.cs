@@ -182,7 +182,7 @@ namespace ShutdownManager
 
             if (TimerController.IsTimerStarted)
             {
-                TaskbarIcon.ShowBalloonTip("Info", "The timer is still running in the background", BalloonIcon.Info);
+                ShowBalloonTip("Info", "The timer is still running in the background", BalloonIcon.Info);
             }
             //Close Window only on X-Button
             else if (!AppCon.OnWindwoClosingActiv)
@@ -191,6 +191,16 @@ namespace ShutdownManager
             }
 
             
+        }
+
+        public static void ShowBalloonTip(string title, string message, BalloonIcon symbol )
+        {
+            if (!AppCon.DisablePushMessages)
+            {
+                TaskbarIcon.ShowBalloonTip(title, message, symbol);
+                
+            }
+                
         }
 
 

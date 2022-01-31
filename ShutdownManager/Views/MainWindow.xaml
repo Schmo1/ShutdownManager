@@ -105,7 +105,7 @@
 
                 <Button Name="btStartStop" 
                     Margin="3" 
-                    Click="Button_StartStop" 
+                    Click="Button_StartPause" 
                     Grid.Row="1" 
                     Background="White" 
                     BorderThickness="0" 

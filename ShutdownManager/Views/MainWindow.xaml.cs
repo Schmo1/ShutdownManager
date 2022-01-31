@@ -17,9 +17,7 @@ namespace ShutdownManager.Views
         private const string DownUploadInsertTemplate = "XXXInsertDownUploadXXX";
 
         public MainWindow()
-        {
-            
-            
+        { 
             InitializeComponent();
 
             DataContext = App.ViewModel;
@@ -29,7 +27,7 @@ namespace ShutdownManager.Views
         }
 
 
-        private void Button_StartStop(object sender, RoutedEventArgs e)
+        private void Button_StartPause(object sender, RoutedEventArgs e)
         {
             if (!App.TimerController.IsTimerStarted)
             {
@@ -97,14 +95,12 @@ namespace ShutdownManager.Views
         {
             //Images
             imagePlayPause.Source = new BitmapImage(new Uri(@"/images/Pause.png", UriKind.Relative));
-            imageStop.Source = new BitmapImage(new Uri(@"/images/Stop.png", UriKind.Relative));
 
         }
         private void ShowPlayImage()
         {
             //Images
             imagePlayPause.Source = new BitmapImage(new Uri(@"/images/Play.png", UriKind.Relative));
-            imageStop.Source = new BitmapImage(new Uri(@"/images/StopDeacti.png", UriKind.Relative));
 
         }
 

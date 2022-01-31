@@ -26,7 +26,7 @@ namespace ShutdownManager.Classes
             
             set 
             {
-                CreateTaskbarMessage(value);
+                CreateBalloonTip(value);
                 if (value)
                 {
                     _expiredObserveTime = 0;
@@ -238,7 +238,7 @@ namespace ShutdownManager.Classes
         }
 
 
-        private void CreateTaskbarMessage(bool stateActivated)
+        private void CreateBalloonTip(bool stateActivated)
         {
 
             string message = "Observing the Down/Upload is activ/inactiv!";
@@ -261,7 +261,7 @@ namespace ShutdownManager.Classes
                 message = message.Replace("activ/inactiv", "inactiv");
             }
 
-            App.TaskbarIcon.ShowBalloonTip("Info", message, BalloonIcon.Info);
+            App.ShowBalloonTip("Info", message, BalloonIcon.Info);
         }
 
         private void ObserveIsOver()

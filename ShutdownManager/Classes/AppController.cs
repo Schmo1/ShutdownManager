@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hardcodet.Wpf.TaskbarNotification;
+using System;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Threading;
@@ -20,6 +21,7 @@ namespace ShutdownManager.Classes
 
         public bool OnWindwoClosingActiv { get => Properties.Settings.Default.OnWindowClosingActiv; }
         public bool OpenMinimized { get => Properties.Settings.Default.OpenMinimized; }
+        public bool DisablePushMessages {  get => Properties.Settings.Default.DisablePushMessages; }
 
         public event EventHandler OnOpenRequest;
 
