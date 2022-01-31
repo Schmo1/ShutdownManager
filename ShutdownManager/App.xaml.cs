@@ -22,10 +22,11 @@ namespace ShutdownManager
         public static TimerController TimerController { get => _timerController; set => _timerController = value; }
         public static MainWindowViewModel ViewModel { get; set; }   
         public static DownUploadController DownUploadController { get; set; }
-        public static TaskbarIcon TaskbarIcon { get; set; }
+        private static TaskbarIcon TaskbarIcon { get; set; }
         public static NotifyIconViewModel NotifyIconViewModel { get; set; }
         public static AppController AppCon { get; set; }
         public static ShutdownOptions ShutdownOptions { get; set; }
+        public static bool HideWindowPressed { get; set; }  
 
         private delegate void OpenMainWindowDel();
 
@@ -155,6 +156,7 @@ namespace ShutdownManager
             Window.WindowState = WindowState.Normal;
         }
 
+
         public static void OpenSettings()
         {
             if (SettingsView == null || SettingsView.IsVisible == false)
@@ -185,20 +187,19 @@ namespace ShutdownManager
                 ShowBalloonTip("Info", "The timer is still running in the background", BalloonIcon.Info);
             }
             //Close Window only on X-Button
-            else if (!AppCon.OnWindwoClosingActiv)
+            else if (!AppCon.OnWindwoClosingActiv &! HideWindowPressed)
             {
                 Current.Shutdown();
             }
+            HideWindowPressed = false;
 
-            
         }
 
         public static void ShowBalloonTip(string title, string message, BalloonIcon symbol )
         {
             if (!AppCon.DisablePushMessages)
             {
-                TaskbarIcon.ShowBalloonTip(title, message, symbol);
-                
+                TaskbarIcon.ShowBalloonTip(title, message, symbol);  
             }
                 
         }

@@ -48,7 +48,8 @@ namespace ShutdownManager.ViewModels
                 return new DelegateCommand
                 {
 
-                    CommandAction = () => App.Window.Close(),
+                    CommandAction = () => { App.HideWindowPressed = true; 
+                                            App.Window.Close();  },
                     CanExecuteFunc = () => App.Window.IsVisible == true,
                 };
             }
