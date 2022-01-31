@@ -5,7 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShutdownManager.Views"
         mc:Ignorable="d"
-        Title="Settings" Height="250" Width="350" Icon="/ShutdownManager;component/images/Settings.png" >
+        Title="Settings" Height="230" Width="350" 
+        MinHeight="230"
+        MinWidth="350"
+        Icon="/ShutdownManager;component/icons/Settings.ico" >
+    
     <StackPanel>
         <GroupBox Header="Startup" Margin="7">
             <StackPanel>

@@ -180,9 +180,6 @@
     <Resource Include="images\Stop.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="images\StopDeacti.png" />
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.7.2 %28x86 und x64%29</ProductName>
@@ -195,13 +192,16 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="images\Exit.png" />
+    <Resource Include="icons\Settings.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="images\Settings.png" />
+    <Resource Include="icons\Exit.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="images\SettingsSmall.png" />
+    <Resource Include="icons\Show.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\Hide.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

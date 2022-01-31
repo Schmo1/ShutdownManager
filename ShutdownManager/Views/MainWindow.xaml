@@ -127,7 +127,7 @@
                     HorizontalAlignment="Left" 
                     VerticalAlignment="Center" 
                     Style="{DynamicResource RoundetButton}"
-                    IsEnabled="{Binding IsTimerStarted}">
+                    IsEnabled="True">
                     <Image Name="imageStop" Source="/ShutdownManager;component/images\Stop.png"/>
                 </Button>
 

@@ -7,14 +7,27 @@
     <Application.Resources>
 
         <ContextMenu x:Shared="false" x:Key="SysTrayMenu">
-            <MenuItem Header="Show Window" Command="{Binding ShowWindowCommand}"  />
-            <MenuItem Header="Hide Window" Command="{Binding HideWindowCommand}"/>
+            <MenuItem Header="Show Window" Command="{Binding ShowWindowCommand}"  >
+                <MenuItem.Icon>
+                    <Image Width="16"
+                           Height="16"
+                           Source="/icons/Show.ico"/>
+                </MenuItem.Icon>    
+            </MenuItem>
+
+            <MenuItem Header="Hide Window" Command="{Binding HideWindowCommand}"  >
+                <MenuItem.Icon>
+                    <Image Width="16"
+                           Height="16"
+                           Source="/icons/Hide.ico"/>
+                </MenuItem.Icon>
+            </MenuItem>
             <Separator />
             <MenuItem Header="Settings" Command="{Binding OpenSettings}">
                 <MenuItem.Icon>
                     <Image Width="16"
                            Height="16"
-                           Source="/images/SettingsSmall.png"/>
+                           Source="/icons/Settings.ico"/>
                 </MenuItem.Icon>    
             </MenuItem>
                 
@@ -23,7 +36,7 @@
                 <MenuItem.Icon>
                     <Image Width="16"
                            Height="16"
-                           Source="/images/Exit.png" />
+                           Source="/icons/Exit.ico" />
                 </MenuItem.Icon>
             </MenuItem>
         </ContextMenu>
