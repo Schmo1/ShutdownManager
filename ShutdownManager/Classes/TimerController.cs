@@ -119,7 +119,7 @@ namespace ShutdownManager.Classes
         public void UpdateTimeSpan()
         {
 
-            TimeSpan timeSpan = new TimeSpan(App.ViewModel.userDataPersistentManager.Hours, App.ViewModel.userDataPersistentManager.Minutes, App.ViewModel.userDataPersistentManager.Seconds);
+            TimeSpan timeSpan = new TimeSpan(App.ViewModel.Hours, App.ViewModel.Minutes, App.ViewModel.Seconds);
             if (timeSpan > new TimeSpan(24, 0, 0))
             {
                 App.ViewModel.TimeSpanLeft = new TimeSpan(23, 59, 59);

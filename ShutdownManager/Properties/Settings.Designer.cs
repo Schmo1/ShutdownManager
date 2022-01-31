@@ -58,5 +58,125 @@ namespace ShutdownManager.Properties {
                 this["DisablePushMessages"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool TimerRestartIsChecked {
+            get {
+                return ((bool)(this["TimerRestartIsChecked"]));
+            }
+            set {
+                this["TimerRestartIsChecked"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool TimerShutdownIsChecked {
+            get {
+                return ((bool)(this["TimerShutdownIsChecked"]));
+            }
+            set {
+                this["TimerShutdownIsChecked"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool TimerSleepIsChecked {
+            get {
+                return ((bool)(this["TimerSleepIsChecked"]));
+            }
+            set {
+                this["TimerSleepIsChecked"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DownloadIsChecked {
+            get {
+                return ((bool)(this["DownloadIsChecked"]));
+            }
+            set {
+                this["DownloadIsChecked"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UploadIsChecked {
+            get {
+                return ((bool)(this["UploadIsChecked"]));
+            }
+            set {
+                this["UploadIsChecked"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int TimerHours {
+            get {
+                return ((int)(this["TimerHours"]));
+            }
+            set {
+                this["TimerHours"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int TimerMinutes {
+            get {
+                return ((int)(this["TimerMinutes"]));
+            }
+            set {
+                this["TimerMinutes"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int TimerSeconds {
+            get {
+                return ((int)(this["TimerSeconds"]));
+            }
+            set {
+                this["TimerSeconds"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ObserveTime {
+            get {
+                return ((int)(this["ObserveTime"]));
+            }
+            set {
+                this["ObserveTime"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double Speed {
+            get {
+                return ((double)(this["Speed"]));
+            }
+            set {
+                this["Speed"] = value;
+            }
+        }
     }
 }

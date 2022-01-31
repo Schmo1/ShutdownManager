@@ -15,7 +15,7 @@ namespace ShutdownManager.Classes
         public LoadFunction ObserveFunction { 
             
             get  {
-                if (App.ViewModel.userDataPersistentManager.UploadIsChecked) { return LoadFunction.Upload; }
+                if (App.ViewModel.UploadIsChecked) { return LoadFunction.Upload; }
                 else { return LoadFunction.Download; }
             }
         }

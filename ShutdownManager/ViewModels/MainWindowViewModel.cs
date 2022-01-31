@@ -19,8 +19,6 @@ namespace ShutdownManager.Classes
         private string _downloadValue;
         private bool _isTimerStarted;
 
-        public UserDataPersistentManager userDataPersistentManager = new UserDataPersistentManager(); //Class to manage the UserData's
-
 
 
         //Properties
@@ -31,40 +29,26 @@ namespace ShutdownManager.Classes
 
 
         //Timer Functions
-        public bool ShutdownIsChecked { get => userDataPersistentManager.ShutdownIsChecked; set { userDataPersistentManager.ShutdownIsChecked = value; } }
-        public bool RestartIsChecked { get => userDataPersistentManager.RestartIsChecked; set { userDataPersistentManager.RestartIsChecked = value; } }
-        public bool SleepIsChecked { get => userDataPersistentManager.SleepIsChecked; set { userDataPersistentManager.SleepIsChecked = value; } }
+        public bool ShutdownIsChecked { get => Properties.Settings.Default.TimerShutdownIsChecked; set { Properties.Settings.Default.TimerShutdownIsChecked = value; Properties.Settings.Default.Save(); } }
+        public bool RestartIsChecked { get => Properties.Settings.Default.TimerRestartIsChecked; set { Properties.Settings.Default.TimerRestartIsChecked = value;  Properties.Settings.Default.Save(); } }
+        public bool SleepIsChecked { get => Properties.Settings.Default.TimerSleepIsChecked; set { Properties.Settings.Default.TimerSleepIsChecked = value; Properties.Settings.Default.Save(); } }
 
 
         // Down- Upload Functions
-        public bool DownloadIsChecked
-        {
-            get => userDataPersistentManager.DownloadIsChecked;
-            set
-            {
-                userDataPersistentManager.DownloadIsChecked = value;
-            }
-        }
+        public bool DownloadIsChecked { get => Properties.Settings.Default.DownloadIsChecked; set { Properties.Settings.Default.DownloadIsChecked = value; Properties.Settings.Default.Save(); } }
 
-
-        public bool UploadIsChecked
-        {
-            get => userDataPersistentManager.UploadIsChecked;
-            set
-            {
-                userDataPersistentManager.UploadIsChecked = value;
-            }
-        }
+        public bool UploadIsChecked { get => Properties.Settings.Default.UploadIsChecked; set { Properties.Settings.Default.UploadIsChecked = value; Properties.Settings.Default.Save(); } }
 
 
 
         //Times for Timerfunctioncontrol
         public int Hours
         {
-            get => userDataPersistentManager.Hours;
+            get => Properties.Settings.Default.TimerHours;
             set
             {
-                userDataPersistentManager.Hours = value;
+                Properties.Settings.Default.TimerHours = value;
+                Properties.Settings.Default.Save();
                 App.TimerController.UpdateTimeSpan();
                 OnPropertyChanged();
             }
@@ -72,10 +56,11 @@ namespace ShutdownManager.Classes
 
         public int Minutes
         {
-            get => userDataPersistentManager.Minutes;
+            get => Properties.Settings.Default.TimerMinutes;
             set
             {
-                userDataPersistentManager.Minutes = value;
+                Properties.Settings.Default.TimerMinutes = value;
+                Properties.Settings.Default.Save();
                 App.TimerController.UpdateTimeSpan();
                 OnPropertyChanged(); 
             }
@@ -83,22 +68,23 @@ namespace ShutdownManager.Classes
 
         public int Seconds
         {
-            get => userDataPersistentManager.Seconds;
+            get => Properties.Settings.Default.TimerSeconds;
             set
             {
-                userDataPersistentManager.Seconds = value;
+                Properties.Settings.Default.TimerSeconds = value;
+                Properties.Settings.Default.Save();
                 App.TimerController.UpdateTimeSpan();
                 OnPropertyChanged();
             }
         }
 
 
-        public bool IsObserveActiv { get => App.DownUploadController.IsObserveActiv; set => App.DownUploadController.IsObserveActiv = value; }
+        public bool IsObserveActiv { get { return App.DownUploadController.IsObserveActiv; } set { App.DownUploadController.IsObserveActiv = value; OnPropertyChanged(); }  }
 
         //Down- Upload Control
         public int ObserveTime
         {
-            get => userDataPersistentManager.ObserveTime;
+            get => Properties.Settings.Default.ObserveTime;
             set
             {
                 int maxValue = 99999;
@@ -106,23 +92,24 @@ namespace ShutdownManager.Classes
 
                 if (value > maxValue)
                 {
-                    userDataPersistentManager.ObserveTime = maxValue;
+                    Properties.Settings.Default.ObserveTime = maxValue;
                 }
                 else if (value < minValue)
                 {
-                    userDataPersistentManager.ObserveTime = minValue;
+                    Properties.Settings.Default.ObserveTime = minValue;
                 }
                 else
                 {
-                    userDataPersistentManager.ObserveTime = value;
+                    Properties.Settings.Default.ObserveTime = value;
                 }
-                App.DownUploadController.ObserveTime = userDataPersistentManager.ObserveTime;
+                Properties.Settings.Default.Save();
+                App.DownUploadController.ObserveTime = Properties.Settings.Default.ObserveTime;
 
             }
         }
         public double Speed
         {
-            get => userDataPersistentManager.Speed;
+            get => Properties.Settings.Default.Speed;
             set
             {
                 double maxValue = 1000;
@@ -130,16 +117,17 @@ namespace ShutdownManager.Classes
 
                 if (value > maxValue)
                 {
-                    userDataPersistentManager.Speed = maxValue;
+                    Properties.Settings.Default.Speed = maxValue;
                 }
                 else if (value < minValue)
                 {
-                    userDataPersistentManager.Speed = minValue;
+                    Properties.Settings.Default.Speed = minValue;
                 }
                 else
                 {
-                    userDataPersistentManager.Speed = value;
+                    Properties.Settings.Default.Speed = value;
                 }
+                Properties.Settings.Default.Save();
             }
         }
 
@@ -178,7 +166,6 @@ namespace ShutdownManager.Classes
         //Konstruktor
         public MainWindowViewModel()
         {
-            userDataPersistentManager.LoadUserData();
             OnPropertyChanged();
             CheckEmptyUserInput();
         }
@@ -208,6 +195,10 @@ namespace ShutdownManager.Classes
             if (!DownloadIsChecked && !UploadIsChecked)
             {
                 DownloadIsChecked = true;
+            }
+            if(!ShutdownIsChecked &! RestartIsChecked &!SleepIsChecked)
+            {
+                ShutdownIsChecked = true;
             }
         }
     }

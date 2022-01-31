@@ -36,21 +36,19 @@ namespace ShutdownManager
 
         public App()
         {
-
             AppCon = new AppController();
             AppCon.OnOpenRequest += OpenGUIRequest; //Timer is over event
-
+            DownUploadController = new DownUploadController();
             ViewModel = new MainWindowViewModel();
             TimerController = new TimerController();
- 
-            NotifyIconViewModel = new NotifyIconViewModel();
-            DownUploadController = new DownUploadController();
+            NotifyIconViewModel = new NotifyIconViewModel();   
             ShutdownOptions = new ShutdownOptions();    
         }
 
 
 
         //Methods
+
 
         protected override void OnStartup(StartupEventArgs e)
         {

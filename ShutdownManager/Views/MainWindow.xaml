@@ -220,7 +220,7 @@
                 </StackPanel>
 
                 <!--- Checkbox to activate the function  -->
-                <CheckBox Grid.Row="1" Margin="7,3.5,7,3.5" IsChecked="{Binding IsObserveActiv}">Activate</CheckBox>
+                <CheckBox Grid.Row="1" Margin="7,3.5,7,3.5" IsChecked="{Binding IsObserveActiv}" >Activate</CheckBox>
 
 
 
@@ -258,8 +258,8 @@
                         </Grid.ColumnDefinitions>
                         <GroupBox Header="Observe" Margin="7,7,3.5,7">
                             <StackPanel>
-                                <RadioButton GroupName="rbDownUp" Name="RadioButton_Download" Margin="7,14,7,10" Content="Downlaod" Click="RadioButton_DownUp_Click"/>
-                                <RadioButton GroupName="rbDownUp" Name="RadioButton_Upload"   Margin="7,0,0,10"  Content="Upload" Click="RadioButton_DownUp_Click"/>
+                                <RadioButton GroupName="rbDownUp" Name="RadioButton_Download" Margin="7,14,7,10" Content="Downlaod" Click="RadioButton_DownUp_Click" IsEnabled="{Binding IsObserveActiv, Converter={StaticResource MyBoolInvertConverter}}"/>
+                                <RadioButton GroupName="rbDownUp" Name="RadioButton_Upload"   Margin="7,0,0,10"  Content="Upload" Click="RadioButton_DownUp_Click" IsEnabled="{Binding IsObserveActiv, Converter={StaticResource MyBoolInvertConverter}}"/> 
                             </StackPanel>
                         </GroupBox>
                         <GroupBox Header="Values" Grid.Column="1" Margin="7,3.5,7,7">
