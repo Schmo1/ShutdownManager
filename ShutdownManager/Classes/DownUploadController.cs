@@ -211,7 +211,7 @@ namespace ShutdownManager.Classes
 
         private bool IsAverageUnderSpeed()
         {
-            if(GetAverage() < App.ViewModel.Speed)
+            if(GetAverage() < App.ViewModel?.Speed)
             {
                 return true;
             }

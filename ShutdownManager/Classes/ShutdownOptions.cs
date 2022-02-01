@@ -12,7 +12,16 @@ namespace ShutdownManager.Classes
 
         static extern uint SetSuspendState(bool hibernate, bool forceCritical, bool disableWakeEvent);
 
-        private const bool _testingModeActiv = true;
+        private bool _testingModeActiv;
+
+        public ShutdownOptions()
+        {
+#if DEBUG
+            _testingModeActiv = true;
+#else
+             _testingModeActiv = false;
+#endif
+        }
 
         public void Shutdown()
         {
