@@ -43,6 +43,8 @@ namespace ShutdownManager.Classes
 
         public void StopPauseTimer(bool isPaused, bool WithMessage)
         {
+
+
             if (IsTimerStarted)
             {
                 timer.Enabled = false;
@@ -59,6 +61,10 @@ namespace ShutdownManager.Classes
                 {
                     if (WithMessage) {App.ShowBalloonTip("Info", "Timer has paused", BalloonIcon.Info); }
                 }
+            }
+            else //If Stop is only pressed => Reset TimeSpan
+            {
+                UpdateTimeSpan();
             }
         }
 
