@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ShutdownManager.Views"
         xmlns:converters="clr-namespace:ShutdownManager.Converters"
         mc:Ignorable="d"
-        Title="Shutdown Manager" Height="350" Width="330" MinHeight="320" MinWidth="270" MaxHeight="500" MaxWidth="400" Icon="/ShutdownManager;component/icons/ShutdownManager.ico" WindowStartupLocation="CenterScreen">
+        Title="Shutdown Manager" Height="500" Width="330" MinHeight="320" MinWidth="270" MaxHeight="600" MaxWidth="400" Icon="/ShutdownManager;component/icons/ShutdownManager.ico" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         
         <!-- Converters -->
@@ -45,7 +45,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
-                        <Border x:Name="border" CornerRadius="8" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                        <Border x:Name="border" CornerRadius="10" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
                             <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -80,9 +80,11 @@
         <TabItem Header="Timer" Name="TIHeader">
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="90"/>
+                    <RowDefinition Height="55"/>
+                    <RowDefinition Height="*"/>
                     <RowDefinition Height="1.2*"/>
-                    <RowDefinition Height="50"/>
-                    <RowDefinition Height="2*"/>
+
 
                 </Grid.RowDefinitions>
 
@@ -131,8 +133,37 @@
                     <Image Name="imageStop" Source="/ShutdownManager;component/images\Stop.png"/>
                 </Button>
 
+                <GroupBox Margin="7" Header="Action" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <RadioButton GroupName="rbAction" x:Name="RadioButton_Shutdown" Margin="13,15,5,7" Content="Shutdown" IsChecked="{Binding ShutdownIsChecked}"/>
+                            <RadioButton GroupName="rbAction" x:Name="RadioButton_Restart" Margin="13,5,5,7" Content="Restart" IsChecked="{Binding RestartIsChecked}" />
+                            <RadioButton GroupName="rbAction" x:Name="RadioButton_Sleep" Margin="13,5,5,15" Content="Sleep" IsChecked="{Binding SleepIsChecked}"/>
+                        </StackPanel>
 
-                <GroupBox Margin="7" Header="Time Settings" Grid.Row="3">
+                        <Button Name="NowButton" 
+                                FontSize="15"
+                                Content="Trigger Now" 
+                                Grid.Row="2" 
+                                Grid.Column="1" 
+                                Height="40" Width="105" 
+                                HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                Margin="20" 
+                                Style="{DynamicResource RoundetButton}"
+                                Background="LightGray"
+                                Command="{Binding TriggerNowCommand}"/>    
+                    </Grid>
+
+                </GroupBox>
+
+
+
+
+                <GroupBox Margin="7" Header="Time Settings" Grid.Row="3" Grid.ColumnSpan="2">
                     <Grid>
 
                         <Grid.RowDefinitions>
@@ -141,8 +172,9 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="82"/>
-                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
                         <TextBox PreviewTextInput="NumberValidationTextBox" 
@@ -153,8 +185,12 @@
                              Name="txtHours" 
                              HorizontalAlignment="Right" 
                              Height="24" 
-                             Width="65"/>
+                             Width="65"
+                             Grid.Column="1"/>
 
+                        <Slider Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" Margin="20,0,20,0" VerticalAlignment="Center" Width="140"
+                                Value="{Binding Hours}" Maximum="23" 
+                                IsEnabled="{Binding IsTimerStarted, Converter={StaticResource MyBoolInvertConverter}}"/>
 
                         <TextBox PreviewTextInput="NumberValidationTextBox" 
                              FontSize="15" 
@@ -165,8 +201,13 @@
                              HorizontalAlignment="Right" 
                              Height="24" 
                              Width="65" 
-                             Grid.Row="1"/>
+                             Grid.Row="1"
+                             Grid.Column="1"/>
 
+                        <Slider Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" Margin="20,0,20,0" VerticalAlignment="Center" Width="140" 
+                                Value="{Binding Minutes}" Maximum="60" 
+                                IsEnabled="{Binding IsTimerStarted, Converter={StaticResource MyBoolInvertConverter}}" />
+                        
                         <TextBox PreviewTextInput="NumberValidationTextBox" 
                              FontSize="15" 
                              TextAlignment="Center" 
@@ -176,25 +217,22 @@
                              HorizontalAlignment="Right" 
                              Height="24" 
                              Width="65" 
-                             Grid.Row="2"/>
+                             Grid.Row="2"
+                             Grid.Column="1"/>
 
-                        <TextBlock Text="h" Grid.Column="1" FontSize="17" HorizontalAlignment = "Left" VerticalAlignment="Center" Margin="5" TextAlignment="Center" />
-                        <TextBlock Text="m" Grid.Row="1" Grid.Column="1" FontSize="17" HorizontalAlignment = "Left" VerticalAlignment="Center" Margin="5" TextAlignment="Center" />
-                        <TextBlock Text="s"  Grid.Row="2" Grid.Column="1" FontSize="17" HorizontalAlignment = "Left" VerticalAlignment="Center" Margin="5" TextAlignment="Center" />
+                        <Slider Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" Margin="20,0,20,0" VerticalAlignment="Center" Width="140" 
+                                Value="{Binding Seconds}" Maximum="60" 
+                                IsEnabled="{Binding IsTimerStarted, Converter={StaticResource MyBoolInvertConverter}}"/>
+                        
+                        <TextBlock Text="h" Grid.Column="2" FontSize="17" HorizontalAlignment = "Left" VerticalAlignment="Center" Margin="5" TextAlignment="Center" />
+                        <TextBlock Text="m" Grid.Row="1" Grid.Column="2" FontSize="17" HorizontalAlignment = "Left" VerticalAlignment="Center" Margin="5" TextAlignment="Center" />
+                        <TextBlock Text="s"  Grid.Row="2" Grid.Column="2" FontSize="17" HorizontalAlignment = "Left" VerticalAlignment="Center" Margin="5" TextAlignment="Center" />
 
                     </Grid>
 
                 </GroupBox>
 
-                <GroupBox Margin="7" Header="Action" Grid.Row="3" Grid.Column="1">
 
-                    <StackPanel>
-                        <RadioButton GroupName="rbAction" x:Name="RadioButton_Shutdown" Margin="13,15,5,10" Content="Shutdown" IsChecked="{Binding ShutdownIsChecked}"/>
-                        <RadioButton GroupName="rbAction" x:Name="RadioButton_Restart" Margin="13,5,5,10" Content="Restart" IsChecked="{Binding RestartIsChecked}" />
-                        <RadioButton GroupName="rbAction" x:Name="RadioButton_Sleep" Margin="13,5,5,10" Content="Sleep" IsChecked="{Binding SleepIsChecked}"/>
-                    </StackPanel>
-
-                </GroupBox>
             </Grid>
         </TabItem>
 
@@ -214,13 +252,13 @@
 
                 <!--- Infotext  -->
                 <StackPanel Margin="7">
-                    <TextBlock Name="tbTextDownUp1"> If the Down-, Upload Control is active, it will check</TextBlock>
-                    <TextBlock Name="tbTextDownUp2"> if the average XXXInsertDownUploadXXX speed is under XXXInsertSpeedXXX MB/s</TextBlock>
-                    <TextBlock x:Name="tbTextDownUp3"><Run Text="for Insert"/><Run Language="de-de" Text="Times"/><Run Text=" s then the PC will shut down"/></TextBlock>
+                    <TextBlock Name="tbTextDownUp1" Margin="2"> If the Down-, Upload Control is active, it will check</TextBlock>
+                    <TextBlock Name="tbTextDownUp2" Margin="2" > if the average XXXInsertDownUploadXXX speed is under XXXInsertSpeedXXX MB/s</TextBlock>
+                    <TextBlock x:Name="tbTextDownUp3" Margin=" 2,2,2,15" ><Run Text="for Insert"/><Run Language="de-de" Text="Times"/><Run Text=" s then the PC will shut down"/></TextBlock>
                 </StackPanel>
 
                 <!--- Checkbox to activate the function  -->
-                <CheckBox Grid.Row="1" Margin="7,3.5,7,3.5" IsChecked="{Binding IsObserveActiv}" >Activate</CheckBox>
+                <CheckBox Grid.Row="1" Margin="7,3.5,7,7" IsChecked="{Binding IsObserveActiv}" >Activate</CheckBox>
 
 
 

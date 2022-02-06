@@ -146,6 +146,14 @@ namespace ShutdownManager.Classes
                 }
 
 
+                //If maxReceived or maxSend was reseted from the pc, Reset the other variables
+
+                if (maxReceived == 0 || maxSend == 0 && (maxReceivedOld != 0 || maxSendOld != 0))
+                {
+                    maxReceivedOld = 0;
+                    maxSendOld = 0;
+                }
+
                 if (firstScan)
                 {
                     //First scan
@@ -197,7 +205,7 @@ namespace ShutdownManager.Classes
 
                     }
                 }
-               
+
                 Thread.Sleep(1000);
                 
             }

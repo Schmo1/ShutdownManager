@@ -1,8 +1,8 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using ShutdownManager.Commands;
+using System;
 using System.ComponentModel;
-using Hardcodet.Wpf.TaskbarNotification;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 namespace ShutdownManager.Classes
 {
@@ -18,6 +18,40 @@ namespace ShutdownManager.Classes
         private string _uploadValue;
         private string _downloadValue;
         private bool _isTimerStarted;
+        private ICommand _clickCommand;
+
+
+        public ICommand TriggerNowCommand
+        {
+            get
+            {
+                return _clickCommand ?? (_clickCommand = new CommandHandler(() => MyAction(), () => CanExecute));
+            }
+        }
+        public bool CanExecute
+        {
+            get
+            {
+                // check if executing is allowed, i.e., validate, check if a process is running, etc. 
+                return true;
+            }
+        }
+
+        public void MyAction()
+        {
+            if (ShutdownIsChecked)
+            {
+                App.ShutdownOptions.Shutdown();
+            }
+            else if (RestartIsChecked)
+            {
+                App.ShutdownOptions.Restart();
+            }
+            else
+            {
+                App.ShutdownOptions.Sleep();
+            }
+        }
 
 
 
@@ -34,6 +68,7 @@ namespace ShutdownManager.Classes
         public bool SleepIsChecked { get => Properties.Settings.Default.TimerSleepIsChecked; set { Properties.Settings.Default.TimerSleepIsChecked = value; Properties.Settings.Default.Save(); } }
 
 
+
         // Down- Upload Functions
         public bool DownloadIsChecked { get => Properties.Settings.Default.DownloadIsChecked; set { Properties.Settings.Default.DownloadIsChecked = value; Properties.Settings.Default.Save(); } }
 
@@ -47,7 +82,7 @@ namespace ShutdownManager.Classes
             get => Properties.Settings.Default.TimerHours;
             set
             {
-                Properties.Settings.Default.TimerHours = value;
+                Properties.Settings.Default.TimerHours = CheckMaxValue(23, value);
                 Properties.Settings.Default.Save();
                 App.TimerController.UpdateTimeSpan();
                 OnPropertyChanged();
@@ -59,7 +94,7 @@ namespace ShutdownManager.Classes
             get => Properties.Settings.Default.TimerMinutes;
             set
             {
-                Properties.Settings.Default.TimerMinutes = value;
+                Properties.Settings.Default.TimerMinutes = CheckMaxValue(59, value); ;
                 Properties.Settings.Default.Save();
                 App.TimerController.UpdateTimeSpan();
                 OnPropertyChanged(); 
@@ -71,7 +106,7 @@ namespace ShutdownManager.Classes
             get => Properties.Settings.Default.TimerSeconds;
             set
             {
-                Properties.Settings.Default.TimerSeconds = value;
+                Properties.Settings.Default.TimerSeconds = CheckMaxValue(59, value); ;
                 Properties.Settings.Default.Save();
                 App.TimerController.UpdateTimeSpan();
                 OnPropertyChanged();
@@ -87,14 +122,9 @@ namespace ShutdownManager.Classes
             get => Properties.Settings.Default.ObserveTime;
             set
             {
-                int maxValue = 99999;
                 int minValue = 2;
 
-                if (value > maxValue)
-                {
-                    Properties.Settings.Default.ObserveTime = maxValue;
-                }
-                else if (value < minValue)
+                if (CheckMaxValue(99999, value) < minValue)
                 {
                     Properties.Settings.Default.ObserveTime = minValue;
                 }
@@ -201,6 +231,20 @@ namespace ShutdownManager.Classes
                 ShutdownIsChecked = true;
             }
         }
+
+
+        private int CheckMaxValue(int maxValue, int value)
+        {
+            if(value > maxValue)
+            {
+                return maxValue;
+            }
+            else
+            {
+                return value;
+            }
+        }
+
     }
 }
 

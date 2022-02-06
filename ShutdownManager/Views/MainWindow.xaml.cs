@@ -11,7 +11,7 @@ namespace ShutdownManager.Views
     {
 
         private const string downUploadText2 = "if the average XXXInsertDownUploadXXX speed is under XXXInsertSpeedXXX MB/s";
-        private const string downUploadText3 = " for XXXInsertTimesXXX Times (s) then the PC will shut down";
+        private const string downUploadText3 = "for XXXInsertTimesXXX Times (s) then the PC will shut down";
         private const string speedInsertTemplate = "XXXInsertSpeedXXX";
         private const string timesInsertTemplate = "XXXInsertTimesXXX";
         private const string DownUploadInsertTemplate = "XXXInsertDownUploadXXX";

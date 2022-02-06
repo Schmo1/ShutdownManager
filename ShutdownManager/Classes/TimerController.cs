@@ -126,14 +126,8 @@ namespace ShutdownManager.Classes
         {
 
             TimeSpan timeSpan = new TimeSpan(App.ViewModel.Hours, App.ViewModel.Minutes, App.ViewModel.Seconds);
-            if (timeSpan > new TimeSpan(24, 0, 0))
-            {
-                App.ViewModel.TimeSpanLeft = new TimeSpan(23, 59, 59);
-            }
-            else
-            {
-                App.ViewModel.TimeSpanLeft = timeSpan;
-            }
+            App.ViewModel.TimeSpanLeft = timeSpan;
+            
 
         }
     }
