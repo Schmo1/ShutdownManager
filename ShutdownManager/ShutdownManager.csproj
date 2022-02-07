@@ -103,6 +103,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Classes\AutoStart.cs" />
+    <Compile Include="Classes\ClockControl.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Installer\Installer.cs">
       <SubType>Component</SubType>

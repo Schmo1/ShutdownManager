@@ -22,6 +22,7 @@ namespace ShutdownManager
         public static TimerController TimerController { get => _timerController; set => _timerController = value; }
         public static MainWindowViewModel ViewModel { get; set; }   
         public static DownUploadController DownUploadController { get; set; }
+        public static ClockControl ClockControl { get; set; }
         private static TaskbarIcon TaskbarIcon { get; set; }
         public static NotifyIconViewModel NotifyIconViewModel { get; set; }
         public static AppController AppCon { get; set; }
@@ -39,6 +40,7 @@ namespace ShutdownManager
             AppCon = new AppController();
             AppCon.OnOpenRequest += OpenGUIRequest; //Timer is over event
             DownUploadController = new DownUploadController();
+            ClockControl = new ClockControl();
             ViewModel = new MainWindowViewModel();
             TimerController = new TimerController();
             NotifyIconViewModel = new NotifyIconViewModel();   

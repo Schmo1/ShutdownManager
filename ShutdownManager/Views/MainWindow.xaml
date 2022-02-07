@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="Shutdown Manager" Height="500" Width="330" MinHeight="320" MinWidth="270" MaxHeight="600" MaxWidth="400" Icon="/ShutdownManager;component/icons/ShutdownManager.ico" WindowStartupLocation="CenterScreen">
     <Window.Resources>
-        
+
         <!-- Converters -->
         <converters:StringToIntConverter x:Key="MyStringToIntConverter"/>
         <converters:BoolInvertConverter x:Key="MyBoolInvertConverter"/>
@@ -72,11 +72,12 @@
         </Style>
     </Window.Resources>
 
-
-    <!--        -->
-    <!--- Timer -->
-    <!--        -->
     <TabControl Margin="5">
+        
+        
+        <!--        -->
+        <!--- Timer -->
+        <!--        -->
         <TabItem Header="Timer" Name="TIHeader">
             <Grid>
                 <Grid.RowDefinitions>
@@ -133,7 +134,7 @@
                     <Image Name="imageStop" Source="/ShutdownManager;component/images\Stop.png"/>
                 </Button>
 
-                <GroupBox Margin="7" Header="Action" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+                <GroupBox Margin="7" Header="Actions" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -234,6 +235,111 @@
 
 
             </Grid>
+        </TabItem>
+
+
+        
+        <!--                        -->
+        <!--- Clcok  -->
+        <!--                        -->
+        <TabItem Header="Clock" >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="90"/>
+                    <RowDefinition Height="90"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+
+                </Grid.RowDefinitions>
+
+
+                <GroupBox Header="Actual Time" Margin="7">
+                    <TextBlock Name="tbTime" 
+                               TextAlignment="Center" 
+                               VerticalAlignment="Center" 
+                               HorizontalAlignment="Center" 
+                               FontSize="35" 
+                               TextWrapping="Wrap" 
+                               Text="{Binding ClockTime, FallbackValue=00:00:00}" />
+                </GroupBox>
+                <GroupBox Header="Observing Time" Grid.Row="1" Margin="7">
+                    
+                </GroupBox>
+
+                <GroupBox Header="Actions" Grid.Row="2" Margin="7">
+                    
+                </GroupBox>
+                
+                <GroupBox Header="Clock settings" Grid.Row="3" Margin="7" >
+                    <Grid>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="0.6*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="82"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox PreviewTextInput="NumberValidationTextBox" 
+                             FontSize="15" 
+                             TextAlignment="Center" 
+                             Text="{Binding ClockHours, FallbackValue= 0 , Converter={StaticResource MyStringToIntConverter}}" 
+                             IsEnabled="{Binding IsClockObservingStarted, Converter={StaticResource MyBoolInvertConverter}}"
+                             Name="txtClockHours" 
+                             HorizontalAlignment="Right" 
+                             Height="24" 
+                             Width="65"
+                             Grid.Column="1"/>
+
+                        <Slider Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" Margin="20,0,20,0" VerticalAlignment="Center" Width="140"
+                                Value="{Binding ClockHours}" Maximum="23" 
+                                IsEnabled="{Binding IsClockObservingStarted, Converter={StaticResource MyBoolInvertConverter}}"/>
+
+                        <TextBox PreviewTextInput="NumberValidationTextBox" 
+                             FontSize="15" 
+                             TextAlignment="Center" 
+                             Text="{Binding ClockMinutes, FallbackValue=0, Converter={StaticResource MyStringToIntConverter}}" 
+                             IsEnabled="{Binding IsClockObservingStarted, Converter={StaticResource MyBoolInvertConverter}}"
+                             Name="txtClockMinutes" 
+                             HorizontalAlignment="Right" 
+                             Height="24" 
+                             Width="65" 
+                             Grid.Row="1"
+                             Grid.Column="1"/>
+
+                        <Slider Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" Margin="20,0,20,0" VerticalAlignment="Center" Width="140" 
+                                Value="{Binding ClockMinutes}" Maximum="60" 
+                                IsEnabled="{Binding IsClockObservingStarted, Converter={StaticResource MyBoolInvertConverter}}" />
+
+                        <TextBox PreviewTextInput="NumberValidationTextBox" 
+                             FontSize="15" 
+                             TextAlignment="Center" 
+                             Text="{Binding ClockSeconds, FallbackValue=0, Converter={StaticResource MyStringToIntConverter}}"
+                             IsEnabled="{Binding IsClockObservingStarted, Converter={StaticResource MyBoolInvertConverter}}"
+                             Name="txtClockSeconds"  
+                             HorizontalAlignment="Right" 
+                             Height="24" 
+                             Width="65" 
+                             Grid.Row="2"
+                             Grid.Column="1"/>
+
+                        <Slider Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" Margin="20,0,20,0" VerticalAlignment="Center" Width="140" 
+                                Value="{Binding ClockSeconds}" Maximum="60" 
+                                IsEnabled="{Binding IsClockObservingStarted, Converter={StaticResource MyBoolInvertConverter}}"/>
+
+                        <TextBlock Text="h" Grid.Column="2" FontSize="17" HorizontalAlignment = "Left" VerticalAlignment="Center" Margin="5" TextAlignment="Center" />
+                        <TextBlock Text="m" Grid.Row="1" Grid.Column="2" FontSize="17" HorizontalAlignment = "Left" VerticalAlignment="Center" Margin="5" TextAlignment="Center" />
+                        <TextBlock Text="s"  Grid.Row="2" Grid.Column="2" FontSize="17" HorizontalAlignment = "Left" VerticalAlignment="Center" Margin="5" TextAlignment="Center" />
+
+                    </Grid>
+                </GroupBox>
+
+            </Grid>
+           
         </TabItem>
 
         <!--                        -->

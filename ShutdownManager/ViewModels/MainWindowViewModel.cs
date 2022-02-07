@@ -19,13 +19,14 @@ namespace ShutdownManager.Classes
         private string _downloadValue;
         private bool _isTimerStarted;
         private ICommand _clickCommand;
+        private string _clockTime;
 
 
         public ICommand TriggerNowCommand
         {
             get
             {
-                return _clickCommand ?? (_clickCommand = new CommandHandler(() => MyAction(), () => CanExecute));
+                return _clickCommand ?? (_clickCommand = new CommandHandler(() => NowPressed(), () => CanExecute));
             }
         }
         public bool CanExecute
@@ -37,7 +38,7 @@ namespace ShutdownManager.Classes
             }
         }
 
-        public void MyAction()
+        public void NowPressed()
         {
             if (ShutdownIsChecked)
             {
@@ -57,8 +58,8 @@ namespace ShutdownManager.Classes
 
         //Properties
         public TimeSpan TimeSpanLeft { get { return _timeSpanLeft; } set { _timeSpanLeft = value; TimeLeft = _timeSpanLeft.ToString(@"hh\:mm\:ss"); } }
-        public string TimeLeft { get { return _timeLeft; } set { _timeLeft = value; OnPropertyChanged(); } }
-        public bool IsTimerStarted { get { return _isTimerStarted; } set { _isTimerStarted = value; OnPropertyChanged(); } }
+        public string TimeLeft { get { return _timeLeft; } set { _timeLeft = value; OnPropertyChanged(nameof(TimeLeft)); ; } }
+        public bool IsTimerStarted { get { return _isTimerStarted; } set { _isTimerStarted = value; OnPropertyChanged(nameof(IsTimerStarted)); } }
 
 
 
@@ -85,7 +86,7 @@ namespace ShutdownManager.Classes
                 Properties.Settings.Default.TimerHours = CheckMaxValue(23, value);
                 Properties.Settings.Default.Save();
                 App.TimerController.UpdateTimeSpan();
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(Hours));
             }
         }
 
@@ -97,7 +98,7 @@ namespace ShutdownManager.Classes
                 Properties.Settings.Default.TimerMinutes = CheckMaxValue(59, value); ;
                 Properties.Settings.Default.Save();
                 App.TimerController.UpdateTimeSpan();
-                OnPropertyChanged(); 
+                OnPropertyChanged(nameof(Minutes));
             }
         }
 
@@ -109,12 +110,14 @@ namespace ShutdownManager.Classes
                 Properties.Settings.Default.TimerSeconds = CheckMaxValue(59, value); ;
                 Properties.Settings.Default.Save();
                 App.TimerController.UpdateTimeSpan();
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(Seconds));
             }
         }
 
 
-        public bool IsObserveActiv { get { return App.DownUploadController.IsObserveActiv; } set { App.DownUploadController.IsObserveActiv = value; OnPropertyChanged(); }  }
+        public bool IsObserveActiv { get { return App.DownUploadController.IsObserveActiv; } set { App.DownUploadController.IsObserveActiv = value; OnPropertyChanged(nameof(IsObserveActiv)); }  }
+
+
 
         //Down- Upload Control
         public int ObserveTime
@@ -167,7 +170,7 @@ namespace ShutdownManager.Classes
             set
             {
                 _downloadValue = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(DownloadValue));
             }
         }
 
@@ -177,7 +180,7 @@ namespace ShutdownManager.Classes
             set
             {
                 _uploadValue = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(UploadValue));
             }
         }
 
@@ -187,7 +190,41 @@ namespace ShutdownManager.Classes
             set => App.DownUploadController.IsTapActiv = value;
         }
 
+        public bool ClcokIsSelected
+        {
+            get => App.DownUploadController.IsTapActiv;
+            set => App.DownUploadController.IsTapActiv = value;
+        }
 
+        public string ClockTime { get { return _clockTime; } set { _clockTime = value; OnPropertyChanged(nameof(ClockTime)); }}
+        public int ClockHours
+        {
+            get => Properties.Settings.Default.ClockHours;
+            set
+            {
+                Properties.Settings.Default.ClockHours = CheckMaxValue(23, value); ;
+                SaveUserData(nameof(ClockHours));
+            }
+        }
+        public int ClockMinutes
+        {
+
+            get => Properties.Settings.Default.ClockMinutes;
+            set
+            {
+                Properties.Settings.Default.ClockMinutes = CheckMaxValue(59, value); ;
+                SaveUserData(nameof(ClockMinutes));
+            }
+        }
+        public int ClockSeconds {
+
+            get => Properties.Settings.Default.ClockSeconds;
+            set
+            {
+                Properties.Settings.Default.ClockSeconds = CheckMaxValue(59, value); ;
+                SaveUserData(nameof(ClockSeconds));
+            }
+        }
 
         //Events
         public event PropertyChangedEventHandler PropertyChanged;
@@ -198,6 +235,7 @@ namespace ShutdownManager.Classes
         {
             OnPropertyChanged();
             CheckEmptyUserInput();
+            App.ClockControl.Timer.Tick += ClockTick;
         }
 
 
@@ -207,6 +245,17 @@ namespace ShutdownManager.Classes
         private void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void SaveUserData(string nameOf)
+        {
+            Properties.Settings.Default.Save();
+            OnPropertyChanged(nameOf);
+        }
+
+        private void ClockTick(object source, EventArgs e)
+        {
+            ClockTime = App.ClockControl.ClockTime.ToLongTimeString();
         }
 
 
@@ -244,6 +293,7 @@ namespace ShutdownManager.Classes
                 return value;
             }
         }
+
 
     }
 }

@@ -178,5 +178,41 @@ namespace ShutdownManager.Properties {
                 this["Speed"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ClockHours {
+            get {
+                return ((int)(this["ClockHours"]));
+            }
+            set {
+                this["ClockHours"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ClockMinutes {
+            get {
+                return ((int)(this["ClockMinutes"]));
+            }
+            set {
+                this["ClockMinutes"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ClockSeconds {
+            get {
+                return ((int)(this["ClockSeconds"]));
+            }
+            set {
+                this["ClockSeconds"] = value;
+            }
+        }
     }
 }
