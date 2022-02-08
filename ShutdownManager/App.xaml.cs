@@ -4,6 +4,7 @@ using ShutdownManager.Views;
 using ShutdownManager.Classes;
 using ShutdownManager.ViewModels;
 using Hardcodet.Wpf.TaskbarNotification;
+using ShutdownManager.Utility;
 
 namespace ShutdownManager
 {
@@ -37,6 +38,7 @@ namespace ShutdownManager
 
         public App()
         {
+            MyLogger.GetInstance().Info("App is starting...");
             AppCon = new AppController();
             AppCon.OnOpenRequest += OpenGUIRequest; //Timer is over event
             DownUploadController = new DownUploadController();
@@ -44,25 +46,27 @@ namespace ShutdownManager
             ViewModel = new MainWindowViewModel();
             TimerController = new TimerController();
             NotifyIconViewModel = new NotifyIconViewModel();   
-            ShutdownOptions = new ShutdownOptions();    
+            ShutdownOptions = new ShutdownOptions();
+
         }
 
 
 
         //Methods
 
-
         protected override void OnStartup(StartupEventArgs e)
         {
 
             base.OnStartup(e);
-
+            
 
             //if not first instance then exit App
-            if(!AppCon.IsFirstInstance())
+            if (!AppCon.IsFirstInstance())
             {
-               Current.Shutdown();
+                MyLogger.GetInstance().InfoWithClassName("App is not first instance ==> shutdown the application", Current);
+                Current.Shutdown();
             }
+            MyLogger.GetInstance().InfoWithClassName("App is the first instance", Current);
 
             ////start Listener
             AppCon.StartListening();
@@ -74,7 +78,7 @@ namespace ShutdownManager
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message.ToString(), "Find Resource", MessageBoxButton.OK ,MessageBoxImage.Error);
+                MyLogger.GetInstance().ErrorWithClassName("Error find Resource Taskbar. Exception " + ex.Message, Current);
             }
 
             if (WithUserInterface())
@@ -102,6 +106,7 @@ namespace ShutdownManager
             AppCon.StopListening();
 
             AppCon = null;
+            MyLogger.GetInstance().Info("Close application 'OnExit'.... ");
 
             base.OnExit(e);
         }
@@ -116,16 +121,23 @@ namespace ShutdownManager
                 //Check if its on Startup
                 string[] arguments = Environment.GetCommandLineArgs();
 
-                bool WithUi = true;
+                bool WithUI = true;
                 foreach (string arg in arguments)
                 {
-                    if (arg == "/startup") { WithUi = false; }
+                    if (arg == "/startup")
+                    {
+                        MyLogger.GetInstance().InfoWithClassName($"Open UserInterface Found argument: {arg}", Current);
+                        WithUI = false; 
+                    }
+                        
+                    
                 }
-
-                return WithUi;
+                MyLogger.GetInstance().InfoWithClassName($"Open UserInterface? {WithUI} ", Current);
+                return WithUI;
             }
             else
             {
+                MyLogger.GetInstance().InfoWithClassName("Open with UserInterface.Open minimized deaktivated", Current);
                 return true;   
             }
 
@@ -133,8 +145,9 @@ namespace ShutdownManager
 
         public static void OpenMainWindow()
         {
+            MyLogger.GetInstance().Info("Open main window");
 
-            if(Window == null || Window.IsVisible == false)
+            if (Window == null || Window.IsVisible == false)
             {
                 try
                 {
@@ -148,7 +161,7 @@ namespace ShutdownManager
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message.ToString(), "Create MainWindow", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MyLogger.GetInstance().ErrorWithClassName("Open main window. Exception " + ex.Message, Current);
                 }
 
             }
@@ -159,6 +172,8 @@ namespace ShutdownManager
 
         public static void OpenSettings()
         {
+            MyLogger.GetInstance().InfoWithClassName("Open settings", Current);
+
             if (SettingsView == null || SettingsView.IsVisible == false)
             {
                 SettingsView = new SettingsView();
@@ -168,8 +183,7 @@ namespace ShutdownManager
                 }
                 catch (Exception ex)
                 {
-
-                    MessageBox.Show(ex.Message.ToString(), "Create Settings Window", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MyLogger.GetInstance().ErrorWithClassName("Open settings. Exception " + ex.Message, Current);
                 }
             }
 
@@ -178,6 +192,8 @@ namespace ShutdownManager
 
         private static void OnMainWindowClosing(object source, EventArgs args)
         {
+
+            MyLogger.GetInstance().InfoWithClassName("Closing main window", Current);
 
             Window.Closing -= OnMainWindowClosing;
             DownUploadController.AbortThread();
@@ -197,6 +213,14 @@ namespace ShutdownManager
 
         public static void ShowBalloonTip(string title, string message, BalloonIcon symbol )
         {
+
+            if(symbol == BalloonIcon.Info)
+                MyLogger.GetInstance().Info($"BalloonTip title: {title}, message: {message} ");
+            else if(symbol == BalloonIcon.Warning)
+                MyLogger.GetInstance().Warning($"BalloonTip title: {title}, message: {message} ");
+            else
+                MyLogger.GetInstance().Error($"BalloonTip title: {title}, message: {message} ");
+
             if (!AppCon.DisablePushMessages)
             {
                 TaskbarIcon.ShowBalloonTip(title, message, symbol);  

@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using ShutdownManager.Utility;
 
 namespace ShutdownManager.Classes
 {
@@ -25,6 +26,7 @@ namespace ShutdownManager.Classes
 
         public void Shutdown()
         {
+            MyLogger.GetInstance().InfoWithClassName("Execute Action: 'Shutdown' ....", this);
             if (_testingModeActiv)
             {
                 MessageBox.Show("Shutdown!");
@@ -38,6 +40,7 @@ namespace ShutdownManager.Classes
 
         public void Restart()
         {
+            MyLogger.GetInstance().InfoWithClassName("Execute Action: 'Restart' ....", this);
             if (_testingModeActiv)
             {
                 MessageBox.Show("Restart!");
@@ -50,6 +53,7 @@ namespace ShutdownManager.Classes
 
         public void Sleep()
         {
+            MyLogger.GetInstance().InfoWithClassName("Execute Action: 'Sleep' ....", this);
             if (_testingModeActiv)
             {
                 MessageBox.Show("Sleep!");

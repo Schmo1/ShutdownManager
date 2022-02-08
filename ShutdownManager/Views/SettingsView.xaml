@@ -13,8 +13,8 @@
     <StackPanel>
         <GroupBox Header="Startup" Margin="7">
             <StackPanel>
-                <CheckBox Content="Start automatically with Windows" Margin="7" IsChecked="{Binding AutoStartActiv}"/>
-                <CheckBox Content="Open minimized" Margin="7" IsChecked="{Binding OpenMinimized}"/> 
+                <CheckBox Content="Start automatically with Windows" Margin="7" IsChecked="{Binding AutoStartActiv}" Name="cbAutoStartActiv"/>
+                <CheckBox Content="Open minimized" Margin="7" IsChecked="{Binding OpenMinimized}" IsEnabled="{Binding ElementName=cbAutoStartActiv, Path= IsChecked, Mode=OneWay}"/> 
             </StackPanel>
         </GroupBox>
         <GroupBox Header="App settings" Margin="7">

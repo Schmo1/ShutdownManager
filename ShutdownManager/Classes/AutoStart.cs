@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using ShutdownManager.Utility;
 using System;
 using System.IO;
 using System.Windows;
@@ -27,15 +28,15 @@ namespace ShutdownManager.Classes
             _appName = Application.ResourceAssembly.GetName().Name;
         }
         public AutoStart(string args)
-        {
-           Arguments = args;
+        { 
             _appName = Application.ResourceAssembly.GetName().Name;
+            _args = args;
         }
 
         public AutoStart(string args, string appName)
         {
-            Arguments = args;
             _appName = appName;
+            _args = args;
         }
 
         private bool IsAutoStartActiv()
@@ -58,10 +59,18 @@ namespace ShutdownManager.Classes
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message.ToString(), "Error GetValue", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MyLogger.GetInstance().Error("Error Registry GetValue ==> Exception: " + ex.Message);
                     return false;
                 }
             }
+        }
+
+        public object GetValue()
+        {
+            if(startupKey.GetValue(_appName) != null)
+                return startupKey.GetValue(_appName);
+            else
+                return "";
         }
 
 
@@ -71,18 +80,25 @@ namespace ShutdownManager.Classes
             {
                 //Get Full Path
                 string dirPath = GetRegPath();
+                string getPath = GetValue().ToString();
 
-                // Add the value in the registry so that the application runs at startup
-                startupKey?.SetValue(_appName, dirPath);
+                if (!getPath.Equals(dirPath) && _appName != null) 
+                {
+                    //Update path
+                    MyLogger.GetInstance().InfoWithClassName($"EnableAutoStart, appName: {_appName},path: {dirPath}", this);
+                    // Add the value in the registry so that the application runs at startup
+                    startupKey?.SetValue(_appName, dirPath);
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message.ToString(), "Error GetFullPath", MessageBoxButton.OK, MessageBoxImage.Error);
+                MyLogger.GetInstance().Error("Error create Registry entry ==> Exception: " + ex.Message);
             }
         }
 
         public void DisableAutoStart()
         {
+            MyLogger.GetInstance().InfoWithClassName("DisableAutoStart", this);
             try
             {
                 // Remove the value from the registry so that the application doesn't start
@@ -90,7 +106,7 @@ namespace ShutdownManager.Classes
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message.ToString(), "Error Delete Registry entry", MessageBoxButton.OK, MessageBoxImage.Error);
+                MyLogger.GetInstance().Error("Error Delete Registry entry ==> Exception: " + ex.Message);
             }
         }
 

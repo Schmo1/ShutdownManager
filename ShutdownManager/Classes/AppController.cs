@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ShutdownManager.Utility;
+using System;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Threading;
@@ -44,12 +45,13 @@ namespace ShutdownManager.Classes
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message.ToString(), "Error Threading", MessageBoxButton.OK, MessageBoxImage.Error);
+                MyLogger.GetInstance().Error("AppController start Listening. Exception " + ex.Message);
             }
         }
 
         private void ReciveRequestForGUI()
         {
+            MyLogger.GetInstance().InfoWithClassName("Start listening...", this);
             //if instance of the programm has started, this instance will open the GUI and the other instance closes itself.
             using (var mmf = MemoryMappedFile.CreateOrOpen("ShowGuiMapName", 1024))
             using (var view = mmf.CreateViewStream())
@@ -65,6 +67,7 @@ namespace ShutdownManager.Classes
                     reader.BaseStream.Position = 0;
                     if (reader.ReadString() == "OpenGUI")
                     {
+                        MyLogger.GetInstance().InfoWithClassName("Other application was found ==> Open GUI", this);
                         OnOpenRequest?.Invoke(this, EventArgs.Empty); //Event
                     }
                     mutex.ReleaseMutex();
@@ -88,7 +91,7 @@ namespace ShutdownManager.Classes
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message.ToString(), "Error Mutex", MessageBoxButton.OK, MessageBoxImage.Error);
+                MyLogger.GetInstance().Error("AppController IsFirstInstance. Exception " + ex.Message);
             }
 
             return true;
@@ -96,6 +99,8 @@ namespace ShutdownManager.Classes
 
         public void SendGUIRequest()
         {
+            MyLogger.GetInstance().InfoWithClassName("Send GUI request", this);
+
             using (MemoryMappedFile mmf = MemoryMappedFile.CreateOrOpen("ShowGuiMapName", 1024))
             using (var view = mmf.CreateViewStream())
             {

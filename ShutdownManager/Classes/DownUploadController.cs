@@ -3,6 +3,7 @@ using System;
 using System.Net.NetworkInformation;
 using System.Threading;
 using System.Windows.Forms;
+using ShutdownManager.Utility;
 
 
 
@@ -102,7 +103,7 @@ namespace ShutdownManager.Classes
 
         public void UpdateNetworkTraffic()
         {
-
+            MyLogger.GetInstance().InfoWithClassName("Start Thread 'UpdateNetworkTraffic'", this);
             long maxReceived = 0;
             long maxSend = 0;
             long maxReceivedOld = 0;
@@ -274,12 +275,14 @@ namespace ShutdownManager.Classes
 
         private void ObserveIsOver()
         {
+            MyLogger.GetInstance().InfoWithClassName("Observing Down- Upload is over", this);
             _expiredObserveTime = 0;
             App.ShutdownOptions.Shutdown();
         }
 
         public void AbortThread()
         {
+            MyLogger.GetInstance().InfoWithClassName("Abort Thread 'UpdateNetworkTraffic'", this);
             thUpdateValues.Abort();
         }
 
