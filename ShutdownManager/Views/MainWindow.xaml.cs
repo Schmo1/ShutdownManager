@@ -143,6 +143,20 @@ namespace ShutdownManager.Views
         {
             UpdateDownUploadText();
         }
+
+        private void Slider_ClockHours_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            App.ViewModel.ClockHours = App.ClockControl.ClockTime.Hour;
+        }
+        private void Slider_ClockMinutes_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            App.ViewModel.ClockMinutes = App.ClockControl.ClockTime.Minute;
+        }
+        private void Slider_ClockSeconds_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            App.ViewModel.ClockSeconds = App.ClockControl.ClockTime.Second;
+        }
+
     }
     
 }

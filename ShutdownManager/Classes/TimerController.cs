@@ -128,7 +128,6 @@ namespace ShutdownManager.Classes
             TimeSpan timeSpan = new TimeSpan(App.ViewModel.Hours, App.ViewModel.Minutes, App.ViewModel.Seconds);
             App.ViewModel.TimeSpanLeft = timeSpan;
             
-
         }
     }
 }

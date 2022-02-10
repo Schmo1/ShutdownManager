@@ -131,7 +131,7 @@ namespace ShutdownManager.Classes
                 catch (Exception e)
                 {
 
-                    MessageBox.Show(e.Message.ToString(), "DownUploadController", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MyLogger.GetInstance().ErrorWithClassName("GetAllNetworkInterfaces. Exception "+ e.Message , this);
                 }
 
                 foreach (NetworkInterface ni in interfaces)
@@ -215,7 +215,8 @@ namespace ShutdownManager.Classes
 
         private void CreateArrNew()
         {
-            recordedSpeeds = new double[App.ViewModel.ObserveTime];
+            if(App.ViewModel != null)
+                recordedSpeeds = new double[App.ViewModel.ObserveTime];
         }
 
         private bool IsAverageUnderSpeed()
@@ -283,13 +284,13 @@ namespace ShutdownManager.Classes
         public void AbortThread()
         {
             MyLogger.GetInstance().InfoWithClassName("Abort Thread 'UpdateNetworkTraffic'", this);
-            thUpdateValues.Abort();
+            thUpdateValues?.Abort();
         }
 
 
         ~DownUploadController()
         {
-            thUpdateValues.Abort();
+            AbortThread();
         }
 
 

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ShutdownManager.Views"
         xmlns:converters="clr-namespace:ShutdownManager.Converters"
         mc:Ignorable="d"
-        Title="Shutdown Manager" Height="500" Width="330" MinHeight="320" MinWidth="270" MaxHeight="600" MaxWidth="400" Icon="/ShutdownManager;component/icons/ShutdownManager.ico" WindowStartupLocation="CenterScreen">
+        Title="Shutdown Manager" Height="500" Width="340" MinHeight="490" MinWidth="330" MaxHeight="550" MaxWidth="400" Icon="/ShutdownManager;component/icons/ShutdownManager.ico" WindowStartupLocation="CenterScreen">
     <Window.Resources>
 
         <!-- Converters -->
@@ -82,7 +82,7 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="90"/>
-                    <RowDefinition Height="55"/>
+                    <RowDefinition Height="65"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="1.2*"/>
 
@@ -141,11 +141,10 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel>
-                            <RadioButton GroupName="rbAction" x:Name="RadioButton_Shutdown" Margin="13,15,5,7" Content="Shutdown" IsChecked="{Binding ShutdownIsChecked}"/>
-                            <RadioButton GroupName="rbAction" x:Name="RadioButton_Restart" Margin="13,5,5,7" Content="Restart" IsChecked="{Binding RestartIsChecked}" />
-                            <RadioButton GroupName="rbAction" x:Name="RadioButton_Sleep" Margin="13,5,5,15" Content="Sleep" IsChecked="{Binding SleepIsChecked}"/>
+                            <RadioButton GroupName="rbAction" x:Name="RadioButton_Shutdown" Margin="13,13,5,4" Content="Shutdown" IsChecked="{Binding ShutdownIsChecked}"/>
+                            <RadioButton GroupName="rbAction" x:Name="RadioButton_Restart" Margin="13,5,5,4" Content="Restart" IsChecked="{Binding RestartIsChecked}" />
+                            <RadioButton GroupName="rbAction" x:Name="RadioButton_Sleep" Margin="13,5,5,0" Content="Sleep" IsChecked="{Binding SleepIsChecked}"/>
                         </StackPanel>
-
                         <Button Name="NowButton" 
                                 FontSize="15"
                                 Content="Trigger Now" 
@@ -240,15 +239,15 @@
 
         
         <!--                        -->
-        <!--- Clcok  -->
+        <!--- Clock  -->
         <!--                        -->
         <TabItem Header="Clock" >
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="90"/>
-                    <RowDefinition Height="90"/>
+                    <RowDefinition Height="65"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="1.2*"/>
 
                 </Grid.RowDefinitions>
 
@@ -262,12 +261,31 @@
                                TextWrapping="Wrap" 
                                Text="{Binding ClockTime, FallbackValue=00:00:00}" />
                 </GroupBox>
-                <GroupBox Header="Observing Time" Grid.Row="1" Margin="7">
-                    
+                <GroupBox Header="Trigger Time" Grid.Row="1" Margin="7">
+                    <TextBlock Name="tbTriggerTime" 
+                               TextAlignment="Center" 
+                               VerticalAlignment="Center" 
+                               HorizontalAlignment="Center" 
+                               FontSize="25" 
+                               TextWrapping="Wrap" 
+                               Text="{Binding TriggerTime, FallbackValue=00:00:00, Mode=OneWay}" />
                 </GroupBox>
 
                 <GroupBox Header="Actions" Grid.Row="2" Margin="7">
-                    
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel>
+                            <RadioButton GroupName="rbActionClock" Margin="13,13,5,4" Content="Shutdown" IsChecked="{Binding ShutdownClockIsChecked}"/>
+                            <RadioButton GroupName="rbActionClock" Margin="13,5,5,4" Content="Restart" IsChecked="{Binding RestartClockIsChecked}" />
+                            <RadioButton GroupName="rbActionClock" Margin="13,5,5,0" Content="Sleep" IsChecked="{Binding SleepClockIsChecked}"/>
+                        </StackPanel>
+                        <local:ToggleButton Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="55" Width="70" Toggled="{Binding IsClockObservingActiv}"/>
+                        
+                    </Grid>
                 </GroupBox>
                 
                 <GroupBox Header="Clock settings" Grid.Row="3" Margin="7" >
@@ -288,22 +306,22 @@
                              FontSize="15" 
                              TextAlignment="Center" 
                              Text="{Binding ClockHours, FallbackValue= 0 , Converter={StaticResource MyStringToIntConverter}}" 
-                             IsEnabled="{Binding IsClockObservingStarted, Converter={StaticResource MyBoolInvertConverter}}"
+                             IsEnabled="{Binding IsClockObservingActiv, Converter={StaticResource MyBoolInvertConverter}}"
                              Name="txtClockHours" 
                              HorizontalAlignment="Right" 
                              Height="24" 
                              Width="65"
                              Grid.Column="1"/>
 
-                        <Slider Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" Margin="20,0,20,0" VerticalAlignment="Center" Width="140"
+                        <Slider Name="sClockHours" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" Margin="20,0,20,0" VerticalAlignment="Center" Width="140"
                                 Value="{Binding ClockHours}" Maximum="23" 
-                                IsEnabled="{Binding IsClockObservingStarted, Converter={StaticResource MyBoolInvertConverter}}"/>
+                                IsEnabled="{Binding IsClockObservingActiv, Converter={StaticResource MyBoolInvertConverter}}" MouseDoubleClick="Slider_ClockHours_MouseDoubleClick"/>
 
                         <TextBox PreviewTextInput="NumberValidationTextBox" 
                              FontSize="15" 
                              TextAlignment="Center" 
                              Text="{Binding ClockMinutes, FallbackValue=0, Converter={StaticResource MyStringToIntConverter}}" 
-                             IsEnabled="{Binding IsClockObservingStarted, Converter={StaticResource MyBoolInvertConverter}}"
+                             IsEnabled="{Binding IsClockObservingActiv, Converter={StaticResource MyBoolInvertConverter}}"
                              Name="txtClockMinutes" 
                              HorizontalAlignment="Right" 
                              Height="24" 
@@ -311,15 +329,15 @@
                              Grid.Row="1"
                              Grid.Column="1"/>
 
-                        <Slider Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" Margin="20,0,20,0" VerticalAlignment="Center" Width="140" 
+                        <Slider Name="sClockMinutes" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" Margin="20,0,20,0" VerticalAlignment="Center" Width="140" 
                                 Value="{Binding ClockMinutes}" Maximum="60" 
-                                IsEnabled="{Binding IsClockObservingStarted, Converter={StaticResource MyBoolInvertConverter}}" />
+                                IsEnabled="{Binding IsClockObservingActiv, Converter={StaticResource MyBoolInvertConverter}}" MouseDoubleClick="Slider_ClockMinutes_MouseDoubleClick"/>
 
                         <TextBox PreviewTextInput="NumberValidationTextBox" 
                              FontSize="15" 
                              TextAlignment="Center" 
                              Text="{Binding ClockSeconds, FallbackValue=0, Converter={StaticResource MyStringToIntConverter}}"
-                             IsEnabled="{Binding IsClockObservingStarted, Converter={StaticResource MyBoolInvertConverter}}"
+                             IsEnabled="{Binding IsClockObservingActiv, Converter={StaticResource MyBoolInvertConverter}}"
                              Name="txtClockSeconds"  
                              HorizontalAlignment="Right" 
                              Height="24" 
@@ -327,9 +345,9 @@
                              Grid.Row="2"
                              Grid.Column="1"/>
 
-                        <Slider Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" Margin="20,0,20,0" VerticalAlignment="Center" Width="140" 
+                        <Slider Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" Margin="20,0,20,0" VerticalAlignment="Center" Width="140" Name="sClockSeconds" 
                                 Value="{Binding ClockSeconds}" Maximum="60" 
-                                IsEnabled="{Binding IsClockObservingStarted, Converter={StaticResource MyBoolInvertConverter}}"/>
+                                IsEnabled="{Binding IsClockObservingActiv, Converter={StaticResource MyBoolInvertConverter}}" MouseDoubleClick="Slider_ClockSeconds_MouseDoubleClick" />
 
                         <TextBlock Text="h" Grid.Column="2" FontSize="17" HorizontalAlignment = "Left" VerticalAlignment="Center" Margin="5" TextAlignment="Center" />
                         <TextBlock Text="m" Grid.Row="1" Grid.Column="2" FontSize="17" HorizontalAlignment = "Left" VerticalAlignment="Center" Margin="5" TextAlignment="Center" />

@@ -115,32 +115,20 @@ namespace ShutdownManager
 
         private bool WithUserInterface()
         {
+            //Check if its on Startup
+            string[] arguments = Environment.GetCommandLineArgs();
 
-            if (AppCon.OpenMinimized)
+            
+            foreach (string arg in arguments)
             {
-                //Check if its on Startup
-                string[] arguments = Environment.GetCommandLineArgs();
-
-                bool WithUI = true;
-                foreach (string arg in arguments)
+                if (arg == "/startup" && AppCon.OpenMinimized)
                 {
-                    if (arg == "/startup")
-                    {
-                        MyLogger.GetInstance().InfoWithClassName($"Open UserInterface Found argument: {arg}", Current);
-                        WithUI = false; 
-                    }
-                        
-                    
-                }
-                MyLogger.GetInstance().InfoWithClassName($"Open UserInterface? {WithUI} ", Current);
-                return WithUI;
+                    MyLogger.GetInstance().InfoWithClassName($"Open without UserInterface Found argument: {arg}", Current);
+                    return false; 
+                }     
             }
-            else
-            {
-                MyLogger.GetInstance().InfoWithClassName("Open with UserInterface.Open minimized deaktivated", Current);
-                return true;   
-            }
-
+            MyLogger.GetInstance().InfoWithClassName("Open with User Interface", Current);
+            return true;
         }
 
         public static void OpenMainWindow()

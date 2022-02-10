@@ -214,5 +214,41 @@ namespace ShutdownManager.Properties {
                 this["ClockSeconds"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShutdownClockIsChecked {
+            get {
+                return ((bool)(this["ShutdownClockIsChecked"]));
+            }
+            set {
+                this["ShutdownClockIsChecked"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool RestartClockIsChecked {
+            get {
+                return ((bool)(this["RestartClockIsChecked"]));
+            }
+            set {
+                this["RestartClockIsChecked"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SleepClockIsChecked {
+            get {
+                return ((bool)(this["SleepClockIsChecked"]));
+            }
+            set {
+                this["SleepClockIsChecked"] = value;
+            }
+        }
     }
 }

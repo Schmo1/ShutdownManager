@@ -18,8 +18,10 @@ namespace ShutdownManager.Classes
         private string _uploadValue;
         private string _downloadValue;
         private bool _isTimerStarted;
+        private bool _isClockObservingActiv;
         private ICommand _clickCommand;
         private string _clockTime;
+        private string _triggerTime;
 
 
         public ICommand TriggerNowCommand
@@ -197,6 +199,8 @@ namespace ShutdownManager.Classes
         }
 
         public string ClockTime { get { return _clockTime; } set { _clockTime = value; OnPropertyChanged(nameof(ClockTime)); }}
+
+        public string TriggerTime { get { return _triggerTime; } set { _triggerTime = value; OnPropertyChanged(nameof(TriggerTime)); } }
         public int ClockHours
         {
             get => Properties.Settings.Default.ClockHours;
@@ -204,6 +208,7 @@ namespace ShutdownManager.Classes
             {
                 Properties.Settings.Default.ClockHours = CheckMaxValue(23, value); ;
                 SaveUserData(nameof(ClockHours));
+                UpdateTriggerTime();
             }
         }
         public int ClockMinutes
@@ -214,6 +219,7 @@ namespace ShutdownManager.Classes
             {
                 Properties.Settings.Default.ClockMinutes = CheckMaxValue(59, value); ;
                 SaveUserData(nameof(ClockMinutes));
+                UpdateTriggerTime();
             }
         }
         public int ClockSeconds {
@@ -223,8 +229,49 @@ namespace ShutdownManager.Classes
             {
                 Properties.Settings.Default.ClockSeconds = CheckMaxValue(59, value); ;
                 SaveUserData(nameof(ClockSeconds));
+                UpdateTriggerTime();
             }
         }
+
+        public bool ShutdownClockIsChecked
+        {
+            get => Properties.Settings.Default.ShutdownClockIsChecked;
+            set 
+            { 
+                Properties.Settings.Default.ShutdownClockIsChecked = value;
+                SaveUserData(nameof(ShutdownClockIsChecked));
+            }
+        }
+        public bool RestartClockIsChecked
+        {
+            get => Properties.Settings.Default.RestartClockIsChecked;
+            set
+            {
+                Properties.Settings.Default.RestartClockIsChecked = value;
+                SaveUserData(nameof(RestartClockIsChecked));
+            }
+        }
+        public bool SleepClockIsChecked
+        {
+            get => Properties.Settings.Default.SleepClockIsChecked;
+            set
+            {
+                Properties.Settings.Default.SleepClockIsChecked = value;
+                SaveUserData(nameof(SleepClockIsChecked));
+            }
+        }
+
+        public bool IsClockObservingActiv 
+        {
+            get { return _isClockObservingActiv; } 
+            set { _isClockObservingActiv = value; OnPropertyChanged(nameof(IsClockObservingActiv)); } 
+        }
+
+
+
+
+
+
 
         //Events
         public event PropertyChangedEventHandler PropertyChanged;
@@ -235,6 +282,7 @@ namespace ShutdownManager.Classes
         {
             OnPropertyChanged();
             CheckEmptyUserInput();
+            UpdateTriggerTime();
             App.ClockControl.Timer.Tick += ClockTick;
         }
 
@@ -258,6 +306,10 @@ namespace ShutdownManager.Classes
             ClockTime = App.ClockControl.ClockTime.ToLongTimeString();
         }
 
+        private void UpdateTriggerTime()
+        {
+            TriggerTime = new TimeSpan(ClockHours, ClockMinutes, ClockSeconds).ToString();
+        }
 
         private void CheckEmptyUserInput()
         {
