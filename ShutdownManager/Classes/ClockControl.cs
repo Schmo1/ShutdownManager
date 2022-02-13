@@ -1,4 +1,5 @@
-﻿using ShutdownManager.Utility;
+﻿using Hardcodet.Wpf.TaskbarNotification;
+using ShutdownManager.Utility;
 using System;
 using System.Windows.Threading;
 
@@ -33,14 +34,51 @@ namespace ShutdownManager.Classes
         private void Update_Timer(object sender, EventArgs e)
         {
             _time = DateTime.Now;
-  
+
+            if (!IsClockObservingActiv) { return; }
 
 
-            if (IsClockObservingActiv && CheckTimeEqual(_time, TriggerTime))
+            //Check time is over/equal
+            if (CheckTimeEqual(_time, TriggerTime))
             {
                 MyLogger.GetInstance().InfoWithClassName($"ClockTime is over Time: {_time.TimeOfDay}", this);
-                //do some action
+
+                if (App.ViewModel.ShutdownClockIsChecked)
+                {
+                    App.ShutdownOptions.Shutdown();
+                }
+                else if (App.ViewModel.SleepClockIsChecked)
+                {
+                    App.ShutdownOptions.Sleep();
+                }
+                else
+                {
+                    App.ShutdownOptions.Restart();
+                }
+            }else if(CheckTimeEqual(_time, TriggerTime.AddMinutes(-1)))
+            {
+                //Message wehn only 60s left before action
+                CreateBaloonTip();
             }
+        }
+
+        private void CreateBaloonTip()
+        {
+            string message = "PC is going to XXReplaceTemplate in 60 seconds!";
+            if (App.ViewModel.ShutdownClockIsChecked)
+            {
+                message = message.Replace("XXReplaceTemplate", "shut down");
+            }
+            else if (App.ViewModel.SleepClockIsChecked)
+            {
+                message = message.Replace("XXReplaceTemplate", "sleep");
+            }
+            else
+            {
+                message = message.Replace("XXReplaceTemplate", "restart");
+            }
+
+            App.ShowBalloonTip("Info", message, BalloonIcon.Info);
         }
 
         private bool CheckTimeEqual(DateTime dateTime1, DateTime dateTime2)

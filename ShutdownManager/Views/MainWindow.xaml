@@ -278,12 +278,12 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <StackPanel>
+                        <StackPanel Grid.Column="1">
                             <RadioButton GroupName="rbActionClock" Margin="13,13,5,4" Content="Shutdown" IsChecked="{Binding ShutdownClockIsChecked}"/>
                             <RadioButton GroupName="rbActionClock" Margin="13,5,5,4" Content="Restart" IsChecked="{Binding RestartClockIsChecked}" />
                             <RadioButton GroupName="rbActionClock" Margin="13,5,5,0" Content="Sleep" IsChecked="{Binding SleepClockIsChecked}"/>
                         </StackPanel>
-                        <local:ToggleButton Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="55" Width="70" Toggled="{Binding IsClockObservingActiv}"/>
+                        <local:ToggleButton Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Height="55" Width="70" Toggled="{Binding IsClockObservingActiv}"/>
                         
                     </Grid>
                 </GroupBox>
@@ -381,12 +381,27 @@
                     <TextBlock x:Name="tbTextDownUp3" Margin=" 2,2,2,15" ><Run Text="for Insert"/><Run Language="de-de" Text="Times"/><Run Text=" s then the PC will shut down"/></TextBlock>
                 </StackPanel>
 
-                <!--- Checkbox to activate the function  -->
-                <CheckBox Grid.Row="1" Margin="7,3.5,7,7" IsChecked="{Binding IsObserveActiv}" >Activate</CheckBox>
+                
+
+                <GroupBox Header="Actions" Margin="7" Grid.Row="1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!--- Checkbox to activate the function  -->
+                        <local:ToggleButton Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Height="55" Width="70" Toggled="{Binding IsObserveActiv}"/>
+                        <StackPanel Grid.Column="1">
+                            <RadioButton GroupName="rbActionUploadDownload" Margin="13,13,5,4" Content="Shutdown" IsChecked="{Binding ShutdownUPDownIsChecked}"/>
+                            <RadioButton GroupName="rbActionUploadDownload" Margin="13,5,5,4" Content="Restart" IsChecked="{Binding RestartUPDownIsChecked}" />
+                            <RadioButton GroupName="rbActionUploadDownload" Margin="13,5,5,0" Content="Sleep" IsChecked="{Binding SleepUPDownIsChecked}"/>
+                        </StackPanel>
+                    </Grid>
+                </GroupBox>
 
 
-
-                <!--- Showing the actual values  -->
+                    <!--- Showing the actual values  -->
                 <GroupBox Header="Actual values" Margin="7,3.5,7,3.5" Grid.Row="2">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -424,7 +439,7 @@
                                 <RadioButton GroupName="rbDownUp" Name="RadioButton_Upload"   Margin="7,0,0,10"  Content="Upload" Click="RadioButton_DownUp_Click" IsEnabled="{Binding IsObserveActiv, Converter={StaticResource MyBoolInvertConverter}}"/> 
                             </StackPanel>
                         </GroupBox>
-                        <GroupBox Header="Values" Grid.Column="1" Margin="7,3.5,7,7">
+                        <GroupBox Header="Values" Grid.Column="2" Margin="7,3.5,7,7">
                             <Grid>
 
                                 <Grid.ColumnDefinitions>
