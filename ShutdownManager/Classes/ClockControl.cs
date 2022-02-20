@@ -10,10 +10,20 @@ namespace ShutdownManager.Classes
     {
 
         private DateTime _time;
+        private bool _isClockObservingActiv;
         DispatcherTimer _timer = new DispatcherTimer();
 
 
-        public bool IsClockObservingActiv { get => App.ViewModel.IsClockObservingActiv; }
+        public bool IsClockObservingActiv 
+        { 
+            get { return _isClockObservingActiv; } 
+            set 
+            { 
+                _isClockObservingActiv = value;
+                if (value)
+                    CreateClockObservingOnTip();
+            } 
+        }
         public DateTime TriggerTime 
         { 
             get 
@@ -45,24 +55,55 @@ namespace ShutdownManager.Classes
 
                 if (App.ViewModel.ShutdownClockIsChecked)
                 {
-                    App.ShutdownOptions.Shutdown();
+                    ShutdownOptions.Instance.Shutdown();
                 }
                 else if (App.ViewModel.SleepClockIsChecked)
                 {
-                    App.ShutdownOptions.Sleep();
+                    ShutdownOptions.Instance.Sleep();
                 }
                 else
                 {
-                    App.ShutdownOptions.Restart();
+                    ShutdownOptions.Instance.Restart();
                 }
             }else if(CheckTimeEqual(_time, TriggerTime.AddMinutes(-1)))
             {
                 //Message wehn only 60s left before action
-                CreateBaloonTip();
+                CreateLastBaloonTip();
             }
         }
 
-        private void CreateBaloonTip()
+        private void CreateClockObservingOnTip()
+        {
+            string message = "PC is going to XXReplaceTemplateXX in XXReplaceTemplateTimeXX";
+            if (App.ViewModel.ShutdownClockIsChecked)
+            {
+                message = message.Replace("XXReplaceTemplateXX", "shut down");
+            }
+            else if (App.ViewModel.SleepClockIsChecked)
+            {
+                message = message.Replace("XXReplaceTemplateXX", "sleep");
+            }
+            else
+            {
+                message = message.Replace("XXReplaceTemplateXX", "restart");
+            }
+
+            string remainingTime;
+
+            if (TriggerTime > _time)
+                remainingTime = (TriggerTime - _time).ToString(@"hh\:mm\:ss");
+            else
+                remainingTime = (TriggerTime + new TimeSpan(24, 0, 0) - _time).ToString(@"hh\:mm\:ss");
+
+            message = message.Replace("XXReplaceTemplateTimeXX", remainingTime);
+
+
+
+            App.ShowBalloonTip("Info", message, BalloonIcon.Info);
+        }
+
+
+        private void CreateLastBaloonTip()
         {
             string message = "PC is going to XXReplaceTemplate in 60 seconds!";
             if (App.ViewModel.ShutdownClockIsChecked)

@@ -71,12 +71,14 @@ namespace ShutdownManager.Views
             Back.Fill = Off;
             Toggled = false;
             Dot.Margin = LeftSide;
+            txtOff.IsEnabled = true;
         }
         private void ToggleOn()
         {
             Back.Fill = On;
             Toggled = true;
             Dot.Margin = RightSide;
+            txtOff.IsEnabled = false;
         }
     }
 }

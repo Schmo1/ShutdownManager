@@ -278,7 +278,7 @@ namespace ShutdownManager.Classes
         {
             MyLogger.GetInstance().InfoWithClassName("Observing Down- Upload is over", this);
             _expiredObserveTime = 0;
-            App.ShutdownOptions.Shutdown();
+            ShutdownOptions.Instance.Shutdown();
         }
 
         public void AbortThread()

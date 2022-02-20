@@ -1,13 +1,15 @@
 ﻿using System.Windows;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using ShutdownManager.Utility;
 
-namespace ShutdownManager.Classes
+
+namespace ShutdownManager.Utility
 {
     public class ShutdownOptions
     {
 
+
+        private static readonly ShutdownOptions instance = new ShutdownOptions(); //singleton design pattern. singl instance of this class.
 
         [DllImport("Powrprof.dll", SetLastError = true)]
 
@@ -15,7 +17,9 @@ namespace ShutdownManager.Classes
 
         private bool _testingModeActiv;
 
-        public ShutdownOptions()
+
+        //single design pattern - private constructor
+        private ShutdownOptions()
         {
 #if DEBUG
             _testingModeActiv = true;
@@ -23,6 +27,14 @@ namespace ShutdownManager.Classes
              _testingModeActiv = false;
 #endif
         }
+
+
+        //exits int he programm, then send them the reference to the original.
+        public static ShutdownOptions Instance { get { return instance; } } 
+
+
+
+
 
         public void Shutdown()
         {

@@ -27,7 +27,6 @@ namespace ShutdownManager
         private static TaskbarIcon TaskbarIcon { get; set; }
         public static NotifyIconViewModel NotifyIconViewModel { get; set; }
         public static AppController AppCon { get; set; }
-        public static ShutdownOptions ShutdownOptions { get; set; }
         public static bool HideWindowPressed { get; set; }  
 
         private delegate void OpenMainWindowDel();
@@ -45,8 +44,7 @@ namespace ShutdownManager
             ClockControl = new ClockControl();
             ViewModel = new MainWindowViewModel();
             TimerController = new TimerController();
-            NotifyIconViewModel = new NotifyIconViewModel();   
-            ShutdownOptions = new ShutdownOptions();
+            NotifyIconViewModel = new NotifyIconViewModel();
 
         }
 

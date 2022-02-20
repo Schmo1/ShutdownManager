@@ -1,8 +1,9 @@
-﻿using ShutdownManager.Commands;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using ShutdownManager.Commands;
+using ShutdownManager.Utility;
 
 namespace ShutdownManager.Classes
 {
@@ -44,15 +45,15 @@ namespace ShutdownManager.Classes
         {
             if (ShutdownIsChecked)
             {
-                App.ShutdownOptions.Shutdown();
+                ShutdownOptions.Instance.Shutdown();
             }
             else if (RestartIsChecked)
             {
-                App.ShutdownOptions.Restart();
+                ShutdownOptions.Instance.Restart();
             }
             else
             {
-                App.ShutdownOptions.Sleep();
+                ShutdownOptions.Instance.Sleep();
             }
         }
 
@@ -69,6 +70,11 @@ namespace ShutdownManager.Classes
         public bool ShutdownIsChecked { get => Properties.Settings.Default.TimerShutdownIsChecked; set { Properties.Settings.Default.TimerShutdownIsChecked = value; Properties.Settings.Default.Save(); } }
         public bool RestartIsChecked { get => Properties.Settings.Default.TimerRestartIsChecked; set { Properties.Settings.Default.TimerRestartIsChecked = value;  Properties.Settings.Default.Save(); } }
         public bool SleepIsChecked { get => Properties.Settings.Default.TimerSleepIsChecked; set { Properties.Settings.Default.TimerSleepIsChecked = value; Properties.Settings.Default.Save(); } }
+
+        //DownUpload Functions
+        public bool ShutdownIsCheckedDownUP { get => Properties.Settings.Default.ShutdownIsCheckedDownUP; set { Properties.Settings.Default.ShutdownIsCheckedDownUP = value; Properties.Settings.Default.Save(); } }
+        public bool RestartIsCheckedDownUP { get => Properties.Settings.Default.RestartIsCheckedDownUP; set { Properties.Settings.Default.RestartIsCheckedDownUP = value; Properties.Settings.Default.Save(); } }
+        public bool SleepIsCheckedDownUP { get => Properties.Settings.Default.SleepIsCheckedDownUP; set { Properties.Settings.Default.SleepIsCheckedDownUP = value; Properties.Settings.Default.Save(); } }
 
 
 
@@ -117,7 +123,7 @@ namespace ShutdownManager.Classes
         }
 
 
-        public bool IsObserveActiv { get { return App.DownUploadController.IsObserveActiv; } set { App.DownUploadController.IsObserveActiv = value; OnPropertyChanged(nameof(IsObserveActiv)); }  }
+        public bool IsObserveDownUploadActiv { get { return App.DownUploadController.IsObserveActiv; } set { App.DownUploadController.IsObserveActiv = value; OnPropertyChanged(nameof(IsObserveDownUploadActiv)); }  }
 
 
 
@@ -192,11 +198,6 @@ namespace ShutdownManager.Classes
             set => App.DownUploadController.IsTapActiv = value;
         }
 
-        public bool ClcokIsSelected
-        {
-            get => App.DownUploadController.IsTapActiv;
-            set => App.DownUploadController.IsTapActiv = value;
-        }
 
         public string ClockTime { get { return _clockTime; } set { _clockTime = value; OnPropertyChanged(nameof(ClockTime)); }}
 
@@ -264,7 +265,12 @@ namespace ShutdownManager.Classes
         public bool IsClockObservingActiv 
         {
             get { return _isClockObservingActiv; } 
-            set { _isClockObservingActiv = value; OnPropertyChanged(nameof(IsClockObservingActiv)); } 
+            set 
+            { 
+                _isClockObservingActiv = value; 
+                OnPropertyChanged(nameof(IsClockObservingActiv));
+                App.ClockControl.IsClockObservingActiv = value;
+            } 
         }
 
 

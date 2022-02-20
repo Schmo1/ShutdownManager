@@ -6,7 +6,7 @@ namespace ShutdownManager.Utility
     public class MyLogger : ILogger
     {
 
-        //singleton pattern example. Only one instance of this class can be instanciated
+        //Only one instance of this class can be instanciated
         private static MyLogger instance; //singleton design pattern. singl instance of this class.
         private static Logger logger;//static variable to hold a single instance of the nLog logger.
         private const string rulesConfName = "myAppLoggerRules";

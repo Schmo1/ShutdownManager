@@ -4,7 +4,7 @@ using System.Windows.Data;
 
 namespace ShutdownManager.Converters
 {
-    internal class StringToIntConverter : IValueConverter
+    public class StringToIntConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

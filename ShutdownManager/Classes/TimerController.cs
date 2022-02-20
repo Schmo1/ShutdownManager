@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using Hardcodet.Wpf.TaskbarNotification;
-using ShutdownManager.ViewModels;
+using ShutdownManager.Utility;
 
 namespace ShutdownManager.Classes
 {
@@ -106,15 +106,15 @@ namespace ShutdownManager.Classes
         { 
             if (App.ViewModel.ShutdownIsChecked)
             {
-                App.ShutdownOptions.Shutdown();
+                ShutdownOptions.Instance.Shutdown();
             }
             else if (App.ViewModel.RestartIsChecked)
             {
-                App.ShutdownOptions.Restart();
+                ShutdownOptions.Instance.Restart();
             }
             else if (App.ViewModel.SleepIsChecked)
             {
-                App.ShutdownOptions.Sleep(); 
+                ShutdownOptions.Instance.Sleep(); 
             }
             else
             {

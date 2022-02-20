@@ -13,8 +13,17 @@
                        VerticalAlignment="Top" Width="96" 
                        Margin="2,2,0,0" RadiusX="30" RadiusY="30" 
                        MouseLeftButtonDown="Ellipse_MouseLeftButtonDown"/>
+            
+            <TextBlock x:Name="txtOff" Foreground="White" Text="OFF" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10" FontSize="18" FontWeight="Bold" 
+                       MouseLeftButtonDown="Ellipse_MouseLeftButtonDown"/>
 
-            <Ellipse x:Name="Dot" Fill="White" HorizontalAlignment="Center" Height="46" Width="46" VerticalAlignment="Center" MouseLeftButtonDown="Ellipse_MouseLeftButtonDown"/>
+            <TextBlock x:Name="txtOn" Foreground="White" Text="ON" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10" FontSize="18" FontWeight="Bold" 
+                       MouseLeftButtonDown="Ellipse_MouseLeftButtonDown"/>
+
+            <Ellipse    x:Name="Dot" Fill="White" HorizontalAlignment="Center" Height="46" Width="46" VerticalAlignment="Center" 
+                        MouseLeftButtonDown="Ellipse_MouseLeftButtonDown"/>
+            
+
         </Grid>
     </Viewbox>
 

@@ -250,5 +250,41 @@ namespace ShutdownManager.Properties {
                 this["SleepClockIsChecked"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShutdownIsCheckedDownUP {
+            get {
+                return ((bool)(this["ShutdownIsCheckedDownUP"]));
+            }
+            set {
+                this["ShutdownIsCheckedDownUP"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool RestartIsCheckedDownUP {
+            get {
+                return ((bool)(this["RestartIsCheckedDownUP"]));
+            }
+            set {
+                this["RestartIsCheckedDownUP"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SleepIsCheckedDownUP {
+            get {
+                return ((bool)(this["SleepIsCheckedDownUP"]));
+            }
+            set {
+                this["SleepIsCheckedDownUP"] = value;
+            }
+        }
     }
 }
