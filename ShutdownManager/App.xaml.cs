@@ -137,6 +137,7 @@ namespace ShutdownManager
             {
                 try
                 {
+
                     Window = new MainWindow();
 
                     //Create some events

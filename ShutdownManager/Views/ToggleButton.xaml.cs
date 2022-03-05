@@ -20,8 +20,7 @@ namespace ShutdownManager.Views
 
         public static readonly DependencyProperty ToggledProperty = DependencyProperty.Register
             ("Toggled", typeof(bool), typeof(ToggleButton), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, ToggleChangedCallback));
-
-
+  
 
         private void ToggleChangedCallback(bool value)
         {
@@ -41,8 +40,7 @@ namespace ShutdownManager.Views
             set => SetValue(ToggledProperty, value);
         }
 
-
-
+   
 
         public ToggleButton()
         {
@@ -54,7 +52,7 @@ namespace ShutdownManager.Views
         private void Ellipse_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
 
-            if (!Toggled)
+            if (!Toggled && IsEnabled)
             {
                 ToggleOn();
             }

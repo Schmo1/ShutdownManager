@@ -21,8 +21,10 @@ namespace ShutdownManager.Views
             InitializeComponent();
 
             DataContext = App.ViewModel;
+            
 
             App.TimerController.OnTimerIsOver += OnTimerisOver; //Timer is over event
+
 
         }
 
@@ -157,6 +159,40 @@ namespace ShutdownManager.Views
             App.ViewModel.ClockSeconds = App.ClockControl.ClockTime.Second;
         }
 
+
+
+        //Radiobutton without binding
+        private void rb_CheckedClock(object sender, RoutedEventArgs e)
+        {
+            App.ViewModel.ShutdownClockIsChecked = (bool)rbShutdownClock.IsChecked;
+            App.ViewModel.RestartClockIsChecked = (bool)rbRestartClock.IsChecked;
+            App.ViewModel.SleepClockIsChecked = (bool)rbSleepClock.IsChecked;
+           
+        }
+
+        private void rb_CheckedDownUp(object sender, RoutedEventArgs e)
+        {
+            App.ViewModel.ShutdownIsCheckedDownUP = (bool)rbShutdownActionUpDown.IsChecked;
+            App.ViewModel.RestartIsCheckedDownUP = (bool)rbRestartActionUpDown.IsChecked;
+            App.ViewModel.SleepIsCheckedDownUP = (bool)rbSleepActionUpDown.IsChecked;
+
+        }
+
+
+        private void TIClock_GotFocus(object sender, RoutedEventArgs e)
+        {
+            rbShutdownClock.IsChecked = App.ViewModel.ShutdownClockIsChecked;
+            rbRestartClock.IsChecked = App.ViewModel.RestartClockIsChecked;
+            rbSleepClock.IsChecked = App.ViewModel.SleepClockIsChecked;
+
+        }
+
+        private void TIDownUpload_GotFocus(object sender, RoutedEventArgs e)
+        {
+            rbShutdownActionUpDown.IsChecked = App.ViewModel.ShutdownIsCheckedDownUP;
+            rbRestartActionUpDown.IsChecked = App.ViewModel.RestartIsCheckedDownUP;
+            rbSleepActionUpDown.IsChecked = App.ViewModel.SleepIsCheckedDownUP;
+        }
     }
     
 }

@@ -113,6 +113,8 @@
     <Compile Include="Classes\AutoStart.cs" />
     <Compile Include="Classes\ClockControl.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
+    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\IntToDoubleConverter.cs" />
     <Compile Include="Installer\Installer.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -121,6 +123,8 @@
     </Compile>
     <Compile Include="Utility\ILogger.cs" />
     <Compile Include="Utility\MyLogger.cs" />
+    <Compile Include="ViewModels\MainWindowViewModelClock.cs" />
+    <Compile Include="ViewModels\MainWindowViewModelDownUp.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>

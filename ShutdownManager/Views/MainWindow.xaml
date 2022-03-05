@@ -17,6 +17,8 @@
         <converters:StringToIntConverter x:Key="MyStringToIntConverter"/>
         <converters:BoolInvertConverter x:Key="MyBoolInvertConverter"/>
         <converters:StringToDoubleConverter x:Key="MyStringToDoubleConverter"/>
+        <converters:IntToDoubleConverter x:Key="MyIntToDoubleConverter"/>
+        <converters:BoolToVisibilityConverter x:Key="MyBoolToVisibilityConverter"/>
 
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
@@ -144,9 +146,9 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel>
-                            <RadioButton GroupName="rbAction" x:Name="RadioButton_Shutdown" Margin="13,13,5,4" Content="Shutdown" IsChecked="{Binding ShutdownIsChecked}"/>
-                            <RadioButton GroupName="rbAction" x:Name="RadioButton_Restart" Margin="13,5,5,4" Content="Restart" IsChecked="{Binding RestartIsChecked}" />
-                            <RadioButton GroupName="rbAction" x:Name="RadioButton_Sleep" Margin="13,5,5,0" Content="Sleep" IsChecked="{Binding SleepIsChecked}"/>
+                            <RadioButton GroupName="rbAction" Name="rbShutdown" Margin="13,13,5,4" Content="Shutdown" IsChecked="{Binding ShutdownIsChecked}"/>
+                            <RadioButton GroupName="rbAction" Name="rbRestart" Margin="13,5,5,4" Content="Restart" IsChecked="{Binding RestartIsChecked}" />
+                            <RadioButton GroupName="rbAction" Name="rbSleep" Margin="13,5,5,0" Content="Sleep" IsChecked="{Binding SleepIsChecked}"/>
                         </StackPanel>
                         <Button Name="NowButton" 
                                 FontSize="15"
@@ -244,7 +246,7 @@
         <!--                        -->
         <!--- Clock  -->
         <!--                        -->
-        <TabItem Header="Clock" >
+        <TabItem Header="Clock" Name="TIClock" GotFocus="TIClock_GotFocus" >
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="90"/>
@@ -282,9 +284,10 @@
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Grid.Column="1">
-                            <RadioButton GroupName="rbActionClock" Margin="13,13,5,4" Content="Shutdown" IsChecked="{Binding ShutdownClockIsChecked}"/>
-                            <RadioButton GroupName="rbActionClock" Margin="13,5,5,4" Content="Restart" IsChecked="{Binding RestartClockIsChecked}" />
-                            <RadioButton GroupName="rbActionClock" Margin="13,5,5,0" Content="Sleep" IsChecked="{Binding SleepClockIsChecked}"/>
+                            <RadioButton GroupName="rbActionClock" Name="rbShutdownClock" Margin="13,13,5,4" Content="Shutdown" Checked="rb_CheckedClock" />
+                            <RadioButton GroupName="rbActionClock" Name="rbRestartClock" Margin="13,5,5,4" Content="Restart" Checked="rb_CheckedClock" />
+                            <RadioButton GroupName="rbActionClock" Name="rbSleepClock" Margin="13,5,5,0" Content="Sleep" Checked="rb_CheckedClock" />
+
                         </StackPanel>
                         <local:ToggleButton Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Height="55" Width="70" Toggled="{Binding IsClockObservingActiv}"/>
                         
@@ -366,7 +369,7 @@
         <!--                        -->
         <!--- Down/Upload Controll  -->
         <!--                        -->
-        <TabItem Header="Down/Upload Control" Name="TIDownUpload" IsSelected="{Binding Path= DownUploadIsSelected, Mode=OneWayToSource}">
+        <TabItem Header="Down/Upload Control" Name="TIDownUpload" IsSelected="{Binding Path= DownUploadIsSelected, Mode=OneWayToSource}"  GotFocus="TIDownUpload_GotFocus" >
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -381,7 +384,7 @@
                 <StackPanel Margin="7">
                     <TextBlock Name="tbTextDownUp1" Margin="2"> If the Down-, Upload Control is active, it will check</TextBlock>
                     <TextBlock Name="tbTextDownUp2" Margin="2" > if the average XXXInsertDownUploadXXX speed is under XXXInsertSpeedXXX MB/s</TextBlock>
-                    <TextBlock x:Name="tbTextDownUp3" Margin=" 2,2,2,15" ><Run Text="for Insert"/><Run Language="de-de" Text="Times"/><Run Text=" s then the PC will shut down"/></TextBlock>
+                    <TextBlock x:Name="tbTextDownUp3" Margin=" 2,2,2,0" ><Run Text="for Insert"/><Run Language="de-de" Text="Times"/><Run Text=" s then the PC will shut down"/></TextBlock>
                 </StackPanel>
 
                 
@@ -394,17 +397,20 @@
                         </Grid.ColumnDefinitions>
 
                         <!--- Checkbox to activate the function  -->
-                        <local:ToggleButton Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Height="55" Width="70" Toggled="{Binding IsObserveDownUploadActiv}"/>
+                        <local:ToggleButton Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Height="55" Width="70" 
+                                            Toggled="{Binding IsObserveDownUploadActiv}" IsEnabled="{Binding NoInternetConnection, Converter={StaticResource MyBoolInvertConverter}}"/>
+                        <TextBlock Margin="0,7,0,7" Visibility="{Binding NoInternetConnection,Converter={StaticResource MyBoolToVisibilityConverter}}" HorizontalAlignment = "Center" Text="no connection" Foreground="Red" />
+
                         <StackPanel Grid.Column="1">
-                            <RadioButton GroupName="rbActionUploadDownload" Margin="13,13,5,4" Content="Shutdown" IsChecked="{Binding ShutdownIsCheckedDownUP}"/>
-                            <RadioButton GroupName="rbActionUploadDownload" Margin="13,5,5,4" Content="Restart" IsChecked="{Binding RestartIsCheckedDownUP}" />
-                            <RadioButton GroupName="rbActionUploadDownload" Margin="13,5,5,15" Content="Sleep" IsChecked="{Binding SleepIsCheckedDownUP}"/>
+                            <RadioButton GroupName="rbActionUploadDownload" Name="rbShutdownActionUpDown" Margin="13,13,5,4" Content="Shutdown" Checked="rb_CheckedDownUp"  />
+                            <RadioButton GroupName="rbActionUploadDownload" Name="rbRestartActionUpDown" Margin="13,5,5,4" Content="Restart" Checked="rb_CheckedDownUp"  />
+                            <RadioButton GroupName="rbActionUploadDownload" Name="rbSleepActionUpDown" Margin="13,5,5,15" Content="Sleep" Checked="rb_CheckedDownUp"  />
                         </StackPanel>
                     </Grid>
                 </GroupBox>
 
 
-                    <!--- Showing the actual values  -->
+                <!--- Showing the actual values  -->
                 <GroupBox Header="Actual values" Margin="7,3.5,7,3.5" Grid.Row="2">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -414,11 +420,24 @@
                             <ColumnDefinition Width="0.7*"/>
                         </Grid.ColumnDefinitions>
 
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
 
+                        <!-- Activ download values -->
                         <TextBlock Grid.Column="0" Margin="7" HorizontalAlignment = "Left" VerticalAlignment="Center" >Download:</TextBlock>
                         <TextBlock Grid.Column="1" Margin="0,7,0,7" HorizontalAlignment = "Left" Text="{Binding DownloadValue}"/>
+                        <!-- Upload values -->
                         <TextBlock Grid.Column="2" Margin="7" HorizontalAlignment = "Left" VerticalAlignment="Center" >Upload:</TextBlock>
                         <TextBlock Grid.Column="3" Margin="0,7,0,7" HorizontalAlignment = "Left" Text="{Binding UploadValue}"/>
+
+
+                        <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="elapsed time:"/>
+                        <ProgressBar Name="prBaDownUpload" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="3" Margin="7" Height="15" MaxHeight="15" 
+                                     Value="{Binding PrBaValue, Converter={StaticResource MyIntToDoubleConverter}}" 
+                                     Maximum="{Binding ObserveTime, Converter={StaticResource MyIntToDoubleConverter}}" />
+                      
                     </Grid>
                 </GroupBox>
 
@@ -438,8 +457,10 @@
                         </Grid.ColumnDefinitions>
                         <GroupBox Header="Observe" Margin="7,7,3.5,7">
                             <StackPanel>
-                                <RadioButton GroupName="rbDownUp" Name="RadioButton_Download" Margin="7,14,7,10" Content="Downlaod" Click="RadioButton_DownUp_Click" IsEnabled="{Binding IsObserveDownUploadActiv, Converter={StaticResource MyBoolInvertConverter}}"/>
-                                <RadioButton GroupName="rbDownUp" Name="RadioButton_Upload"   Margin="7,0,0,10"  Content="Upload" Click="RadioButton_DownUp_Click" IsEnabled="{Binding IsObserveDownUploadActiv, Converter={StaticResource MyBoolInvertConverter}}"/> 
+                                <RadioButton GroupName="rbDownUp" Name="RadioButton_Download" Margin="7,14,7,10" Content="Downlaod" Click="RadioButton_DownUp_Click"
+                                             IsEnabled="{Binding IsObserveDownUploadActiv, Converter={StaticResource MyBoolInvertConverter}}"/>
+                                <RadioButton GroupName="rbDownUp" Name="RadioButton_Upload"   Margin="7,0,0,10"  Content="Upload" Click="RadioButton_DownUp_Click"
+                                             IsEnabled="{Binding IsObserveDownUploadActiv, Converter={StaticResource MyBoolInvertConverter}}"/> 
                             </StackPanel>
                         </GroupBox>
                         <GroupBox Header="Values" Grid.Column="2" Margin="7,3.5,7,7">
@@ -457,6 +478,7 @@
                                 <TextBox Margin="7" 
                                          TextAlignment="Center" 
                                          Text="{Binding Speed, FallbackValue=0.5, Converter={StaticResource MyStringToDoubleConverter}}"
+                                         IsEnabled="{Binding IsObserveDownUploadActiv, Converter={StaticResource MyBoolInvertConverter}}"
                                          PreviewTextInput="NumberValidationTextBoxDouble"
                                          Name="tBSpeed"
                                          TextChanged="TextChanged"/>
@@ -464,6 +486,7 @@
                                          TextAlignment="Center" 
                                          Grid.Row="1" 
                                          Text="{Binding ObserveTime, FallbackValue=10, Converter={StaticResource MyStringToIntConverter}}" 
+                                         IsEnabled="{Binding IsObserveDownUploadActiv, Converter={StaticResource MyBoolInvertConverter}}"
                                          PreviewTextInput="NumberValidationTextBox"
                                          Name="tBSeconds"
                                          TextChanged="TextChanged"/>

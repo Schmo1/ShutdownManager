@@ -1,9 +1,8 @@
-﻿using Hardcodet.Wpf.TaskbarNotification;
-using System;
+﻿using System;
 using System.Net.NetworkInformation;
 using System.Threading;
-using System.Windows.Forms;
 using ShutdownManager.Utility;
+using Hardcodet.Wpf.TaskbarNotification;
 
 
 
@@ -28,18 +27,12 @@ namespace ShutdownManager.Classes
             set 
             {
                 CreateBalloonTip(value);
-                if (value)
-                {
-                    _expiredObserveTime = 0;
-                }
+
+                XSecondsUnderX = 0;
                 _isObserveActive = value;
             } 
         }
-        public int ObserveTime
-        {
-            get { return _observeTime; }
-            set { _observeTime = value; CreateArrNew(); }
-        }
+
 
         //if view is activ, it would be start the Thread to read the up- and download
         public bool IsTapActiv
@@ -67,24 +60,26 @@ namespace ShutdownManager.Classes
                     //Create new Thread
                     thUpdateValues = new Thread(UpdateNetworkTraffic);
                 }
-            }
-            
+            } 
         }
 
-        public bool IsWindowActiv
-        {
-            get => _isWindowActiv;
-            set => _isWindowActiv = value;
+
+        private int XSecondsUnderX 
+        { 
+            get { return _xSecondsUnderX; } 
+            set {
+                    _xSecondsUnderX = value;
+                    if(App.ViewModel != null)
+                        App.ViewModel.PrBaValue = value;
+                } 
         }
 
-        private int _observeTime;
+
         private bool _isObserveActive;
         private bool _isTapActive;
-        private bool _isWindowActiv;
         private NetworkInterface[] interfaces;
         private Thread thUpdateValues;
-        private double[] recordedSpeeds;
-        private int _expiredObserveTime;
+        private int _xSecondsUnderX = 0;
 
         public DownUploadController()
         {
@@ -112,140 +107,127 @@ namespace ShutdownManager.Classes
             double sendMBS;
             bool firstScan = true;
 
-            CreateArrNew();
-
 
             while (true)
             {
 
                 if (!NetworkInterface.GetIsNetworkAvailable())
-                    return;
-
-                try
-                {
-                    interfaces = NetworkInterface.GetAllNetworkInterfaces();
-                }catch (ThreadAbortException)
-                {
-                    //nothing                    
-                }
-                catch (Exception e)
-                {
-
-                    MyLogger.GetInstance().ErrorWithClassName("GetAllNetworkInterfaces. Exception "+ e.Message , this);
-                }
-
-                foreach (NetworkInterface ni in interfaces)
-                {
-                    if (maxReceived < ni.GetIPv4Statistics().BytesReceived)
-                    {
-                        maxReceived = ni.GetIPv4Statistics().BytesReceived;
-                    }
-                    if (maxSend < ni.GetIPv4Statistics().BytesSent)
-                    {
-                        maxSend = ni.GetIPv4Statistics().BytesSent;
-                    }
-                }
-
-
-                //If maxReceived or maxSend was reseted from the pc, Reset the other variables
-
-                if (maxReceived == 0 || maxSend == 0 && (maxReceivedOld != 0 || maxSendOld != 0))
-                {
-                    maxReceivedOld = 0;
-                    maxSendOld = 0;
-                }
-
-                if (firstScan)
-                {
-                    //First scan
-                    maxReceivedOld = maxReceived;
-                    maxSendOld = maxSend;
-                    firstScan = false;  
+                { 
+                    App.ViewModel.DownloadValue = "";
+                    App.ViewModel.UploadValue = "";
+                    App.ViewModel.NoInternetConnection = true;
+                    if (firstScan) { MyLogger.GetInstance().ErrorWithClassName("No internet connection", this);}
                 }
                 else
                 {
-                    maxReceived -= maxReceivedOld;
-                    maxSend -= maxSendOld;
 
-                    
-                    receivedMBS = ((double)maxReceived / 1024.0) / 1024.0;   // (maxReceived / 1024) /1024 = MBit/s
-                    sendMBS = ((double)maxSend / 1024.0) / 1024.0; // (maxSent / 1024) / 1024 = MBit / s
+                    App.ViewModel.NoInternetConnection = false;
 
-                    App.ViewModel.DownloadValue = Math.Round(receivedMBS,1).ToString() + " MB/s";
-                    App.ViewModel.UploadValue = Math.Round(sendMBS).ToString() + " MB/s"; 
-
-                    maxReceivedOld += maxReceived;
-                    maxSendOld += maxSend;
-
-                    
-                    if (_isObserveActive && recordedSpeeds.Length != 0)
+                    try
                     {
-                        _expiredObserveTime++;
+                        interfaces = NetworkInterface.GetAllNetworkInterfaces();
+                    }
+                    catch (ThreadAbortException)
+                    {
+                        //nothing                    
+                    }
+                    catch (Exception e)
+                    {
 
-                        //Move the Array
-                        for (int i = recordedSpeeds.Length - 1; i > 0; i--)
-                        {
-                            recordedSpeeds[i] = recordedSpeeds[i - 1];
-                        }
+                        MyLogger.GetInstance().ErrorWithClassName("GetAllNetworkInterfaces. Exception " + e.Message, this);
+                    }
 
-                        if (ObserveFunction == LoadFunction.Download)
+                    foreach (NetworkInterface ni in interfaces)
+                    {
+                        if (maxReceived < ni.GetIPv4Statistics().BytesReceived)
                         {
-                            recordedSpeeds[0] = receivedMBS;
+                            maxReceived = ni.GetIPv4Statistics().BytesReceived;
                         }
-                        else
+                        if (maxSend < ni.GetIPv4Statistics().BytesSent)
                         {
-                            recordedSpeeds[0] = sendMBS;
+                            maxSend = ni.GetIPv4Statistics().BytesSent;
                         }
+                    }
 
 
-                        //Check if Average of the Speed is under the Observe speed and on the first time they should do nothing
-                        if (IsAverageUnderSpeed() && (_expiredObserveTime > App.ViewModel.ObserveTime))
-                        {
-                            ObserveIsOver();
-                        }
+                    //If maxReceived or maxSend was reseted from the pc, Reset the other variables
+
+                    if (maxReceived == 0 || maxSend == 0 && (maxReceivedOld != 0 || maxSendOld != 0))
+                    {
+                        maxReceivedOld = 0;
+                        maxSendOld = 0;
+                    }
+
+                    if (firstScan)
+                    {
+                        MyLogger.GetInstance().InfoWithClassName("Starting read received and send data", this);
+                        //First scan
+                        maxReceivedOld = maxReceived;
+                        maxSendOld = maxSend;
 
                     }
+                    else
+                    {
+                        maxReceived -= maxReceivedOld;
+                        maxSend -= maxSendOld;
+
+
+                        receivedMBS = ((double)maxReceived / 1024.0) / 1024.0;   // (maxReceived / 1024) /1024 = MBit/s
+                        sendMBS = ((double)maxSend / 1024.0) / 1024.0; // (maxSent / 1024) / 1024 = MBit / s
+
+                        App.ViewModel.DownloadValue = Math.Round(receivedMBS, 1).ToString() + " MB/s";
+                        App.ViewModel.UploadValue = Math.Round(sendMBS).ToString() + " MB/s";
+
+                        maxReceivedOld += maxReceived;
+                        maxSendOld += maxSend;
+
+
+                        if (_isObserveActive)
+                        {
+
+
+                            /* if received or send MBs under the checked Speed add some#
+                                else set it on zero */
+                            if (ObserveFunction == LoadFunction.Download)
+                            {
+                                if (receivedMBS < App.ViewModel?.Speed)
+                                {
+                                    XSecondsUnderX++;
+                                }
+                                else
+                                {
+                                    XSecondsUnderX = 0;
+                                }
+                            }
+                            else // upload
+                            {
+                                if (sendMBS < App.ViewModel?.Speed)
+                                {
+                                    XSecondsUnderX++;
+                                }
+                                else
+                                {
+                                    XSecondsUnderX = 0;
+                                }
+                            }
+
+                            if (App.ViewModel?.ObserveTime < XSecondsUnderX)
+                            {//Time is over
+                                ObserveIsOver();
+                            }
+                        }
+                    }
+
                 }
 
+                firstScan = false;
                 Thread.Sleep(1000);
                 
             }
 
         }
 
-        private void CreateArrNew()
-        {
-            if(App.ViewModel != null)
-                recordedSpeeds = new double[App.ViewModel.ObserveTime];
-        }
 
-        private bool IsAverageUnderSpeed()
-        {
-            if(GetAverage() < App.ViewModel?.Speed)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        private double GetAverage()
-        {
-            double average = 0;
-            
-            foreach (double value in recordedSpeeds)
-            {
-                average += value;
-            }
-            if(average != 0)
-            {
-                average /= (recordedSpeeds.Length + 1);
-            }
-            
-            return average;
-        }
 
 
         private void CreateBalloonTip(bool stateActivated)
@@ -277,8 +259,14 @@ namespace ShutdownManager.Classes
         private void ObserveIsOver()
         {
             MyLogger.GetInstance().InfoWithClassName("Observing Down- Upload is over", this);
-            _expiredObserveTime = 0;
-            ShutdownOptions.Instance.Shutdown();
+            XSecondsUnderX = 0;
+
+            if(App.ViewModel.RestartIsCheckedDownUP)
+                ShutdownOptions.Instance.Restart();
+            else if (App.ViewModel.ShutdownIsCheckedDownUP)
+                ShutdownOptions.Instance.Shutdown();
+            else
+                ShutdownOptions.Instance.Sleep();
         }
 
         public void AbortThread()
