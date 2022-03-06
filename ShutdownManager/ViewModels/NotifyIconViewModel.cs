@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
 using ShutdownManager.Commands;
 
@@ -9,8 +11,15 @@ namespace ShutdownManager.ViewModels
     /// view model is assigned to the NotifyIcon in XAML. Alternatively, the startup routing
     /// in App.xaml.cs could have created this view model, and assigned it to the NotifyIcon.
     /// </summary>
-    public class NotifyIconViewModel
+    public class NotifyIconViewModel : INotifyPropertyChanged
     {
+
+        private string _sysTrayMenuText;
+
+        public NotifyIconViewModel()
+        {
+            SetSystemTrayMenuTextToDefault();
+        }
 
         // Shows a window, if none is already open.
 
@@ -67,9 +76,25 @@ namespace ShutdownManager.ViewModels
         }
 
 
+        public string SystemTrayMenuText { get { return _sysTrayMenuText; } set { _sysTrayMenuText = value; OnPropertyChanged(); } }
 
 
+
+
+        public void SetSystemTrayMenuTextToDefault()
+        {
+            SystemTrayMenuText = Application.ResourceAssembly.GetName().Name;
+        }
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
+
 
 
 }

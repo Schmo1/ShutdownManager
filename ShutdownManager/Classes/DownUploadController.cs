@@ -125,7 +125,7 @@ namespace ShutdownManager.Classes
 
                     try
                     {
-                        interfaces = NetworkInterface.GetAllNetworkInterfaces();
+                          interfaces = NetworkInterface.GetAllNetworkInterfaces();
                     }
                     catch (ThreadAbortException)
                     {

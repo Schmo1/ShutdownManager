@@ -1,0 +1,52 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:tb="http://www.hardcodet.net/taskbar"
+                    xmlns:local="clr-namespace:ShutdownManager.Views">
+
+    <ContextMenu x:Shared="false" x:Key="SysTrayMenu">
+        <MenuItem Header="Show Window" Command="{Binding ShowWindowCommand}"  >
+            <MenuItem.Icon>
+                <Image Width="16"
+                           Height="16"
+                           Source="/icons/Show.ico"/>
+            </MenuItem.Icon>
+        </MenuItem>
+
+        <MenuItem Header="Hide Window" Command="{Binding HideWindowCommand}"  >
+            <MenuItem.Icon>
+                <Image Width="16"
+                           Height="16"
+                           Source="/icons/Hide.ico"/>
+            </MenuItem.Icon>
+        </MenuItem>
+        <Separator />
+        <MenuItem Header="Settings" Command="{Binding OpenSettings}">
+            <MenuItem.Icon>
+                <Image Width="16"
+                           Height="16"
+                           Source="/icons/Settings.ico"/>
+            </MenuItem.Icon>
+        </MenuItem>
+
+        <Separator/>
+        <MenuItem Header="Exit" Command="{Binding ExitApplicationCommand}">
+            <MenuItem.Icon>
+                <Image Width="16"
+                           Height="16"
+                           Source="/icons/Exit.ico" />
+            </MenuItem.Icon>
+        </MenuItem>
+    </ContextMenu>
+
+
+    <!--  IconSource="/icons/ShutdownManager.ico"   -->
+    <tb:TaskbarIcon x:Key="Taskbar" VerticalAlignment="Top" 
+                        
+                        ToolTipText="{Binding SystemTrayMenuText }"
+                        IconSource="/icons/ShutdownManager.ico"
+                        DoubleClickCommand="{Binding ShowWindowCommand}"
+                        ContextMenu="{StaticResource SysTrayMenu}">
+
+    </tb:TaskbarIcon>
+
+</ResourceDictionary>
