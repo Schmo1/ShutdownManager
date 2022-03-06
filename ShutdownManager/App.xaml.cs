@@ -101,7 +101,6 @@ namespace ShutdownManager
         protected override void OnExit(ExitEventArgs e)
         {
             TaskbarIcon.Dispose();
-            DownUploadController.AbortThread();
             AppCon.StopListening();
 
             AppCon = null;
@@ -184,7 +183,6 @@ namespace ShutdownManager
             MyLogger.GetInstance().InfoWithClassName("Closing main window", Current);
 
             Window.Closing -= OnMainWindowClosing;
-            DownUploadController.AbortThread();
 
             if (TimerController.IsTimerStarted)
             {

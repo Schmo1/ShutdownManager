@@ -1,7 +1,7 @@
-﻿using Hardcodet.Wpf.TaskbarNotification;
-using ShutdownManager.Utility;
-using System;
+﻿using System;
 using System.Windows.Threading;
+using Hardcodet.Wpf.TaskbarNotification;
+using ShutdownManager.Utility;
 
 namespace ShutdownManager.Classes
 {

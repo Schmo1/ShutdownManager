@@ -1,4 +1,5 @@
 ﻿using System;
+using Timers = System.Windows.Forms;
 using System.Net.NetworkInformation;
 using System.Threading;
 using ShutdownManager.Utility;
@@ -10,6 +11,15 @@ namespace ShutdownManager.Classes
 {
     public class DownUploadController
     {
+        private Timers.Timer _timer;
+        long _maxReceived = 0;
+        long _maxSend = 0;
+        long _maxReceivedOld = 0;
+        long _maxSendOld = 0;
+        double _receivedMBS;
+        double _sendMBS;
+        bool _firstScan = true;
+
         public enum LoadFunction { Download, Upload }
 
         public LoadFunction ObserveFunction { 
@@ -41,25 +51,20 @@ namespace ShutdownManager.Classes
             set
             {
                 _isTapActive = value;
-                if (thUpdateValues != null)
+                
+                //start Thread
+                if (_isTapActive)
                 {
-                    //start Thread
-                    if (_isTapActive && !thUpdateValues.IsAlive)
-                    {
-                        thUpdateValues = new Thread(UpdateNetworkTraffic);
-                        thUpdateValues.Start();
-                    }
-                    //stop Thread
-                    else
-                    {
-                        AbortThreadWithConditions();
-                    }
+                    _timer?.Start();
+                    _firstScan = true;
                 }
+                //stop Thread
                 else
                 {
-                    //Create new Thread
-                    thUpdateValues = new Thread(UpdateNetworkTraffic);
+                    _timer?.Stop();
                 }
+                
+     
             } 
         }
 
@@ -78,154 +83,129 @@ namespace ShutdownManager.Classes
         private bool _isObserveActive;
         private bool _isTapActive;
         private NetworkInterface[] interfaces;
-        private Thread thUpdateValues;
         private int _xSecondsUnderX = 0;
 
         public DownUploadController()
         {
+            _timer = new Timers.Timer{Interval = 1000};
+            _timer.Tick += new EventHandler(TimerEventTick);
         }
 
-
-        //Abort thread if conditions OK
-        private void AbortThreadWithConditions()
+        private void TimerEventTick(Object myObject, EventArgs myEventArgs)
         {
-            if (thUpdateValues.IsAlive && !_isObserveActive)
+            if (!NetworkInterface.GetIsNetworkAvailable())
             {
-                AbortThread();
+                App.ViewModel.DownloadValue = "";
+                App.ViewModel.UploadValue = "";
+                App.ViewModel.NoInternetConnection = true;
+                if (_firstScan) { MyLogger.GetInstance().ErrorWithClassName("No internet connection", this); }
             }
-        }
-
-
-        public void UpdateNetworkTraffic()
-        {
-            MyLogger.GetInstance().InfoWithClassName("Start Thread 'UpdateNetworkTraffic'", this);
-            long maxReceived = 0;
-            long maxSend = 0;
-            long maxReceivedOld = 0;
-            long maxSendOld = 0;
-            double receivedMBS;
-            double sendMBS;
-            bool firstScan = true;
-
-
-            while (true)
+            else
             {
 
-                if (!NetworkInterface.GetIsNetworkAvailable())
-                { 
-                    App.ViewModel.DownloadValue = "";
-                    App.ViewModel.UploadValue = "";
-                    App.ViewModel.NoInternetConnection = true;
-                    if (firstScan) { MyLogger.GetInstance().ErrorWithClassName("No internet connection", this);}
+                App.ViewModel.NoInternetConnection = false;
+
+                try
+                {
+                    interfaces = NetworkInterface.GetAllNetworkInterfaces();
+                }
+                catch (ThreadAbortException)
+                {
+                    //nothing                    
+                }
+                catch (Exception e)
+                {
+
+                    MyLogger.GetInstance().ErrorWithClassName("GetAllNetworkInterfaces. Exception " + e.Message, this);
+                }
+
+                foreach (NetworkInterface ni in interfaces)
+                {
+                    if (_maxReceived < ni.GetIPv4Statistics().BytesReceived)
+                    {
+                        _maxReceived = ni.GetIPv4Statistics().BytesReceived;
+                    }
+                    if (_maxSend < ni.GetIPv4Statistics().BytesSent)
+                    {
+                        _maxSend = ni.GetIPv4Statistics().BytesSent;
+                    }
+                }
+
+
+                //If maxReceived or maxSend was reseted from the pc, Reset the other variables
+
+                if (_maxReceived == 0 || _maxSend == 0 && (_maxReceivedOld != 0 || _maxSendOld != 0))
+                {
+                    _maxReceivedOld = 0;
+                    _maxSendOld = 0;
+                }
+
+                if (_firstScan)
+                {
+                    MyLogger.GetInstance().InfoWithClassName("Starting read received and send data", this);
+                    //First scan
+                    _maxReceivedOld = _maxReceived;
+                    _maxSendOld = _maxSend;
+
                 }
                 else
                 {
+                    _maxReceived -= _maxReceivedOld;
+                    _maxSend -= _maxSendOld;
 
-                    App.ViewModel.NoInternetConnection = false;
 
-                    try
-                    {
-                          interfaces = NetworkInterface.GetAllNetworkInterfaces();
-                    }
-                    catch (ThreadAbortException)
-                    {
-                        //nothing                    
-                    }
-                    catch (Exception e)
+                    _receivedMBS = ((double)_maxReceived / 1024.0) / 1024.0;   // (maxReceived / 1024) /1024 = MBit/s
+                    _sendMBS = ((double)_maxSend / 1024.0) / 1024.0; // (maxSent / 1024) / 1024 = MBit / s
+
+                    App.ViewModel.DownloadValue = Math.Round(_receivedMBS, 1).ToString() + " MB/s";
+                    App.ViewModel.UploadValue = Math.Round(_sendMBS).ToString() + " MB/s";
+
+                    _maxReceivedOld += _maxReceived;
+                    _maxSendOld += _maxSend;
+
+
+                    if (_isObserveActive)
                     {
 
-                        MyLogger.GetInstance().ErrorWithClassName("GetAllNetworkInterfaces. Exception " + e.Message, this);
-                    }
 
-                    foreach (NetworkInterface ni in interfaces)
-                    {
-                        if (maxReceived < ni.GetIPv4Statistics().BytesReceived)
+                        /* if received or send MBs under the checked Speed add some#
+                            else set it on zero */
+                        if (ObserveFunction == LoadFunction.Download)
                         {
-                            maxReceived = ni.GetIPv4Statistics().BytesReceived;
-                        }
-                        if (maxSend < ni.GetIPv4Statistics().BytesSent)
-                        {
-                            maxSend = ni.GetIPv4Statistics().BytesSent;
-                        }
-                    }
-
-
-                    //If maxReceived or maxSend was reseted from the pc, Reset the other variables
-
-                    if (maxReceived == 0 || maxSend == 0 && (maxReceivedOld != 0 || maxSendOld != 0))
-                    {
-                        maxReceivedOld = 0;
-                        maxSendOld = 0;
-                    }
-
-                    if (firstScan)
-                    {
-                        MyLogger.GetInstance().InfoWithClassName("Starting read received and send data", this);
-                        //First scan
-                        maxReceivedOld = maxReceived;
-                        maxSendOld = maxSend;
-
-                    }
-                    else
-                    {
-                        maxReceived -= maxReceivedOld;
-                        maxSend -= maxSendOld;
-
-
-                        receivedMBS = ((double)maxReceived / 1024.0) / 1024.0;   // (maxReceived / 1024) /1024 = MBit/s
-                        sendMBS = ((double)maxSend / 1024.0) / 1024.0; // (maxSent / 1024) / 1024 = MBit / s
-
-                        App.ViewModel.DownloadValue = Math.Round(receivedMBS, 1).ToString() + " MB/s";
-                        App.ViewModel.UploadValue = Math.Round(sendMBS).ToString() + " MB/s";
-
-                        maxReceivedOld += maxReceived;
-                        maxSendOld += maxSend;
-
-
-                        if (_isObserveActive)
-                        {
-
-
-                            /* if received or send MBs under the checked Speed add some#
-                                else set it on zero */
-                            if (ObserveFunction == LoadFunction.Download)
+                            if (_receivedMBS < App.ViewModel?.Speed)
                             {
-                                if (receivedMBS < App.ViewModel?.Speed)
-                                {
-                                    XSecondsUnderX++;
-                                }
-                                else
-                                {
-                                    XSecondsUnderX = 0;
-                                }
+                                XSecondsUnderX++;
                             }
-                            else // upload
+                            else
                             {
-                                if (sendMBS < App.ViewModel?.Speed)
-                                {
-                                    XSecondsUnderX++;
-                                }
-                                else
-                                {
-                                    XSecondsUnderX = 0;
-                                }
-                            }
-
-                            if (App.ViewModel?.ObserveTime < XSecondsUnderX)
-                            {//Time is over
-                                ObserveIsOver();
+                                XSecondsUnderX = 0;
                             }
                         }
-                    }
+                        else // upload
+                        {
+                            if (_sendMBS < App.ViewModel?.Speed)
+                            {
+                                XSecondsUnderX++;
+                            }
+                            else
+                            {
+                                XSecondsUnderX = 0;
+                            }
+                        }
 
+                        if (App.ViewModel?.ObserveTime < XSecondsUnderX)
+                        {//Time is over
+                            ObserveIsOver();
+                        }
+                    }
                 }
-
-                firstScan = false;
-                Thread.Sleep(1000);
-                
             }
 
+            _firstScan = false;
+
         }
+
+
 
 
 
@@ -268,19 +248,6 @@ namespace ShutdownManager.Classes
             else
                 ShutdownOptions.Instance.Sleep();
         }
-
-        public void AbortThread()
-        {
-            MyLogger.GetInstance().InfoWithClassName("Abort Thread 'UpdateNetworkTraffic'", this);
-            thUpdateValues?.Abort();
-        }
-
-
-        ~DownUploadController()
-        {
-            AbortThread();
-        }
-
 
     }
 }
