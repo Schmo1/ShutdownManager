@@ -25,7 +25,7 @@ namespace ShutdownManager
         public static DownUploadController DownUploadController { get; set; }
         public static ClockControl ClockControl { get; set; }
         private static TaskbarIcon TaskbarIcon { get; set; }
-        public NotifyIconViewModel NotifyIconViewModel { get; set; }
+        public static NotifyIconViewModel NotifyIconViewModel { get; set; }
         public static AppController AppCon { get; set; }
         public static bool HideWindowPressed { get; set; }  
 
@@ -45,6 +45,7 @@ namespace ShutdownManager
             ViewModel = new MainWindowViewModel();
             TimerController = new TimerController();
             NotifyIconViewModel = new NotifyIconViewModel();
+            
 
         }
 

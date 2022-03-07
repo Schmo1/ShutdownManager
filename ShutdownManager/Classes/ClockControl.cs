@@ -21,7 +21,12 @@ namespace ShutdownManager.Classes
             { 
                 _isClockObservingActiv = value;
                 if (value)
+                {
                     CreateClockObservingOnTip();
+                    App.NotifyIconViewModel.SystemTrayMenuText = "Clock trigger is activ";
+                }
+                else
+                    App.NotifyIconViewModel.SetSystemTrayMenuTextToDefault();
             } 
         }
         public DateTime TriggerTime 

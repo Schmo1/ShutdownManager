@@ -37,6 +37,7 @@ namespace ShutdownManager.Classes
                 timer.Start();
                 timer.Enabled = true;
                 IsTimerStarted = true;
+                App.NotifyIconViewModel.SystemTrayMenuText = "Timer is activ";
                 App.ShowBalloonTip("Info", "Timer has started", BalloonIcon.Info);
             }
         }
@@ -54,6 +55,7 @@ namespace ShutdownManager.Classes
                 if (!isPaused)//If the Timer is not paused, then Update the Timespan
                 {
                     UpdateTimeSpan();
+                    App.NotifyIconViewModel.SetSystemTrayMenuTextToDefault();
                     if (WithMessage) { App.ShowBalloonTip("Info", "Timer has stopped", BalloonIcon.Info); }
                     
                 }
@@ -65,6 +67,7 @@ namespace ShutdownManager.Classes
             else //If Stop is only pressed => Reset TimeSpan
             {
                 UpdateTimeSpan();
+                App.NotifyIconViewModel.SetSystemTrayMenuTextToDefault();
             }
         }
 

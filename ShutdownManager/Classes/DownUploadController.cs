@@ -37,9 +37,14 @@ namespace ShutdownManager.Classes
             set 
             {
                 CreateBalloonTip(value);
-
                 XSecondsUnderX = 0;
                 _isObserveActive = value;
+                //Set value only when it 
+                if (_isObserveActive)
+                    App.NotifyIconViewModel.SystemTrayMenuText = "Down- Upload observing is activ";
+                else
+                    App.NotifyIconViewModel.SetSystemTrayMenuTextToDefault();
+                
             } 
         }
 
@@ -52,19 +57,17 @@ namespace ShutdownManager.Classes
             {
                 _isTapActive = value;
                 
-                //start Thread
+                //start Timer
                 if (_isTapActive)
                 {
                     _timer?.Start();
                     _firstScan = true;
                 }
-                //stop Thread
+                //stop Timer
                 else
-                {
+                {                    
                     _timer?.Stop();
                 }
-                
-     
             } 
         }
 

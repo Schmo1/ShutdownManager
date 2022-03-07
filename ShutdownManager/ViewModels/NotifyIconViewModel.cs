@@ -1,7 +1,10 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using ShutdownManager.Commands;
 
 namespace ShutdownManager.ViewModels
@@ -18,7 +21,7 @@ namespace ShutdownManager.ViewModels
 
         public NotifyIconViewModel()
         {
-            SetSystemTrayMenuTextToDefault();
+            _sysTrayMenuText = App.AppCon.AppName;
         }
 
         // Shows a window, if none is already open.
@@ -76,14 +79,27 @@ namespace ShutdownManager.ViewModels
         }
 
 
-        public string SystemTrayMenuText { get { return _sysTrayMenuText; } set { _sysTrayMenuText = value; OnPropertyChanged(); } }
+        public string SystemTrayMenuText 
+        { 
+            get { return _sysTrayMenuText; } 
+            set
+            {//write only, when _sysTrayMenuText is AppName or _sysTrayMenuText is AppName
+                if (value == App.AppCon.AppName || _sysTrayMenuText == App.AppCon.AppName)
+                {
+                    _sysTrayMenuText = value;
+                    OnPropertyChanged();
+                }
 
+            } 
+        }
 
+        public ImageSource ShowIcon { get { return new BitmapImage(new Uri(@"/icons/Show.ico", UriKind.Relative)); } }
+        public ImageSource HideIcon { get { return new BitmapImage(new Uri(@"/icons/Hide.ico", UriKind.Relative)); } }
 
 
         public void SetSystemTrayMenuTextToDefault()
         {
-            SystemTrayMenuText = Application.ResourceAssembly.GetName().Name;
+            SystemTrayMenuText = App.AppCon.AppName;
         }
 
 

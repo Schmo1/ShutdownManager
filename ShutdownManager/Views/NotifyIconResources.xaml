@@ -8,7 +8,7 @@
             <MenuItem.Icon>
                 <Image Width="16"
                            Height="16"
-                           Source="/icons/Show.ico"/>
+                           Source="{Binding ShowIcon}"/>
             </MenuItem.Icon>
         </MenuItem>
 
@@ -16,7 +16,7 @@
             <MenuItem.Icon>
                 <Image Width="16"
                            Height="16"
-                           Source="/icons/Hide.ico"/>
+                           Source="{Binding HideIcon}"/>
             </MenuItem.Icon>
         </MenuItem>
         <Separator />
