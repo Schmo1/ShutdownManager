@@ -27,11 +27,11 @@ namespace ShutdownManager
         private static TaskbarIcon TaskbarIcon { get; set; }
         public static NotifyIconViewModel NotifyIconViewModel { get; set; }
         public static AppController AppCon { get; set; }
-        public static bool HideWindowPressed { get; set; }  
+        public static bool HideWindowPressed { get; set; }  //using to check with which way is started to closing
 
         private delegate void OpenMainWindowDel();
 
-       
+
 
         //Constructor
 
@@ -45,8 +45,7 @@ namespace ShutdownManager
             ViewModel = new MainWindowViewModel();
             TimerController = new TimerController();
             NotifyIconViewModel = new NotifyIconViewModel();
-            
-
+          
         }
 
 
@@ -143,6 +142,7 @@ namespace ShutdownManager
 
                     //Create some events
                     Window.Closing += OnMainWindowClosing;
+                    Window.IsVisibleChanged += OnMainWindowVisibleChanged;
 
                     Window.Show();
                     Window.LoadInformations();
@@ -156,6 +156,9 @@ namespace ShutdownManager
 
             Window.WindowState = WindowState.Normal;
         }
+
+
+ 
 
 
         public static void OpenSettings()
@@ -197,6 +200,11 @@ namespace ShutdownManager
             HideWindowPressed = false;
 
         }
+        private static void OnMainWindowVisibleChanged(object source, DependencyPropertyChangedEventArgs args)
+        {
+            NotifyIconViewModel?.UpdateShowAndHideIcon();
+        }
+
 
         public static void ShowBalloonTip(string title, string message, BalloonIcon symbol )
         {

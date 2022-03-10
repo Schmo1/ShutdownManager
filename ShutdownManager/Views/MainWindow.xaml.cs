@@ -11,10 +11,11 @@ namespace ShutdownManager.Views
     {
 
         private const string downUploadText2 = "if the average XXXInsertDownUploadXXX speed is under XXXInsertSpeedXXX MB/s";
-        private const string downUploadText3 = "for XXXInsertTimesXXX Times (s) then the PC will shut down";
+        private const string downUploadText3 = "for XXXInsertTimesXXX Times (s) then the PC will XXXInsertActionXXX";
         private const string speedInsertTemplate = "XXXInsertSpeedXXX";
         private const string timesInsertTemplate = "XXXInsertTimesXXX";
         private const string DownUploadInsertTemplate = "XXXInsertDownUploadXXX";
+        private const string DownUploadActionInsertTemplate = "XXXInsertActionXXX";
 
         public MainWindow()
         { 
@@ -125,6 +126,17 @@ namespace ShutdownManager.Views
                     tbTextDownUp2.Text = tbTextDownUp2.Text.Replace(DownUploadInsertTemplate, "Upload");
                 }
 
+                if (App.ViewModel.ShutdownIsCheckedDownUP)
+                {
+                    tbTextDownUp3.Text = tbTextDownUp3.Text.Replace(DownUploadActionInsertTemplate, "shut down");
+                }else if (App.ViewModel.RestartIsCheckedDownUP)
+                {
+                    tbTextDownUp3.Text = tbTextDownUp3.Text.Replace(DownUploadActionInsertTemplate, "restart");
+                }else
+                {
+                    tbTextDownUp3.Text = tbTextDownUp3.Text.Replace(DownUploadActionInsertTemplate, "sleep");
+                }
+
             }
 
             RadioButton_Download.IsChecked = App.ViewModel.DownloadIsChecked ;
@@ -167,7 +179,7 @@ namespace ShutdownManager.Views
             App.ViewModel.ShutdownClockIsChecked = (bool)rbShutdownClock.IsChecked;
             App.ViewModel.RestartClockIsChecked = (bool)rbRestartClock.IsChecked;
             App.ViewModel.SleepClockIsChecked = (bool)rbSleepClock.IsChecked;
-           
+            
         }
 
         private void rb_CheckedDownUp(object sender, RoutedEventArgs e)
@@ -175,7 +187,7 @@ namespace ShutdownManager.Views
             App.ViewModel.ShutdownIsCheckedDownUP = (bool)rbShutdownActionUpDown.IsChecked;
             App.ViewModel.RestartIsCheckedDownUP = (bool)rbRestartActionUpDown.IsChecked;
             App.ViewModel.SleepIsCheckedDownUP = (bool)rbSleepActionUpDown.IsChecked;
-
+            UpdateDownUploadText();
         }
 
 

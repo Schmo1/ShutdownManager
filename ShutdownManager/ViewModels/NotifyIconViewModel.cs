@@ -18,6 +18,9 @@ namespace ShutdownManager.ViewModels
     {
 
         private string _sysTrayMenuText;
+        private ImageSource _showIcon;
+        private ImageSource _hideIcon;
+
 
         public NotifyIconViewModel()
         {
@@ -93,8 +96,9 @@ namespace ShutdownManager.ViewModels
             } 
         }
 
-        public ImageSource ShowIcon { get { return new BitmapImage(new Uri(@"/icons/Show.ico", UriKind.Relative)); } }
-        public ImageSource HideIcon { get { return new BitmapImage(new Uri(@"/icons/Hide.ico", UriKind.Relative)); } }
+
+        public ImageSource ShowIcon { get => _showIcon; private set { _showIcon = value; OnPropertyChanged(); } }
+        public ImageSource HideIcon { get => _hideIcon; private set { _hideIcon = value; OnPropertyChanged(); } }
 
 
         public void SetSystemTrayMenuTextToDefault()
@@ -109,6 +113,21 @@ namespace ShutdownManager.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        public void UpdateShowAndHideIcon()
+        {
+            if (App.Window.IsVisible)
+            {
+                ShowIcon = new BitmapImage(new Uri(@"/icons/ShowDisabled.ico", UriKind.Relative));
+                HideIcon = new BitmapImage(new Uri(@"/icons/Hide.ico", UriKind.Relative));
+            }
+            else
+            {
+                ShowIcon = new BitmapImage(new Uri(@"/icons/Show.ico", UriKind.Relative));
+                HideIcon = new BitmapImage(new Uri(@"/icons/HideDisabled.ico", UriKind.Relative));
+            }
+
+}
     }
 
 
