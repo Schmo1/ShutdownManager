@@ -38,7 +38,7 @@ namespace ShutdownManager.Utility
 
         public void Shutdown()
         {
-            MyLogger.GetInstance().InfoWithClassName("Execute Action: 'Shutdown' ....", this);
+            MyLogger.GetInstance().DebugWithClassName("Execute Action: 'Shutdown' ....", this);
             if (_testingModeActiv)
             {
                 MessageBox.Show("Shutdown!");
@@ -51,8 +51,8 @@ namespace ShutdownManager.Utility
         }
 
         public void Restart()
-        {
-            MyLogger.GetInstance().InfoWithClassName("Execute Action: 'Restart' ....", this);
+        { 
+            MyLogger.GetInstance().DebugWithClassName("Execute Action: 'Restart' ....", this);
             if (_testingModeActiv)
             {
                 MessageBox.Show("Restart!");
@@ -65,7 +65,7 @@ namespace ShutdownManager.Utility
 
         public void Sleep()
         {
-            MyLogger.GetInstance().InfoWithClassName("Execute Action: 'Sleep' ....", this);
+            MyLogger.GetInstance().DebugWithClassName("Execute Action: 'Sleep' ....", this);
             if (_testingModeActiv)
             {
                 MessageBox.Show("Sleep!");

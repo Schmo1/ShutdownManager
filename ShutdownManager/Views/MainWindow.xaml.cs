@@ -10,8 +10,8 @@ namespace ShutdownManager.Views
     public partial class MainWindow : Window
     {
 
-        private const string downUploadText2 = "if the average XXXInsertDownUploadXXX speed is under XXXInsertSpeedXXX MB/s";
-        private const string downUploadText3 = "for XXXInsertTimesXXX Times (s) then the PC will XXXInsertActionXXX";
+        private string downUploadText2 = App.AppCon.RManager.GetString("mainUpDownLine2");
+        private  string downUploadText3 = App.AppCon.RManager.GetString("mainUpDownLine3");
         private const string speedInsertTemplate = "XXXInsertSpeedXXX";
         private const string timesInsertTemplate = "XXXInsertTimesXXX";
         private const string DownUploadInsertTemplate = "XXXInsertDownUploadXXX";
@@ -128,13 +128,13 @@ namespace ShutdownManager.Views
 
                 if (App.ViewModel.ShutdownIsCheckedDownUP)
                 {
-                    tbTextDownUp3.Text = tbTextDownUp3.Text.Replace(DownUploadActionInsertTemplate, "shut down");
+                    tbTextDownUp3.Text = tbTextDownUp3.Text.Replace(DownUploadActionInsertTemplate, App.AppCon.RManager.GetString("shutdown").ToLower());
                 }else if (App.ViewModel.RestartIsCheckedDownUP)
                 {
-                    tbTextDownUp3.Text = tbTextDownUp3.Text.Replace(DownUploadActionInsertTemplate, "restart");
+                    tbTextDownUp3.Text = tbTextDownUp3.Text.Replace(DownUploadActionInsertTemplate, App.AppCon.RManager.GetString("restart").ToLower());
                 }else
                 {
-                    tbTextDownUp3.Text = tbTextDownUp3.Text.Replace(DownUploadActionInsertTemplate, "sleep");
+                    tbTextDownUp3.Text = tbTextDownUp3.Text.Replace(DownUploadActionInsertTemplate, App.AppCon.RManager.GetString("sleep").ToLower());
                 }
 
             }

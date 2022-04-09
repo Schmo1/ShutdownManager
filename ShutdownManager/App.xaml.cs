@@ -45,7 +45,8 @@ namespace ShutdownManager
             ViewModel = new MainWindowViewModel();
             TimerController = new TimerController();
             NotifyIconViewModel = new NotifyIconViewModel();
-          
+
+
         }
 
 
@@ -61,10 +62,10 @@ namespace ShutdownManager
             //if not first instance then exit App
             if (!AppCon.IsFirstInstance())
             {
-                MyLogger.GetInstance().InfoWithClassName("App is not first instance ==> shutdown the application", Current);
+                MyLogger.GetInstance().DebugWithClassName("App is not first instance ==> shutdown the application", Current);
                 Current.Shutdown();
             }
-            MyLogger.GetInstance().InfoWithClassName("App is the first instance", Current);
+            MyLogger.GetInstance().DebugWithClassName("App is the first instance", Current);
 
             ////start Listener
             AppCon.StartListening();
@@ -121,17 +122,18 @@ namespace ShutdownManager
             {
                 if (arg == "/startup" && AppCon.OpenMinimized)
                 {
-                    MyLogger.GetInstance().InfoWithClassName($"Open without UserInterface Found argument: {arg}", Current);
+                    MyLogger.GetInstance().DebugWithClassName($"Open without UserInterface Found argument: {arg}", Current);
                     return false; 
                 }     
             }
-            MyLogger.GetInstance().InfoWithClassName("Open with User Interface", Current);
+            MyLogger.GetInstance().DebugWithClassName("Open with User Interface", Current);
             return true;
         }
 
         public static void OpenMainWindow()
         {
             MyLogger.GetInstance().Info("Open main window");
+            
 
             if (Window == null || Window.IsVisible == false)
             {
@@ -155,6 +157,7 @@ namespace ShutdownManager
             }
 
             Window.WindowState = WindowState.Normal;
+            Window.Activate();
         }
 
 
@@ -163,7 +166,7 @@ namespace ShutdownManager
 
         public static void OpenSettings()
         {
-            MyLogger.GetInstance().InfoWithClassName("Open settings", Current);
+            MyLogger.GetInstance().DebugWithClassName("Open settings", Current);
 
             if (SettingsView == null || SettingsView.IsVisible == false)
             {
@@ -184,13 +187,13 @@ namespace ShutdownManager
         private static void OnMainWindowClosing(object source, EventArgs args)
         {
 
-            MyLogger.GetInstance().InfoWithClassName("Closing main window", Current);
+            MyLogger.GetInstance().DebugWithClassName("Closing main window", Current);
 
             Window.Closing -= OnMainWindowClosing;
 
             if (TimerController.IsTimerStarted)
             {
-                ShowBalloonTip("Info", "The timer is still running in the background", BalloonIcon.Info);
+                ShowBalloonTip(AppCon.RManager.GetString("timerStillRunning"), BalloonIcon.Info);
             }
             //Close Window only on X-Button
             else if (!AppCon.OnWindwoClosingActiv &! HideWindowPressed)
@@ -206,15 +209,25 @@ namespace ShutdownManager
         }
 
 
-        public static void ShowBalloonTip(string title, string message, BalloonIcon symbol )
+        public static void ShowBalloonTip( string message, BalloonIcon symbol )
         {
-
-            if(symbol == BalloonIcon.Info)
+            string title;
+            if (symbol == BalloonIcon.Info) 
+            {
+                title = App.AppCon.RManager.GetString("info");
                 MyLogger.GetInstance().Info($"BalloonTip title: {title}, message: {message} ");
-            else if(symbol == BalloonIcon.Warning)
+            }
+            else if (symbol == BalloonIcon.Warning)
+            {
+                title = App.AppCon.RManager.GetString("warning");
                 MyLogger.GetInstance().Warning($"BalloonTip title: {title}, message: {message} ");
+            }
             else
+            {
+                title = App.AppCon.RManager.GetString("error");
                 MyLogger.GetInstance().Error($"BalloonTip title: {title}, message: {message} ");
+            }
+                
 
             if (!AppCon.DisablePushMessages)
             {

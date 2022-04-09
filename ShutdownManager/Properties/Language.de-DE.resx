@@ -117,4 +117,118 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="actions" xml:space="preserve">
+    <value>Aktionen</value>
+  </data>
+  <data name="activ" xml:space="preserve">
+    <value>aktiv</value>
+  </data>
+  <data name="actualTime" xml:space="preserve">
+    <value>Aktuelle Zeit</value>
+  </data>
+  <data name="actualValues" xml:space="preserve">
+    <value>Aktuelle Werte</value>
+  </data>
+  <data name="clock" xml:space="preserve">
+    <value>Zeit</value>
+  </data>
+  <data name="clockLastBaloonTip" xml:space="preserve">
+    <value>PC wird in 60 Sekunden XXReplaceTemplate!</value>
+  </data>
+  <data name="clockTriggerIsActiv" xml:space="preserve">
+    <value>Uhr Trigger ist aktiv</value>
+  </data>
+  <data name="createClockObservingMessage" xml:space="preserve">
+    <value>PC wird in XXReplaceTemplateTimeXX Stunden XXReplaceTemplateXX</value>
+  </data>
+  <data name="downUploadIsActiv" xml:space="preserve">
+    <value>Down- Upload überwachung ist aktiv</value>
+  </data>
+  <data name="downUploadObserving" xml:space="preserve">
+    <value>Down/Upload überwachung</value>
+  </data>
+  <data name="elapsedTime" xml:space="preserve">
+    <value>Abgelaufene Zeit:</value>
+  </data>
+  <data name="error" xml:space="preserve">
+    <value>Fehler</value>
+  </data>
+  <data name="inactiv" xml:space="preserve">
+    <value>inaktiv</value>
+  </data>
+  <data name="info" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="mainUpDownLine1" xml:space="preserve">
+    <value>Wenn die Überwachung aktiv ist wird geprüft,</value>
+  </data>
+  <data name="mainUpDownLine2" xml:space="preserve">
+    <value>ob die XXXInsertDownUploadXXX-Geschwindigkeit unter XXXInsertSpeedXXX MB/s ist</value>
+  </data>
+  <data name="mainUpDownLine3" xml:space="preserve">
+    <value>für XXXInsertTimesXXX mal (s), dann wird der PC XXXInsertActionXXX</value>
+  </data>
+  <data name="noActionSelected" xml:space="preserve">
+    <value>Es wurde keine Aktion ausgewählt. Bitte wähle eine aktion aus!</value>
+  </data>
+  <data name="noConnection" xml:space="preserve">
+    <value>Keine Verbindung</value>
+  </data>
+  <data name="observe" xml:space="preserve">
+    <value>Überwachen</value>
+  </data>
+  <data name="observingDownUpBalloonTip" xml:space="preserve">
+    <value>Die Überwachung des Down/Upload ist activ/inactiv!</value>
+  </data>
+  <data name="restart" xml:space="preserve">
+    <value>Neu starten</value>
+  </data>
+  <data name="seconds" xml:space="preserve">
+    <value>Sekunden</value>
+  </data>
+  <data name="settings" xml:space="preserve">
+    <value>Einstellungen</value>
+  </data>
+  <data name="shutdown" xml:space="preserve">
+    <value>Herunterfahren</value>
+  </data>
+  <data name="sleep" xml:space="preserve">
+    <value>Energie sparen</value>
+  </data>
+  <data name="speed" xml:space="preserve">
+    <value>Speed (MB/s)</value>
+  </data>
+  <data name="time" xml:space="preserve">
+    <value>Zeit</value>
+  </data>
+  <data name="timer" xml:space="preserve">
+    <value>Timer</value>
+  </data>
+  <data name="timerActiv" xml:space="preserve">
+    <value>Der Timer ist aktiv</value>
+  </data>
+  <data name="timerPaused" xml:space="preserve">
+    <value>Der Timer ist pausiert</value>
+  </data>
+  <data name="timerStarted" xml:space="preserve">
+    <value>Der Timer wurde gestartet</value>
+  </data>
+  <data name="timerStillRunning" xml:space="preserve">
+    <value>Der Timer läuft im Hintergrund weiter</value>
+  </data>
+  <data name="timerStopped" xml:space="preserve">
+    <value>Der Timer ist gestoppt</value>
+  </data>
+  <data name="triggerNow" xml:space="preserve">
+    <value>Jetzt auslösen</value>
+  </data>
+  <data name="triggerTime" xml:space="preserve">
+    <value>Auslösezeit</value>
+  </data>
+  <data name="values" xml:space="preserve">
+    <value>Werte</value>
+  </data>
+  <data name="warning" xml:space="preserve">
+    <value>Warnung</value>
+  </data>
 </root>

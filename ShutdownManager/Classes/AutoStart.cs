@@ -85,7 +85,7 @@ namespace ShutdownManager.Classes
                 if (!getPath.Equals(dirPath) && _appName != null) 
                 {
                     //Update path
-                    MyLogger.GetInstance().InfoWithClassName($"EnableAutoStart, appName: {_appName},path: {dirPath}", this);
+                    MyLogger.GetInstance().DebugWithClassName($"EnableAutoStart, appName: {_appName},path: {dirPath}", this);
                     // Add the value in the registry so that the application runs at startup
                     startupKey?.SetValue(_appName, dirPath);
                 }
@@ -98,7 +98,7 @@ namespace ShutdownManager.Classes
 
         public void DisableAutoStart()
         {
-            MyLogger.GetInstance().InfoWithClassName("DisableAutoStart", this);
+            MyLogger.GetInstance().DebugWithClassName("DisableAutoStart", this);
             try
             {
                 // Remove the value from the registry so that the application doesn't start

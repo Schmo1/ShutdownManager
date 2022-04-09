@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShutdownManager.Views"
         xmlns:converters="clr-namespace:ShutdownManager.Converters"
+        xmlns:DataStrings="clr-namespace:ShutdownManager.Properties"
         mc:Ignorable="d"
         Title="Shutdown Manager" Height="500" Width="340" MinHeight="490" MinWidth="330" MaxHeight="550" MaxWidth="400" Icon="/ShutdownManager;component/icons/ShutdownManager.ico" WindowStartupLocation="CenterScreen">
 
@@ -83,7 +84,7 @@
         <!--        -->
         <!--- Timer -->
         <!--        -->
-        <TabItem Header="Timer" Name="TIHeader">
+        <TabItem Header="{x:Static DataStrings:Language.timer}" Name="TIHeader">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="90"/>
@@ -100,7 +101,7 @@
                 </Grid.ColumnDefinitions>
 
 
-                <GroupBox Header="Time" Grid.ColumnSpan="2" Margin="7">
+                <GroupBox Header="{x:Static DataStrings:Language.time}" Grid.ColumnSpan="2" Margin="7">
                     <TextBlock Name="TbTimer" 
                                TextAlignment="Center" 
                                VerticalAlignment="Center" 
@@ -139,20 +140,20 @@
                     <Image Name="imageStop" Source="/ShutdownManager;component/images\Stop.png"/>
                 </Button>
 
-                <GroupBox Margin="7" Header="Actions" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+                <GroupBox Margin="7" Header="{x:Static DataStrings:Language.actions}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel>
-                            <RadioButton GroupName="rbAction" Name="rbShutdown" Margin="13,13,5,4" Content="Shutdown" IsChecked="{Binding ShutdownIsChecked}"/>
-                            <RadioButton GroupName="rbAction" Name="rbRestart" Margin="13,5,5,4" Content="Restart" IsChecked="{Binding RestartIsChecked}" />
-                            <RadioButton GroupName="rbAction" Name="rbSleep" Margin="13,5,5,0" Content="Sleep" IsChecked="{Binding SleepIsChecked}"/>
+                            <RadioButton GroupName="rbAction" Name="rbShutdown" Margin="13,13,5,4" Content="{x:Static DataStrings:Language.shutdown}" IsChecked="{Binding ShutdownIsChecked}"/>
+                            <RadioButton GroupName="rbAction" Name="rbRestart" Margin="13,5,5,4" Content="{x:Static DataStrings:Language.restart}" IsChecked="{Binding RestartIsChecked}" />
+                            <RadioButton GroupName="rbAction" Name="rbSleep" Margin="13,5,5,0" Content="{x:Static DataStrings:Language.sleep}" IsChecked="{Binding SleepIsChecked}"/>
                         </StackPanel>
                         <Button Name="NowButton" 
                                 FontSize="15"
-                                Content="Trigger Now" 
+                                Content="{x:Static DataStrings:Language.triggerNow}"
                                 Grid.Row="2" 
                                 Grid.Column="1" 
                                 Height="40" Width="105" 
@@ -168,7 +169,7 @@
 
 
 
-                <GroupBox Margin="7" Header="Time Settings" Grid.Row="3" Grid.ColumnSpan="2">
+                <GroupBox Margin="7" Header="{x:Static DataStrings:Language.settings}" Grid.Row="3" Grid.ColumnSpan="2">
                     <Grid>
 
                         <Grid.RowDefinitions>
@@ -246,7 +247,7 @@
         <!--                        -->
         <!--- Clock  -->
         <!--                        -->
-        <TabItem Header="Clock" Name="TIClock" GotFocus="TIClock_GotFocus" >
+        <TabItem Header="{x:Static DataStrings:Language.clock}" Name="TIClock" GotFocus="TIClock_GotFocus" >
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="90"/>
@@ -257,7 +258,7 @@
                 </Grid.RowDefinitions>
 
 
-                <GroupBox Header="Actual Time" Margin="7">
+                <GroupBox Header="{x:Static DataStrings:Language.actualTime}" Margin="7">
                     <TextBlock Name="tbTime" 
                                TextAlignment="Center" 
                                VerticalAlignment="Center" 
@@ -266,7 +267,7 @@
                                TextWrapping="Wrap" 
                                Text="{Binding ClockTime, FallbackValue=00:00:00}" />
                 </GroupBox>
-                <GroupBox Header="Trigger Time" Grid.Row="1" Margin="7">
+                <GroupBox Header="{x:Static DataStrings:Language.triggerTime}" Grid.Row="1" Margin="7">
                     <TextBlock Name="tbTriggerTime" 
                                TextAlignment="Center" 
                                VerticalAlignment="Center" 
@@ -276,7 +277,7 @@
                                Text="{Binding TriggerTime, FallbackValue=00:00:00, Mode=OneWay}" />
                 </GroupBox>
 
-                <GroupBox Header="Actions" Grid.Row="2" Margin="7">
+                <GroupBox Header="{x:Static DataStrings:Language.actions}" Grid.Row="2" Margin="7">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -284,17 +285,17 @@
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Grid.Column="1">
-                            <RadioButton GroupName="rbActionClock" Name="rbShutdownClock" Margin="13,13,5,4" Content="Shutdown" Checked="rb_CheckedClock" />
-                            <RadioButton GroupName="rbActionClock" Name="rbRestartClock" Margin="13,5,5,4" Content="Restart" Checked="rb_CheckedClock" />
-                            <RadioButton GroupName="rbActionClock" Name="rbSleepClock" Margin="13,5,5,0" Content="Sleep" Checked="rb_CheckedClock" />
+                            <RadioButton GroupName="rbActionClock" Name="rbShutdownClock" Margin="13,13,5,4" Content="{x:Static DataStrings:Language.shutdown}" Checked="rb_CheckedClock" />
+                            <RadioButton GroupName="rbActionClock" Name="rbRestartClock" Margin="13,5,5,4" Content="{x:Static DataStrings:Language.restart}" Checked="rb_CheckedClock" />
+                            <RadioButton GroupName="rbActionClock" Name="rbSleepClock" Margin="13,5,5,0" Content="{x:Static DataStrings:Language.sleep}" Checked="rb_CheckedClock" />
 
                         </StackPanel>
                         <local:ToggleButton Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Height="55" Width="70" Toggled="{Binding IsClockObservingActiv}"/>
                         
                     </Grid>
                 </GroupBox>
-                
-                <GroupBox Header="Clock settings" Grid.Row="3" Margin="7" >
+
+                <GroupBox Header="{x:Static DataStrings:Language.settings}" Grid.Row="3" Margin="7" >
                     <Grid>
 
                         <Grid.RowDefinitions>
@@ -369,7 +370,7 @@
         <!--                        -->
         <!--- Down/Upload Controll  -->
         <!--                        -->
-        <TabItem Header="Down/Upload Control" Name="TIDownUpload" IsSelected="{Binding Path= DownUploadIsSelected, Mode=OneWayToSource}"  GotFocus="TIDownUpload_GotFocus" >
+        <TabItem Header="{x:Static DataStrings:Language.downUploadObserving}" Name="TIDownUpload" IsSelected="{Binding Path= DownUploadIsSelected, Mode=OneWayToSource}"  GotFocus="TIDownUpload_GotFocus" >
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -382,14 +383,14 @@
 
                 <!--- Infotext  -->
                 <StackPanel Margin="7">
-                    <TextBlock Name="tbTextDownUp1" Margin="2"> If the Down-, Upload Control is active, it will check</TextBlock>
+                    <TextBlock Name="tbTextDownUp1" Margin="2" Text="{x:Static DataStrings:Language.mainUpDownLine1}"/>
                     <TextBlock Name="tbTextDownUp2" Margin="2" > if the average XXXInsertDownUploadXXX speed is under XXXInsertSpeedXXX MB/s</TextBlock>
-                    <TextBlock x:Name="tbTextDownUp3" Margin=" 2,2,2,0" ><Run Text="for Insert"/><Run Language="de-de" Text="Times"/><Run Text=" s then the PC will shut down"/></TextBlock>
+                    <TextBlock x:Name="tbTextDownUp3" Margin=" 2,2,2,0" Text="for XXXInsertTimesXXX Times (s) then the PC will XXXInsertActionXXX"/>
                 </StackPanel>
 
-                
 
-                <GroupBox Header="Actions" Margin="7" Grid.Row="1">
+
+                <GroupBox Header="{x:Static DataStrings:Language.actions}" Margin="7" Grid.Row="1">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -399,19 +400,19 @@
                         <!--- Checkbox to activate the function  -->
                         <local:ToggleButton Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Height="55" Width="70" 
                                             Toggled="{Binding IsObserveDownUploadActiv}" IsEnabled="{Binding NoInternetConnection, Converter={StaticResource MyBoolInvertConverter}}"/>
-                        <TextBlock Margin="0,7,0,7" Visibility="{Binding NoInternetConnection,Converter={StaticResource MyBoolToVisibilityConverter}}" HorizontalAlignment = "Center" Text="no connection" Foreground="Red" />
+                        <TextBlock Margin="0,7,0,7" Visibility="{Binding NoInternetConnection,Converter={StaticResource MyBoolToVisibilityConverter}}" HorizontalAlignment = "Center" Text="{x:Static DataStrings:Language.noConnection}" Foreground="Red" />
 
                         <StackPanel Grid.Column="1">
-                            <RadioButton GroupName="rbActionUploadDownload" Name="rbShutdownActionUpDown" Margin="13,13,5,4" Content="Shutdown" Checked="rb_CheckedDownUp"  />
-                            <RadioButton GroupName="rbActionUploadDownload" Name="rbRestartActionUpDown" Margin="13,5,5,4" Content="Restart" Checked="rb_CheckedDownUp"  />
-                            <RadioButton GroupName="rbActionUploadDownload" Name="rbSleepActionUpDown" Margin="13,5,5,15" Content="Sleep" Checked="rb_CheckedDownUp"  />
+                            <RadioButton GroupName="rbActionUploadDownload" Name="rbShutdownActionUpDown" Margin="13,13,5,4" Content="{x:Static DataStrings:Language.shutdown}" Checked="rb_CheckedDownUp"  />
+                            <RadioButton GroupName="rbActionUploadDownload" Name="rbRestartActionUpDown" Margin="13,5,5,4" Content="{x:Static DataStrings:Language.restart}" Checked="rb_CheckedDownUp"  />
+                            <RadioButton GroupName="rbActionUploadDownload" Name="rbSleepActionUpDown" Margin="13,5,5,15" Content="{x:Static DataStrings:Language.sleep}" Checked="rb_CheckedDownUp"  />
                         </StackPanel>
                     </Grid>
                 </GroupBox>
 
 
                 <!--- Showing the actual values  -->
-                <GroupBox Header="Actual values" Margin="7,3.5,7,3.5" Grid.Row="2">
+                <GroupBox Header="{x:Static DataStrings:Language.actualValues}" Margin="7,3.5,7,3.5" Grid.Row="2">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -421,6 +422,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
@@ -433,8 +435,8 @@
                         <TextBlock Grid.Column="3" Margin="0,7,0,7" HorizontalAlignment = "Left" Text="{Binding UploadValue}"/>
 
 
-                        <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="elapsed time:"/>
-                        <ProgressBar Name="prBaDownUpload" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="3" Margin="7" Height="15" MaxHeight="15" 
+                        <TextBlock Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="7,10,7,4" VerticalAlignment="Center" Text="{x:Static DataStrings:Language.elapsedTime}"/>
+                        <ProgressBar Name="prBaDownUpload" Grid.Row="2" Grid.ColumnSpan="4" Margin="7" Height="15" MaxHeight="15" 
                                      Value="{Binding PrBaValue, Converter={StaticResource MyIntToDoubleConverter}}" 
                                      Maximum="{Binding ObserveTime, Converter={StaticResource MyIntToDoubleConverter}}" />
                       
@@ -443,7 +445,7 @@
 
 
                 <!--- Properties -->
-                <GroupBox Header="Properties" Margin="7,3.5,7,3.5" Grid.Row="3">
+                <GroupBox Header="{x:Static DataStrings:Language.settings}" Margin="7,3.5,7,3.5" Grid.Row="3">
 
                     <Grid>
                         <Grid.RowDefinitions>
@@ -455,15 +457,15 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="1.4*"/>
                         </Grid.ColumnDefinitions>
-                        <GroupBox Header="Observe" Margin="7,7,3.5,7">
+                        <GroupBox Header="{x:Static DataStrings:Language.observe}"  Margin="7,7,3.5,7">
                             <StackPanel>
-                                <RadioButton GroupName="rbDownUp" Name="RadioButton_Download" Margin="7,14,7,10" Content="Downlaod" Click="RadioButton_DownUp_Click"
+                                <RadioButton GroupName="rbDownUp" Name="RadioButton_Download" Margin="7,14,7,10" Content="Download" Click="RadioButton_DownUp_Click"
                                              IsEnabled="{Binding IsObserveDownUploadActiv, Converter={StaticResource MyBoolInvertConverter}}"/>
                                 <RadioButton GroupName="rbDownUp" Name="RadioButton_Upload"   Margin="7,0,0,10"  Content="Upload" Click="RadioButton_DownUp_Click"
                                              IsEnabled="{Binding IsObserveDownUploadActiv, Converter={StaticResource MyBoolInvertConverter}}"/> 
                             </StackPanel>
                         </GroupBox>
-                        <GroupBox Header="Values" Grid.Column="2" Margin="7,3.5,7,7">
+                        <GroupBox Header="{x:Static DataStrings:Language.values}" Grid.Column="2" Margin="7,3.5,7,7">
                             <Grid>
 
                                 <Grid.ColumnDefinitions>
@@ -490,8 +492,8 @@
                                          PreviewTextInput="NumberValidationTextBox"
                                          Name="tBSeconds"
                                          TextChanged="TextChanged"/>
-                                <TextBlock Margin="4,7,7,7" Grid.Column="1" Text="Speed (MB/s)"  />
-                                <TextBlock Margin="4,7,7,7" Grid.Column="1" Grid.Row="1"><Run Language="de-de" Text="Times (s)"/></TextBlock>
+                                <TextBlock Margin="4,7,7,7" Grid.Column="1" Text="{x:Static DataStrings:Language.speed}"   />
+                                <TextBlock Margin="4,7,7,7" Grid.Column="1" Grid.Row="1"><Run Text="{x:Static DataStrings:Language.seconds}" /></TextBlock>
                             </Grid>
                         </GroupBox>
                     </Grid>

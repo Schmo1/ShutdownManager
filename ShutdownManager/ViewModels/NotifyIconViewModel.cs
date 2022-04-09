@@ -44,6 +44,21 @@ namespace ShutdownManager.ViewModels
                 };
             }
         }
+        public ICommand ShowWindowDoubleClickCommand
+        {
+            get
+            {
+                return new DelegateCommand
+                {
+                    CanExecuteFunc = () => true,
+
+                    CommandAction = () =>
+                    {
+                        App.OpenMainWindow();
+                    }
+                };
+            }
+        }
 
         public ICommand OpenSettings
         {

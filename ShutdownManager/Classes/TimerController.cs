@@ -32,14 +32,17 @@ namespace ShutdownManager.Classes
 
         public void StartTimer()
         {
-            if (!IsTimerStarted)
-            {
-                timer.Start();
-                timer.Enabled = true;
-                IsTimerStarted = true;
-                App.NotifyIconViewModel.SystemTrayMenuText = "Timer is activ";
-                App.ShowBalloonTip("Info", "Timer has started", BalloonIcon.Info);
-            }
+            if (IsTimerStarted)
+                return;
+            if (!CheckIfSomeActionIsSelected()) //No action was selected
+                return;
+            
+            timer.Start();
+            timer.Enabled = true;
+            IsTimerStarted = true;
+            App.NotifyIconViewModel.SystemTrayMenuText = App.AppCon.RManager.GetString("timerActiv");
+            App.ShowBalloonTip(App.AppCon.RManager.GetString("timerStarted"), BalloonIcon.Info);
+            
         }
 
         public void StopPauseTimer(bool isPaused, bool WithMessage)
@@ -56,12 +59,12 @@ namespace ShutdownManager.Classes
                 {
                     UpdateTimeSpan();
                     App.NotifyIconViewModel.SetSystemTrayMenuTextToDefault();
-                    if (WithMessage) { App.ShowBalloonTip("Info", "Timer has stopped", BalloonIcon.Info); }
+                    if (WithMessage) { App.ShowBalloonTip(App.AppCon.RManager.GetString("timerStopped"), BalloonIcon.Info); }
                     
                 }
                 else
                 {
-                    if (WithMessage) {App.ShowBalloonTip("Info", "Timer has paused", BalloonIcon.Info); }
+                    if (WithMessage) {App.ShowBalloonTip(App.AppCon.RManager.GetString("timerPaused"), BalloonIcon.Info); }
                 }
             }
             else //If Stop is only pressed => Reset TimeSpan
@@ -87,21 +90,23 @@ namespace ShutdownManager.Classes
             //Last Ballon tip 
             if (App.ViewModel.TimeSpanLeft.TotalSeconds == 60)
             {
-                string message = string.Empty;
+                string message = App.AppCon.RManager.GetString("lastBaloonTip");
 
 
                 if (App.ViewModel.ShutdownIsChecked)
                 {
-                    message = "PC will be shut down after 60 seconds!";
-                }else if (App.ViewModel.RestartIsChecked)
+                    message = message.Replace("XXReplaceTemplateXX", App.AppCon.RManager.GetString("shutdown").ToLower());
+                }
+                else if (App.ViewModel.RestartIsChecked)
                 {
-                    message = "PC will be restart after 60 seconds!";
-                }else if (App.ViewModel.SleepIsChecked)
+                    message = message.Replace("XXReplaceTemplateXX", App.AppCon.RManager.GetString("restart").ToLower());
+                }
+                else if (App.ViewModel.SleepIsChecked)
                 {
-                    message = "PC is going to sleep after 60 seconds!";
+                    message = message.Replace("XXReplaceTemplateXX", App.AppCon.RManager.GetString("sleep").ToLower());
                 }
 
-                App.ShowBalloonTip("Info", message, BalloonIcon.Info);
+                App.ShowBalloonTip(message, BalloonIcon.Info);
             }
         }
 
@@ -115,14 +120,21 @@ namespace ShutdownManager.Classes
             {
                 ShutdownOptions.Instance.Restart();
             }
-            else if (App.ViewModel.SleepIsChecked)
+            else
             {
                 ShutdownOptions.Instance.Sleep(); 
             }
-            else
-            {
-                MessageBox.Show("No action was selected. Please select some action!", "Invalid action", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
+        
+        }
+
+        private bool CheckIfSomeActionIsSelected()
+        {
+            if (App.ViewModel.ShutdownIsChecked || App.ViewModel.RestartIsChecked || App.ViewModel.SleepIsChecked)
+                return true;
+
+            MessageBox.Show(App.AppCon.RManager.GetString("noActionSelected"), "Invalid action", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return false;
+
         }
 
         public void UpdateTimeSpan()

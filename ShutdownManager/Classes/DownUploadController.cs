@@ -41,7 +41,7 @@ namespace ShutdownManager.Classes
                 _isObserveActive = value;
                 //Set value only when it 
                 if (_isObserveActive)
-                    App.NotifyIconViewModel.SystemTrayMenuText = "Down- Upload observing is activ";
+                    App.NotifyIconViewModel.SystemTrayMenuText = App.AppCon.RManager.GetString("downUploadIsActiv") ;
                 else
                     App.NotifyIconViewModel.SetSystemTrayMenuTextToDefault();
                 
@@ -145,7 +145,7 @@ namespace ShutdownManager.Classes
 
                 if (_firstScan)
                 {
-                    MyLogger.GetInstance().InfoWithClassName("Starting read received and send data", this);
+                    MyLogger.GetInstance().DebugWithClassName("Starting read received and send data", this);
                     //First scan
                     _maxReceivedOld = _maxReceived;
                     _maxSendOld = _maxSend;
@@ -215,8 +215,8 @@ namespace ShutdownManager.Classes
 
         private void CreateBalloonTip(bool stateActivated)
         {
-
-            string message = "Observing the Down/Upload is activ/inactiv!";
+            
+            string message = App.AppCon.RManager.GetString("observingDownUpBalloonTip");
 
             if (ObserveFunction == LoadFunction.Download)
             {
@@ -229,19 +229,19 @@ namespace ShutdownManager.Classes
 
             if (stateActivated)
             {
-                message = message.Replace("activ/inactiv", "activ");
+                message = message.Replace("activ/inactiv", App.AppCon.RManager.GetString("activ"));
             }
             else
             {
-                message = message.Replace("activ/inactiv", "inactiv");
+                message = message.Replace("activ/inactiv", App.AppCon.RManager.GetString("inactiv"));
             }
 
-            App.ShowBalloonTip("Info", message, BalloonIcon.Info);
+            App.ShowBalloonTip(message, BalloonIcon.Info);
         }
 
         private void ObserveIsOver()
         {
-            MyLogger.GetInstance().InfoWithClassName("Observing Down- Upload is over", this);
+            MyLogger.GetInstance().DebugWithClassName("Observing Down- Upload is over", this);
             XSecondsUnderX = 0;
 
             if(App.ViewModel.RestartIsCheckedDownUP)

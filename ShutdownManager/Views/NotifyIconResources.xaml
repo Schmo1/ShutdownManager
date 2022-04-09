@@ -44,9 +44,8 @@
                         
                         ToolTipText="{Binding SystemTrayMenuText }"
                         IconSource="/icons/ShutdownManager.ico"
-                        DoubleClickCommand="{Binding ShowWindowCommand}"
+                        DoubleClickCommand="{Binding ShowWindowDoubleClickCommand}"
                         ContextMenu="{StaticResource SysTrayMenu}">
 
     </tb:TaskbarIcon>
-
 </ResourceDictionary>

@@ -1,0 +1,234 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="actions" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="activ" xml:space="preserve">
+    <value>activ</value>
+  </data>
+  <data name="actualTime" xml:space="preserve">
+    <value>Actual Time</value>
+  </data>
+  <data name="actualValues" xml:space="preserve">
+    <value>Actual values</value>
+  </data>
+  <data name="clock" xml:space="preserve">
+    <value>Clock</value>
+  </data>
+  <data name="clockTriggerIsActiv" xml:space="preserve">
+    <value>Clock trigger is activ</value>
+  </data>
+  <data name="createClockObservingMessage" xml:space="preserve">
+    <value>PC is going to XXReplaceTemplateXX in XXReplaceTemplateTimeXX hours</value>
+  </data>
+  <data name="downUploadIsActiv" xml:space="preserve">
+    <value>Down- Upload observing is activ</value>
+  </data>
+  <data name="downUploadObserving" xml:space="preserve">
+    <value>Down/Upload observing</value>
+  </data>
+  <data name="elapsedTime" xml:space="preserve">
+    <value>Elapsed Time:</value>
+  </data>
+  <data name="error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="inactiv" xml:space="preserve">
+    <value>inactiv</value>
+  </data>
+  <data name="info" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="lastBaloonTip" xml:space="preserve">
+    <value>PC is going to XXReplaceTemplateXX in 60 seconds!</value>
+  </data>
+  <data name="mainUpDownLine1" xml:space="preserve">
+    <value>If the Down-, Upload Control is active, it will check</value>
+  </data>
+  <data name="mainUpDownLine2" xml:space="preserve">
+    <value>if the XXXInsertDownUploadXXX speed is under XXXInsertSpeedXXX MB/s</value>
+  </data>
+  <data name="mainUpDownLine3" xml:space="preserve">
+    <value>for XXXInsertTimesXXX Times (s) then the PC will XXXInsertActionXXX</value>
+  </data>
+  <data name="noActionSelected" xml:space="preserve">
+    <value>No action was selected. Please select some action!</value>
+  </data>
+  <data name="noConnection" xml:space="preserve">
+    <value>no connection</value>
+  </data>
+  <data name="observe" xml:space="preserve">
+    <value>Observe</value>
+  </data>
+  <data name="observingDownUpBalloonTip" xml:space="preserve">
+    <value>Observing the Down/Upload is activ/inactiv!</value>
+  </data>
+  <data name="restart" xml:space="preserve">
+    <value>Restart</value>
+  </data>
+  <data name="seconds" xml:space="preserve">
+    <value>Seconds</value>
+  </data>
+  <data name="settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="shutdown" xml:space="preserve">
+    <value>Shutdown</value>
+  </data>
+  <data name="sleep" xml:space="preserve">
+    <value>Sleep</value>
+  </data>
+  <data name="speed" xml:space="preserve">
+    <value>"Speed (MB/s)"</value>
+  </data>
+  <data name="time" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="timer" xml:space="preserve">
+    <value>Timer</value>
+  </data>
+  <data name="timerActiv" xml:space="preserve">
+    <value>Timer is activ</value>
+  </data>
+  <data name="timerPaused" xml:space="preserve">
+    <value>Timer has paused</value>
+  </data>
+  <data name="timerStarted" xml:space="preserve">
+    <value>Timer has started</value>
+  </data>
+  <data name="timerStillRunning" xml:space="preserve">
+    <value>The timer is still running in the background</value>
+  </data>
+  <data name="timerStopped" xml:space="preserve">
+    <value>Timer has stopped</value>
+  </data>
+  <data name="triggerNow" xml:space="preserve">
+    <value>Trigger Now</value>
+  </data>
+  <data name="triggerTime" xml:space="preserve">
+    <value>Trigger Time</value>
+  </data>
+  <data name="values" xml:space="preserve">
+    <value>Values</value>
+  </data>
+  <data name="warning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+</root>

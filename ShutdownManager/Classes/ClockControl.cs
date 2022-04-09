@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 using System.Windows.Threading;
 using Hardcodet.Wpf.TaskbarNotification;
 using ShutdownManager.Utility;
@@ -19,11 +20,11 @@ namespace ShutdownManager.Classes
             get { return _isClockObservingActiv; } 
             set 
             { 
-                _isClockObservingActiv = value;
-                if (value)
+                _isClockObservingActiv = CheckIfSomeActionIsSelected() && value;
+                if (_isClockObservingActiv)
                 {
                     CreateClockObservingOnTip();
-                    App.NotifyIconViewModel.SystemTrayMenuText = "Clock trigger is activ";
+                    App.NotifyIconViewModel.SystemTrayMenuText = App.AppCon.RManager.GetString("clockTriggerIsActiv");
                 }
                 else
                     App.NotifyIconViewModel.SetSystemTrayMenuTextToDefault();
@@ -56,7 +57,7 @@ namespace ShutdownManager.Classes
             //Check time is over/equal
             if (CheckTimeEqual(_time, TriggerTime))
             {
-                MyLogger.GetInstance().InfoWithClassName($"ClockTime is over Time: {_time.TimeOfDay}", this);
+                MyLogger.GetInstance().DebugWithClassName($"ClockTime is over Time: {_time.TimeOfDay}", this);
 
                 if (App.ViewModel.ShutdownClockIsChecked)
                 {
@@ -79,18 +80,19 @@ namespace ShutdownManager.Classes
 
         private void CreateClockObservingOnTip()
         {
-            string message = "PC is going to XXReplaceTemplateXX in XXReplaceTemplateTimeXX";
+            
+            string message = App.AppCon.RManager.GetString("createClockObservingMessage"); ;
             if (App.ViewModel.ShutdownClockIsChecked)
             {
-                message = message.Replace("XXReplaceTemplateXX", "shut down");
+                message = message.Replace("XXReplaceTemplateXX", App.AppCon.RManager.GetString("shutdown").ToLower());
             }
             else if (App.ViewModel.SleepClockIsChecked)
             {
-                message = message.Replace("XXReplaceTemplateXX", "sleep");
+                message = message.Replace("XXReplaceTemplateXX", App.AppCon.RManager.GetString("sleep").ToLower());
             }
             else
             {
-                message = message.Replace("XXReplaceTemplateXX", "restart");
+                message = message.Replace("XXReplaceTemplateXX", App.AppCon.RManager.GetString("restart").ToLower());
             }
 
             string remainingTime;
@@ -104,27 +106,27 @@ namespace ShutdownManager.Classes
 
 
 
-            App.ShowBalloonTip("Info", message, BalloonIcon.Info);
+            App.ShowBalloonTip(message, BalloonIcon.Info);
         }
 
 
         private void CreateLastBaloonTip()
         {
-            string message = "PC is going to XXReplaceTemplate in 60 seconds!";
+            string message = App.AppCon.RManager.GetString("lastBaloonTip");
             if (App.ViewModel.ShutdownClockIsChecked)
             {
-                message = message.Replace("XXReplaceTemplate", "shut down");
+                message = message.Replace("XXReplaceTemplateXX", App.AppCon.RManager.GetString("shutdown").ToLower());
             }
             else if (App.ViewModel.SleepClockIsChecked)
             {
-                message = message.Replace("XXReplaceTemplate", "sleep");
+                message = message.Replace("XXReplaceTemplateXX", App.AppCon.RManager.GetString("sleep").ToLower());
             }
             else
             {
-                message = message.Replace("XXReplaceTemplate", "restart");
+                message = message.Replace("XXReplaceTemplateXX", App.AppCon.RManager.GetString("restart").ToLower());
             }
 
-            App.ShowBalloonTip("Info", message, BalloonIcon.Info);
+            App.ShowBalloonTip(message, BalloonIcon.Info);
         }
 
         private bool CheckTimeEqual(DateTime dateTime1, DateTime dateTime2)
@@ -134,6 +136,16 @@ namespace ShutdownManager.Classes
                 return true;
             }
             return false;
+        }
+
+        private bool CheckIfSomeActionIsSelected()
+        {
+            if (App.ViewModel.ShutdownClockIsChecked || App.ViewModel.RestartClockIsChecked || App.ViewModel.SleepClockIsChecked)
+                return true;
+
+            MessageBox.Show(App.AppCon.RManager.GetString("noActionSelected"), "Invalid action", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return false;
+
         }
 
     }
